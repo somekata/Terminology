@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Prefix/Suffix List</title>
+    <link
+      rel="stylesheet"
+      href="https://cdn.datatables.net/1.11.5/css/jquery.dataTables.min.css"
+    />
+    <link rel="stylesheet" href="css/common.css" />
+    <link rel="stylesheet" href="css/button.css" />
+  </head>
+  <body>
+    <h2>
+      Prefix/Suffix List　　
+      <button class="goto" onclick="location.href='index.html'">目次</button>
+      <button class="goto orange" onclick="location.href='Terminology.html'">
+        医学用語集
+      </button>
+      <button class="goto orange" onclick="location.href='majorSymptom.html'">
+        主要症候
+      </button>
+    </h2>
+
+    <table
+      id="termsTable"
+      class="display"
+      style="width: 100%; border-collapse: collapse"
+    >
+      <thead>
+        <tr>
+          <th onclick="sortTable(0)">Prefix/Suffix</th>
+          <th onclick="sortTable(1)">Examples</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>a-, an- (なし, 欠如, 無-)</td>
+          <td>anemia (貧血), anaerobe (嫌気性), aplasia (無形成)</td>
+        </tr>
+        <tr>
+          <td>ab- (離れて), ad- (近づいて)</td>
+          <td>abduction (外転), adduction (内転)</td>
+        </tr>
+        <tr>
+          <td>-algia (-痛)</td>
+          <td>arthralgia (関節痛), myalgia (筋肉痛), neuralgia (神経痛)</td>
+        </tr>
+        <tr>
+          <td>ambi- (両方の), amphi- (両側の)</td>
+          <td>
+            ambidextrous (両利きの), amphibian (両生類), ambisense (両意性）
+          </td>
+        </tr>
+        <tr>
+          <td>ana- (上へ), cata- (下へ)</td>
+          <td>anabolism (同化作用), catabolism (異化作用)</td>
+        </tr>
+        <tr>
+          <td>anti- (反対の, 抗-)</td>
+          <td>
+            antibody (抗体), antihistamine (抗ヒスタミン薬), proinflammatory
+            (炎症促進性の)
+          </td>
+        </tr>
+        <tr>
+          <td>-ase (-酵素)</td>
+          <td>lipase (リパーゼ, 脂肪分解酵素)</td>
+        </tr>
+        <tr>
+          <td>auto- (自己の, 自己-), allo- (他者の, 異種-)</td>
+          <td>
+            autograft (自己移植), allograft (同種移植), autoimmune (自己免疫),
+            allopathy (異種療法)
+          </td>
+        </tr>
+        <tr>
+          <td>bio- (生命の), necro- (死の)</td>
+          <td>
+            biopsy (生検), necrosis (壊死), bioluminescence (生物発光),
+            necrotizing (壊死性の)
+          </td>
+        </tr>
+        <tr>
+          <td>brady- (遅い, 徐-), tachy- (速い, 頻-)</td>
+          <td>
+            bradycardia (徐脈), tachycardia (頻脈), bradypnea (徐呼吸),
+            tachypnea (頻呼吸)
+          </td>
+        </tr>
+        <tr>
+          <td>circum- (周囲の)</td>
+          <td>circumcision (包茎手術)</td>
+        </tr>
+        <tr>
+          <td>co- (共に, 共-, 補-)</td>
+          <td>co-receptor (共受容体), coenzyme (補酵素), cofactor (補因子)</td>
+        </tr>
+        <tr>
+          <td>contra- (反対の), counter- (逆の)</td>
+          <td>contraindication (禁忌), counterirritant (対刺激薬)</td>
+        </tr>
+        <tr>
+          <td>de- (取り除く), dis- (分離する)</td>
+          <td>dehydration (脱水), dislocation (脱臼)</td>
+        </tr>
+        <tr>
+          <td>dia- (通して), trans- (横切って)</td>
+          <td>dialysis (透析), transdermal (経皮的な)</td>
+        </tr>
+        <tr>
+          <td>dys- (異常な), eu- (正常な, 真正の)</td>
+          <td>
+            dysplasia (異形成), euphoria (多幸感), dysphagia (嚥下障害),
+            euthyroid (甲状腺機能が正常な), eukaryote (真核生物), eubacteria
+            (真正細菌)
+          </td>
+        </tr>
+        <tr>
+          <td>ecto- (外側の), meso- (中間の)</td>
+          <td>
+            ectoderm (外胚葉), mesoderm (中胚葉), ectopic (異所性の),
+            mesothelioma (中皮腫)
+          </td>
+        </tr>
+        <tr>
+          <td>-ectomy (-切除), -otomy (-切離)</td>
+          <td>
+            appendectomy (虫垂切除), lobectomy (葉切除), lobotomy (葉切離)
+          </td>
+        </tr>
+        <tr>
+          <td>-emia (血液の状態, -血症)</td>
+          <td>anemia (貧血), bacteremia (菌血症)</td>
+        </tr>
+        <tr>
+          <td>endo- (内部の), exo- (外部の)</td>
+          <td>
+            endocytosis (エンドサイトーシス、細胞内への取り込み), exocytosis
+            (エクソサイトーシス、細胞外への分泌), endotoxin (内毒素), exotoxin
+            (外毒素)
+          </td>
+        </tr>
+        <tr>
+          <td>epi- (上に), sub- (下に)</td>
+          <td>epithelium (上皮), subcutaneous (皮下)</td>
+        </tr>
+        <tr>
+          <td>extra- (外側の), intra- (内側の), inter- (間の)</td>
+          <td>
+            extracellular (細胞外の), intracellular (細胞内の), intercellular
+            (細胞間の), interstitial (間質の), intravenous (静脈内の)
+          </td>
+        </tr>
+        <tr>
+          <td>hemi- (半分の), semi- (半分の)</td>
+          <td>hemiplegia (片麻痺), semipermeable (半透性の)</td>
+        </tr>
+        <tr>
+          <td>homo- (同じ), hetero- (異なる)</td>
+          <td>
+            homogenous (均質な), heterogeneous (異質な), homologous (相同の),
+            heterozygous (ヘテロ接合の)
+          </td>
+        </tr>
+        <tr>
+          <td>hyper- (過剰な, 高-, 過-), hypo- (低い, 低-)</td>
+          <td>
+            hyperglycemia (高血糖), hypoglycemia (低血糖), hypertension
+            (高血圧), hypotension (低血圧), hypercapnea (高炭酸ガス血漿),
+            hyperventilation (過換気), hypothyroidism (甲状腺機能低下症),
+            hyperthyroidism (甲状腺機能亢進症), hyperplasia (過形成)
+          </td>
+        </tr>
+        <tr>
+          <td>iso- (同じ), hetero- (異なる), homo- (同じ)</td>
+          <td>
+            isothermal (等温), heterothermal (異温), isotope (同位体), isomer
+            ([同じ分子式を持つ]異性体), heterotrophic (異栄養性), homodimer
+            (ホモ二量体), heterodimer (ヘテロ二量体)
+          </td>
+        </tr>
+        <tr>
+          <td>-itis (炎症, -炎)</td>
+          <td>tonsillitis (扁桃炎)</td>
+        </tr>
+        <tr>
+          <td>-lysis (分解)</td>
+          <td>hemolysis (溶血)</td>
+        </tr>
+        <tr>
+          <td>-megaly (-肥大, -腫大, -腫)</td>
+          <td>
+            cardiomegaly (心肥大), hepatomegaly (肝腫大), splenomegaly (脾腫)
+          </td>
+        </tr>
+        <tr>
+          <td>micro- (小さい, 微-, 小-), macro- (大きい, 大-)</td>
+          <td>
+            microorganism (微生物), macroorganism (大生物), microvascular
+            (微小血管の), macrovascular (大血管の)
+          </td>
+        </tr>
+        <tr>
+          <td>multi- (多い, 多-), uni- (単一の)</td>
+          <td>multiple (多数の), uniform (均一の)</td>
+        </tr>
+        <tr>
+          <td>neo- (新しい, 新-), paleo- (古い, 古-)</td>
+          <td>
+            neonatal (新生児の), neoplasm (新生物), paleopathology (古病理学)
+          </td>
+        </tr>
+        <tr>
+          <td>-oid (偽物, もどき, 類-)</td>
+          <td>carcinoid (カルチノイド, 類癌腫)</td>
+        </tr>
+        <tr>
+          <td>-oma (腫瘍, -腫)</td>
+          <td>carcinoma (癌腫), sarcoma (肉腫)</td>
+        </tr>
+        <tr>
+          <td>ortho- (正しい), meta- (変化する)</td>
+          <td>
+            orthopedic (整形外科の), metaphase (中期), orthostatic (直立の),
+            metaplasia (化生)
+          </td>
+        </tr>
+        <tr>
+          <td>-osis (状態,病的状態, -症)</td>
+          <td>fibrosis (線維症)</td>
+        </tr>
+        <tr>
+          <td>-pathy (病気, -症)</td>
+          <td>neuropathy (神経障害)</td>
+        </tr>
+        <tr>
+          <td>peri- (周囲の), para- (傍らの)</td>
+          <td>
+            pericardium (心膜), parathyroid (副甲状腺), perinatal (周産期の),
+            paracrine (傍分泌の)
+          </td>
+        </tr>
+        <tr>
+          <td>
+            -phobia (恐怖, -恐怖症), -philia (愛好), -penia (少ない, 減少)
+          </td>
+          <td>
+            acrophobia (高所恐怖症), photophobia (羞明), hemophilia (血友病),
+            neutropenia (好中球減少)
+          </td>
+        </tr>
+        <tr>
+          <td>poly- (多い, 多-), mono- (単一の)</td>
+          <td>
+            polysaccharide (多糖), monosaccharide (単糖), polyuria (多尿),
+            monotherapy (単独療法), monoclonal (モノクローナルの), polyclonal
+            (ポリクローナルの)
+          </td>
+        </tr>
+        <tr>
+          <td>pre- (前の), post- (後の)</td>
+          <td>
+            prenatal (出生前の), postnatal (出生後の), preoperative (手術前の),
+            postoperative (手術後の)
+          </td>
+        </tr>
+        <tr>
+          <td>pro- (促進する)</td>
+          <td>probiotic (プロバイオティクス)</td>
+        </tr>
+        <tr>
+          <td>-rrh (流出), -rrhea (流出)</td>
+          <td>catarrh (カタル), diarrhea (下痢)</td>
+        </tr>
+        <tr>
+          <td>-scopy (-鏡検査)</td>
+          <td>endoscopy (内視鏡)</td>
+        </tr>
+        <tr>
+          <td>-stasis (停止)</td>
+          <td>homeostasis (恒常性)</td>
+        </tr>
+        <tr>
+          <td>trans- (移動する), cis- (同じ側の)</td>
+          <td>
+            transdermal (経皮的な), translocation (転座), cistron (シストロン)
+          </td>
+        </tr>
+        <tr>
+          <td>uni- (一つの), bi- (二つの)</td>
+          <td>
+            unilateral (片側性の), bilateral (両側性の), unipolar (単極性の),
+            bipolar (双極性の)
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    <div style="margin-top: 10px; margin-bottom: 20px">
+      <button class="goto" onclick="history.back()">戻る</button>
+    </div>
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+    <script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
+    <script>
+      $(document).ready(function () {
+        $("#termsTable").DataTable({
+          language: {
+            url: "//cdn.datatables.net/plug-ins/1.11.5/i18n/ja.json",
+          },
+        });
+      });
+    </script>
+  </body>
+</html>

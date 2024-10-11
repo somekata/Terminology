@@ -1,0 +1,15 @@
+button.goto {
+    font-size: 16px;
+    border-radius: 20px;
+    width: 150px;
+    height:40px;
+  }
+  button.orange {
+    background-color: rgb(255, 215, 156);
+  }
+  button.goto:hover {
+    background-color: rgb(194, 194, 194);
+  }
+  button.orange:hover {
+    background-color: rgb(253, 230, 195);
+  }
