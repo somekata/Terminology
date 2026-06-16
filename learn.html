@@ -1,0 +1,1112 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>授業で学ぶ医学英語</title>
+  <link rel="stylesheet" href="css/common.css" />
+  <style>
+/* ===== learn.html 専用スタイル ===== */
+
+/* --- レイアウト --- */
+body { background: var(--cream); }
+
+.learn-container {
+  display: grid;
+  grid-template-columns: 260px 1fr;
+  grid-template-rows: auto 1fr;
+  min-height: 100vh;
+}
+
+/* --- サイドバー（目次） --- */
+.sidebar {
+  grid-row: 2;
+  background: var(--navy);
+  color: rgba(255,255,255,.85);
+  padding: 16px 0;
+  position: sticky;
+  top: 60px;
+  height: calc(100vh - 60px);
+  overflow-y: auto;
+}
+
+.sidebar-title {
+  font-size: 11px;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  color: rgba(255,255,255,.45);
+  padding: 0 18px 10px;
+  border-bottom: 1px solid rgba(255,255,255,.1);
+  margin-bottom: 8px;
+}
+
+.chapter-group { margin-bottom: 4px; }
+
+.chapter-btn {
+  width: 100%;
+  text-align: left;
+  background: none;
+  border: none;
+  padding: 10px 18px;
+  font-family: inherit;
+  font-size: 13px;
+  color: rgba(255,255,255,.75);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  transition: background .15s;
+  border-radius: 0;
+}
+
+.chapter-btn:hover { background: rgba(255,255,255,.08); }
+.chapter-btn.active { background: var(--teal); color: #fff; }
+
+.chapter-btn .ch-icon { font-size: 1.1em; flex-shrink: 0; }
+.chapter-btn .ch-num {
+  font-size: 10px;
+  background: rgba(255,255,255,.18);
+  border-radius: 8px;
+  padding: 0 6px;
+  margin-left: auto;
+}
+.chapter-btn.active .ch-num { background: rgba(255,255,255,.28); }
+.chapter-btn.done .ch-icon::after { content: ' ✓'; font-size: .8em; color: #6ee9cb; }
+
+/* --- メインコンテンツ --- */
+.learn-main {
+  grid-row: 2;
+  padding: 28px 32px 60px;
+  max-width: 860px;
+}
+
+/* --- 進捗バー --- */
+.progress-header {
+  grid-column: 1 / 3;
+  background: white;
+  border-bottom: 1px solid var(--gray-3);
+  padding: 0 24px;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  height: 60px;
+  position: sticky;
+  top: 0;
+  z-index: 200;
+  box-shadow: 0 1px 4px rgba(0,0,0,.06);
+}
+
+.progress-label { font-size: 13px; color: var(--gray-2); white-space: nowrap; }
+
+.progress-track {
+  flex: 1;
+  height: 6px;
+  background: var(--gray-3);
+  border-radius: 3px;
+  overflow: hidden;
+}
+
+.progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--teal), var(--amber));
+  border-radius: 3px;
+  transition: width .4s ease;
+}
+
+.progress-pct { font-size: 13px; font-weight: bold; color: var(--navy); white-space: nowrap; }
+
+/* --- バッジエリア --- */
+.badge-row {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-left: auto;
+}
+
+.badge {
+  font-size: 18px;
+  opacity: .25;
+  transition: opacity .3s, transform .3s;
+  cursor: default;
+  title: attr(data-label);
+}
+.badge.earned { opacity: 1; transform: scale(1.1); }
+
+/* --- スライドカード --- */
+.slide-card {
+  background: var(--white);
+  border-radius: 12px;
+  box-shadow: 0 3px 14px rgba(0,0,0,.09);
+  overflow: hidden;
+  margin-bottom: 24px;
+  display: none;
+  animation: fadeIn .3s ease;
+}
+.slide-card.active { display: block; }
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(8px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* スライド番号 */
+.slide-eyebrow {
+  background: var(--navy);
+  color: rgba(255,255,255,.7);
+  font-size: 11px;
+  letter-spacing: .1em;
+  padding: 8px 20px;
+  display: flex;
+  justify-content: space-between;
+}
+
+.slide-body { padding: 24px 28px 20px; }
+
+.slide-title {
+  font-size: 1.3rem;
+  font-weight: bold;
+  color: var(--navy);
+  margin: 0 0 16px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.slide-title .icon { font-size: 1.5rem; }
+
+.slide-content { line-height: 1.85; color: var(--gray-1); }
+
+.slide-content p { margin: 0 0 14px; }
+
+.slide-content .highlight-box {
+  background: #eef6f4;
+  border-left: 4px solid var(--teal);
+  border-radius: 4px;
+  padding: 12px 16px;
+  margin: 14px 0;
+}
+
+.slide-content .warn-box {
+  background: #fff8ee;
+  border-left: 4px solid var(--amber);
+  border-radius: 4px;
+  padding: 12px 16px;
+  margin: 14px 0;
+}
+
+.slide-content .term-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 14px 0;
+  font-size: 13px;
+}
+
+.slide-content .term-table th {
+  background: var(--navy);
+  color: white;
+  padding: 8px 12px;
+  text-align: left;
+}
+
+.slide-content .term-table td {
+  padding: 7px 12px;
+  border-bottom: 1px solid var(--gray-3);
+  vertical-align: top;
+}
+
+.slide-content .term-table tr:nth-child(even) td { background: #f5f8fc; }
+
+.en-term {
+  font-style: italic;
+  color: var(--navy);
+  font-weight: 600;
+}
+
+.jp-reading { color: var(--gray-2); font-size: .9em; }
+
+.keyword {
+  background: #fff3cd;
+  padding: 1px 4px;
+  border-radius: 3px;
+  font-weight: 600;
+}
+
+/* スライドナビ */
+.slide-nav {
+  padding: 14px 20px;
+  border-top: 1px solid var(--gray-3);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.slide-counter { font-size: 13px; color: var(--gray-2); }
+
+/* --- クイズ --- */
+.quiz-card {
+  background: var(--white);
+  border-radius: 12px;
+  box-shadow: 0 3px 14px rgba(0,0,0,.09);
+  overflow: hidden;
+  margin-bottom: 24px;
+  display: none;
+  animation: fadeIn .3s ease;
+}
+.quiz-card.active { display: block; }
+
+.quiz-header {
+  background: linear-gradient(90deg, var(--teal), #1a6b5e);
+  color: white;
+  padding: 14px 20px;
+  font-weight: bold;
+  font-size: 1.05rem;
+}
+
+.quiz-body { padding: 20px 24px; }
+
+.quiz-q { font-size: 1.05rem; color: var(--navy); font-weight: bold; margin-bottom: 16px; }
+
+.quiz-options { display: flex; flex-direction: column; gap: 10px; }
+
+.quiz-option {
+  border: 2px solid var(--gray-3);
+  border-radius: 8px;
+  padding: 12px 16px;
+  cursor: pointer;
+  font-family: inherit;
+  font-size: 14px;
+  text-align: left;
+  background: var(--white);
+  transition: border-color .15s, background .15s;
+  color: var(--gray-1);
+}
+
+.quiz-option:hover:not(:disabled) {
+  border-color: var(--teal);
+  background: #f0f9f7;
+}
+
+.quiz-option.correct {
+  border-color: var(--teal);
+  background: #e6f5f2;
+  color: #0a5c4e;
+  font-weight: bold;
+}
+
+.quiz-option.wrong {
+  border-color: #e74c3c;
+  background: #fdf0ef;
+  color: #a93226;
+}
+
+.quiz-option:disabled { cursor: default; }
+
+.quiz-feedback {
+  margin-top: 14px;
+  padding: 12px 16px;
+  border-radius: 8px;
+  font-size: 14px;
+  display: none;
+}
+
+.quiz-feedback.show { display: block; }
+.quiz-feedback.ok { background: #e6f5f2; color: #0a5c4e; border-left: 4px solid var(--teal); }
+.quiz-feedback.ng { background: #fdf0ef; color: #a93226; border-left: 4px solid #e74c3c; }
+
+.quiz-next-btn { margin-top: 14px; display: none; }
+.quiz-next-btn.show { display: block; }
+
+/* --- チャプター完了画面 --- */
+.chapter-complete {
+  text-align: center;
+  padding: 40px 20px;
+  display: none;
+}
+.chapter-complete.active { display: block; }
+.chapter-complete .big-badge { font-size: 5rem; margin-bottom: 12px; }
+.chapter-complete h2 { color: var(--navy); margin-bottom: 8px; }
+.chapter-complete p { color: var(--gray-2); margin-bottom: 20px; }
+
+/* --- 難易度選択 --- */
+.diff-selector {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 20px;
+  flex-wrap: wrap;
+}
+
+.diff-btn {
+  padding: 6px 16px;
+  border-radius: 16px;
+  border: 2px solid var(--gray-3);
+  background: white;
+  font-family: inherit;
+  font-size: 13px;
+  cursor: pointer;
+  transition: all .15s;
+  color: var(--gray-1);
+}
+
+.diff-btn.active { border-color: var(--teal); background: var(--teal); color: white; font-weight: bold; }
+
+/* モバイル対応 */
+@media (max-width: 720px) {
+  .learn-container {
+    grid-template-columns: 1fr;
+  }
+  .sidebar {
+    position: static;
+    height: auto;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0;
+    padding: 8px 0;
+  }
+  .chapter-btn { width: auto; flex: 1; min-width: 120px; }
+  .learn-main { padding: 16px 14px 40px; }
+  .progress-header { padding: 0 12px; }
+}
+  </style>
+</head>
+<body>
+
+<div class="learn-container">
+
+  <!-- 進捗ヘッダー（sticky） -->
+  <header class="progress-header">
+    <a href="index.html" style="text-decoration:none; color:var(--navy); font-weight:bold; font-size:.95rem; white-space:nowrap;">← ポータル</a>
+    <span class="progress-label" id="progressLabel">学習進捗</span>
+    <div class="progress-track">
+      <div class="progress-fill" id="progressFill" style="width:0%"></div>
+    </div>
+    <span class="progress-pct" id="progressPct">0%</span>
+    <div class="badge-row" id="badgeRow">
+      <span class="badge" data-badge="ch1" title="接辞マスター">🔤</span>
+      <span class="badge" data-badge="ch2" title="解剖学習得">🫀</span>
+      <span class="badge" data-badge="ch3" title="感染症通">🦠</span>
+      <span class="badge" data-badge="ch4" title="免疫の守護者">🛡️</span>
+      <span class="badge" data-badge="ch5" title="症候探偵">🩺</span>
+    </div>
+  </header>
+
+  <!-- サイドバー目次 -->
+  <aside class="sidebar">
+    <div class="sidebar-title">チャプター一覧</div>
+    <div id="sidebarNav"></div>
+  </aside>
+
+  <!-- メインコンテンツ -->
+  <main class="learn-main" id="learnMain">
+    <div id="slideArea"></div>
+  </main>
+
+</div>
+
+<footer class="site-footer" style="margin-top:0;">
+  <p>本テキストは AI（Claude, Anthropic）を用いて作成されました。内容には誤りが含まれる可能性があります。<br>
+  医療上の判断には必ず公式の教科書・文献・専門家の指導を参照してください。</p>
+  <p>二次利用・再配布は自己責任のもとで可能です。その際、本注記の保持を推奨します。</p>
+</footer>
+
+<script>
+// ============================================================
+// コースデータ定義
+// ============================================================
+const CHAPTERS = [
+  {
+    id: 'ch1',
+    icon: '🔤',
+    title: '接頭辞・接尾辞（Prefix / Suffix）',
+    badge: '接辞マスター',
+    slides: [
+      {
+        title: 'なぜ接辞を学ぶのか？',
+        icon: '🎯',
+        content: `
+<p>医学英語には専門用語が数千語以上あります。しかし、その多くは<span class="keyword">接頭辞（prefix）</span>・<span class="keyword">語根（root）</span>・<span class="keyword">接尾辞（suffix）</span>の組み合わせで作られています。</p>
+<div class="highlight-box">
+  <strong>例：</strong><span class="en-term">hyper-tension</span>（高血圧）<br>
+  → <span class="keyword">hyper-</span>（高い・過剰な）+ <span class="keyword">tension</span>（圧力）<br><br>
+  <strong>例：</strong><span class="en-term">hypo-glycemia</span>（低血糖）<br>
+  → <span class="keyword">hypo-</span>（低い）+ <span class="keyword">glyc-</span>（糖）+ <span class="keyword">-emia</span>（血液の状態）
+</div>
+<p>接辞を覚えると、初めて見た単語の意味を<strong>類推</strong>できるようになります。これが医学英語学習の最大の武器です。</p>`
+      },
+      {
+        title: '量の接頭辞：hyper- / hypo-',
+        icon: '⚖️',
+        content: `
+<table class="term-table">
+  <thead><tr><th>接辞</th><th>意味</th><th>例</th><th>日本語</th></tr></thead>
+  <tbody>
+    <tr><td><span class="en-term">hyper-</span></td><td>高い・過剰</td><td>hypertension</td><td>高血圧</td></tr>
+    <tr><td><span class="en-term">hyper-</span></td><td>高い・過剰</td><td>hyperglycemia</td><td>高血糖</td></tr>
+    <tr><td><span class="en-term">hypo-</span></td><td>低い・不足</td><td>hypotension</td><td>低血圧</td></tr>
+    <tr><td><span class="en-term">hypo-</span></td><td>低い・不足</td><td>hypoglycemia</td><td>低血糖</td></tr>
+  </tbody>
+</table>
+<div class="warn-box">
+  ⚠️ <strong>覚え方のコツ：</strong>「ハイパー」は日本語でも「過激・過剰」のニュアンスで使いますね。<strong>hyper → 過多、hypo → 過少</strong>とセットで覚えましょう。
+</div>`
+      },
+      {
+        title: '速度の接頭辞：tachy- / brady-',
+        icon: '💓',
+        content: `
+<table class="term-table">
+  <thead><tr><th>接辞</th><th>意味</th><th>例</th><th>日本語</th></tr></thead>
+  <tbody>
+    <tr><td><span class="en-term">tachy-</span></td><td>速い・頻</td><td>tachycardia</td><td>頻脈</td></tr>
+    <tr><td><span class="en-term">tachy-</span></td><td>速い・頻</td><td>tachypnea</td><td>頻呼吸</td></tr>
+    <tr><td><span class="en-term">brady-</span></td><td>遅い・徐</td><td>bradycardia</td><td>徐脈</td></tr>
+    <tr><td><span class="en-term">brady-</span></td><td>遅い・徐</td><td>bradypnea</td><td>徐呼吸</td></tr>
+  </tbody>
+</table>
+<div class="highlight-box">
+  <strong>語根 -cardia</strong>（心）、<strong>-pnea</strong>（呼吸）も一緒に覚えましょう。<br>
+  → cardiology（循環器内科）、dyspnea（呼吸困難）など
+</div>`
+      },
+      {
+        title: '病態の接尾辞：-itis / -emia / -osis',
+        icon: '🔬',
+        content: `
+<table class="term-table">
+  <thead><tr><th>接尾辞</th><th>意味</th><th>例</th><th>日本語</th></tr></thead>
+  <tbody>
+    <tr><td><span class="en-term">-itis</span></td><td>炎症</td><td>hepatitis / tonsillitis / meningitis</td><td>肝炎 / 扁桃炎 / 髄膜炎</td></tr>
+    <tr><td><span class="en-term">-emia</span></td><td>血液の状態</td><td>bacteremia / anemia</td><td>菌血症 / 貧血</td></tr>
+    <tr><td><span class="en-term">-osis</span></td><td>病的状態・症</td><td>tuberculosis / fibrosis</td><td>結核 / 線維症</td></tr>
+    <tr><td><span class="en-term">-oma</span></td><td>腫瘍</td><td>carcinoma / sarcoma</td><td>癌腫 / 肉腫</td></tr>
+    <tr><td><span class="en-term">-pathy</span></td><td>病気</td><td>neuropathy / cardiomyopathy</td><td>神経障害 / 心筋症</td></tr>
+  </tbody>
+</table>
+<p><span class="en-term">-itis</span>は最も重要な接尾辞の一つ。<strong>organ名 + -itis</strong>でその臓器の炎症を表します。</p>`
+      },
+      {
+        title: '操作・手術の接尾辞：-ectomy / -otomy / -scopy',
+        icon: '🔪',
+        content: `
+<table class="term-table">
+  <thead><tr><th>接尾辞</th><th>意味</th><th>例</th><th>日本語</th></tr></thead>
+  <tbody>
+    <tr><td><span class="en-term">-ectomy</span></td><td>切除</td><td>appendectomy / gastrectomy</td><td>虫垂切除術 / 胃切除術</td></tr>
+    <tr><td><span class="en-term">-otomy</span></td><td>切離・切開</td><td>tracheotomy / lobotomy</td><td>気管切開術 / 葉切離術</td></tr>
+    <tr><td><span class="en-term">-scopy</span></td><td>内視鏡検査</td><td>endoscopy / colonoscopy</td><td>内視鏡検査 / 大腸内視鏡</td></tr>
+    <tr><td><span class="en-term">-plasty</span></td><td>形成術</td><td>rhinoplasty / arthroplasty</td><td>鼻形成術 / 関節形成術</td></tr>
+  </tbody>
+</table>
+<div class="highlight-box">
+  <strong>-ectomy vs -otomy：</strong><br>
+  -ectomy → <strong>摘出・切除</strong>（appendectomy: 虫垂を取り出す）<br>
+  -otomy → <strong>切開・切離</strong>（tracheotomy: 気管を切り開く）
+</div>`
+      }
+    ],
+    quizzes: [
+      {
+        q: '「tachycardia（頻脈）」のtachy-が意味するものはどれですか？',
+        options: ['遅い', '速い', '心臓', '血圧'],
+        answer: 1,
+        explanation: 'tachy- は「速い・頻」を意味します。bradycardia（徐脈）と対をなします。'
+      },
+      {
+        q: 'hepatitis（肝炎）の接尾辞 -itis は何を意味しますか？',
+        options: ['腫瘍', '血液の状態', '炎症', '切除'],
+        answer: 2,
+        explanation: '-itis は「炎症」を意味する最も重要な医学接尾辞の一つです。'
+      },
+      {
+        q: '「hyperglycemia」を正しく日本語に訳したものはどれですか？',
+        options: ['低血糖', '高血圧', '高血糖', '低血圧'],
+        answer: 2,
+        explanation: 'hyper-（高い）+ glyc-（糖）+ -emia（血液の状態）= 高血糖です。'
+      }
+    ]
+  },
+
+  {
+    id: 'ch2',
+    icon: '🫀',
+    title: '解剖学用語の基礎',
+    badge: '解剖学習得',
+    slides: [
+      {
+        title: '解剖学の方向・位置を表す用語',
+        icon: '🧭',
+        content: `
+<p>解剖学では体の位置・方向を英語で正確に表現します。これらは身体診察レポートや画像所見の記述で必須です。</p>
+<table class="term-table">
+  <thead><tr><th>英語</th><th>日本語</th><th>対義語</th></tr></thead>
+  <tbody>
+    <tr><td><span class="en-term">anterior / ventral</span></td><td>前方・腹側</td><td>posterior / dorsal（後方・背側）</td></tr>
+    <tr><td><span class="en-term">superior / cranial</span></td><td>上方・頭側</td><td>inferior / caudal（下方・尾側）</td></tr>
+    <tr><td><span class="en-term">lateral</span></td><td>外側・側方</td><td>medial（内側）</td></tr>
+    <tr><td><span class="en-term">proximal</span></td><td>近位</td><td>distal（遠位）</td></tr>
+    <tr><td><span class="en-term">superficial</span></td><td>表層・表在性</td><td>deep（深層・深在性）</td></tr>
+  </tbody>
+</table>`
+      },
+      {
+        title: '臓器を表す形容詞',
+        icon: '🏥',
+        content: `
+<p>英語論文では臓器名をそのまま使うより、対応する<span class="keyword">形容詞形</span>を使うことが多いです。</p>
+<table class="term-table">
+  <thead><tr><th>臓器名</th><th>形容詞</th><th>用例</th></tr></thead>
+  <tbody>
+    <tr><td>heart（心臓）</td><td><span class="en-term">cardiac</span></td><td>cardiac output（心拍出量）</td></tr>
+    <tr><td>lung（肺）</td><td><span class="en-term">pulmonary</span></td><td>pulmonary embolism（肺塞栓症）</td></tr>
+    <tr><td>liver（肝臓）</td><td><span class="en-term">hepatic</span></td><td>hepatic failure（肝不全）</td></tr>
+    <tr><td>kidney（腎臓）</td><td><span class="en-term">renal</span></td><td>renal failure（腎不全）</td></tr>
+    <tr><td>brain（脳）</td><td><span class="en-term">cerebral</span></td><td>cerebral infarction（脳梗塞）</td></tr>
+    <tr><td>stomach（胃）</td><td><span class="en-term">gastric</span></td><td>gastric ulcer（胃潰瘍）</td></tr>
+  </tbody>
+</table>
+<div class="warn-box">⚠️ 「kidney failure」と「renal failure」はどちらも正しい表現ですが、論文では<strong>renal failure</strong>がより一般的です。</div>`
+      },
+      {
+        title: '主要臓器の英語と関連用語',
+        icon: '🫁',
+        content: `
+<table class="term-table">
+  <thead><tr><th>臓器</th><th>英語</th><th>関連語</th></tr></thead>
+  <tbody>
+    <tr><td>脳</td><td><span class="en-term">brain</span></td><td>cerebrum（大脳）, cerebellum（小脳）, brainstem（脳幹）</td></tr>
+    <tr><td>心臓</td><td><span class="en-term">heart</span></td><td>ventricle（心室）, atrium（心房）, myocardium（心筋）</td></tr>
+    <tr><td>肺</td><td><span class="en-term">lung</span></td><td>bronchus（気管支）, alveolus（肺胞）, pleura（胸膜）</td></tr>
+    <tr><td>肝臓</td><td><span class="en-term">liver</span></td><td>hepatocyte（肝細胞）, bile（胆汁）, gallbladder（胆嚢）</td></tr>
+    <tr><td>腎臓</td><td><span class="en-term">kidney</span></td><td>nephron（ネフロン）, ureter（尿管）, glomerulus（糸球体）</td></tr>
+  </tbody>
+</table>`
+      }
+    ],
+    quizzes: [
+      {
+        q: 'anterior（前方）の対義語はどれですか？',
+        options: ['lateral', 'posterior', 'distal', 'medial'],
+        answer: 1,
+        explanation: 'anterior（前方）⇔ posterior（後方）がペアです。'
+      },
+      {
+        q: '「肺」の形容詞はどれですか？',
+        options: ['hepatic', 'renal', 'pulmonary', 'cardiac'],
+        answer: 2,
+        explanation: 'lung（肺）の形容詞は pulmonary です。pulmonary embolism（肺塞栓症）が有名な用例です。'
+      }
+    ]
+  },
+
+  {
+    id: 'ch3',
+    icon: '🦠',
+    title: '感染症の基本用語',
+    badge: '感染症通',
+    slides: [
+      {
+        title: '感染と伝播のしくみ',
+        icon: '🔗',
+        content: `
+<p>感染症を学ぶ上で最初に整理すべき基本概念です。</p>
+<table class="term-table">
+  <thead><tr><th>英語</th><th>日本語</th><th>解説</th></tr></thead>
+  <tbody>
+    <tr><td><span class="en-term">infection</span></td><td>感染</td><td>病原体が宿主に侵入・増殖すること</td></tr>
+    <tr><td><span class="en-term">transmission</span></td><td>伝播・感染経路</td><td>病原体が宿主から宿主へ移動すること</td></tr>
+    <tr><td><span class="en-term">contagious</span></td><td>伝染性の</td><td>接触・飛沫などで伝わりやすい性質</td></tr>
+    <tr><td><span class="en-term">incubation period</span></td><td>潜伏期</td><td>感染から発症までの期間</td></tr>
+    <tr><td><span class="en-term">latent</span></td><td>潜伏性の</td><td>発症せず体内に潜んでいる状態</td></tr>
+  </tbody>
+</table>
+<div class="highlight-box">
+  <strong>endemic / epidemic / pandemic の違い</strong><br>
+  <span class="en-term">endemic</span>：特定地域に常に存在する（風土病）<br>
+  <span class="en-term">epidemic</span>：特定地域で急激に流行する<br>
+  <span class="en-term">pandemic</span>：世界規模で流行する（例：COVID-19）
+</div>`
+      },
+      {
+        title: '主な病原体の分類',
+        icon: '🧫',
+        content: `
+<table class="term-table">
+  <thead><tr><th>分類</th><th>英語</th><th>代表的な病原体</th></tr></thead>
+  <tbody>
+    <tr><td>細菌</td><td><span class="en-term">bacteria</span></td><td><i>Mycobacterium tuberculosis</i>（結核菌）, <i>Staphylococcus aureus</i>（黄色ブドウ球菌）</td></tr>
+    <tr><td>ウイルス</td><td><span class="en-term">virus</span></td><td>influenza virus（インフルエンザウイルス）, varicella-zoster virus（水痘・帯状疱疹ウイルス）</td></tr>
+    <tr><td>真菌</td><td><span class="en-term">fungus</span> / fungi</td><td><i>Candida</i>（カンジダ）, <i>Aspergillus</i>（アスペルギルス）</td></tr>
+    <tr><td>原虫</td><td><span class="en-term">protozoa</span></td><td><i>Plasmodium</i>（マラリア原虫）, <i>Toxoplasma</i>（トキソプラズマ）</td></tr>
+    <tr><td>寄生虫</td><td><span class="en-term">parasite</span></td><td>Ascaris（回虫）, <i>Strongyloides</i>（糞線虫）</td></tr>
+  </tbody>
+</table>
+<div class="warn-box">
+  ⚠️ <strong>学名の書き方：</strong>属名と種名はイタリック体（斜体）で表記します。<i>Staphylococcus aureus</i>（属名 + 種名）が原則です。血清型はイタリックにしません。
+</div>`
+      },
+      {
+        title: '感染症の分類：感染症法',
+        icon: '📋',
+        content: `
+<p>日本では感染症は「感染症法」によって類型化されています。</p>
+<div class="highlight-box">
+  <strong>1類</strong>：エボラ出血熱、ペスト（plague）、天然痘（smallpox）など<br>
+  <strong>2類</strong>：結核（tuberculosis）、ポリオ（polio）、ジフテリア（diphtheria）など<br>
+  <strong>3類</strong>：コレラ（cholera）、腸チフス、赤痢など<br>
+  <strong>4類</strong>：マラリア（malaria）、狂犬病（rabies）など<br>
+  <strong>5類</strong>：インフルエンザ（influenza）、麻疹（measles）、風疹（rubella）など
+</div>
+<p>上位の類ほど感染力・致死率が高く、届出・隔離等の対応が厳格になります。</p>`
+      },
+      {
+        title: '感染予防・制御の用語',
+        icon: '🧼',
+        content: `
+<table class="term-table">
+  <thead><tr><th>英語</th><th>日本語</th><th>補足</th></tr></thead>
+  <tbody>
+    <tr><td><span class="en-term">sterilization</span></td><td>滅菌</td><td>全ての微生物を死滅させる</td></tr>
+    <tr><td><span class="en-term">disinfection</span></td><td>消毒</td><td>病原性微生物を不活化する（芽胞を除く）</td></tr>
+    <tr><td><span class="en-term">isolation</span></td><td>隔離</td><td>感染者と非感染者を分ける</td></tr>
+    <tr><td><span class="en-term">quarantine</span></td><td>検疫</td><td>曝露した可能性のある人を観察期間中に分離</td></tr>
+    <tr><td><span class="en-term">prophylaxis</span></td><td>予防</td><td>感染症を未然に防ぐ措置（薬剤予防を含む）</td></tr>
+  </tbody>
+</table>
+<div class="highlight-box">
+  滅菌（sterilization）&gt; 消毒（disinfection）&gt; 清潔（cleaning）の順に効果は強くなります。
+</div>`
+      }
+    ],
+    quizzes: [
+      {
+        q: '世界規模で流行する感染症を表す英語はどれですか？',
+        options: ['endemic', 'epidemic', 'pandemic', 'outbreak'],
+        answer: 2,
+        explanation: 'pandemic（パンデミック）は世界的な大流行を指します。COVID-19がその代表例です。'
+      },
+      {
+        q: '感染から発症までの期間を表す英語はどれですか？',
+        options: ['latent period', 'incubation period', 'recovery period', 'quarantine period'],
+        answer: 1,
+        explanation: 'incubation period（潜伏期）は病原体に感染してから症状が出るまでの期間です。'
+      },
+      {
+        q: '全ての微生物を死滅させる処理を何と言いますか？',
+        options: ['disinfection（消毒）', 'isolation（隔離）', 'sterilization（滅菌）', 'prophylaxis（予防）'],
+        answer: 2,
+        explanation: 'sterilization（滅菌）は芽胞を含む全ての微生物を死滅させます。disinfection（消毒）は一般細菌を不活化しますが芽胞には効果が限定的です。'
+      }
+    ]
+  },
+
+  {
+    id: 'ch4',
+    icon: '🛡️',
+    title: '免疫学の基本用語',
+    badge: '免疫の守護者',
+    slides: [
+      {
+        title: '自然免疫と適応免疫',
+        icon: '⚔️',
+        content: `
+<p>免疫（immunity）は大きく2種類に分けられます。</p>
+<div class="highlight-box">
+  <strong>自然免疫（innate immunity）</strong><br>
+  生まれつき備わっている非特異的な防御機構。応答は素早いが特異性がない。<br>
+  主役：neutrophil（好中球）, macrophage（マクロファージ）, NK細胞
+</div>
+<div class="highlight-box">
+  <strong>適応免疫（adaptive immunity）= acquired immunity</strong><br>
+  抗原に特異的な応答を獲得する仕組み。応答に時間がかかるが記憶を持つ。<br>
+  主役：T lymphocyte（T細胞）, B lymphocyte（B細胞）, antibody（抗体）
+</div>
+<p>感染症に対する免疫はこの2つが連携して機能します。</p>`
+      },
+      {
+        title: '抗原と抗体',
+        icon: '🔑',
+        content: `
+<table class="term-table">
+  <thead><tr><th>英語</th><th>日本語</th><th>解説</th></tr></thead>
+  <tbody>
+    <tr><td><span class="en-term">antigen</span></td><td>抗原</td><td>免疫応答を引き起こす物質（病原体の一部など）</td></tr>
+    <tr><td><span class="en-term">antibody</span></td><td>抗体</td><td>B細胞が産生する特異的なタンパク質（免疫グロブリン）</td></tr>
+    <tr><td><span class="en-term">immunoglobulin（Ig）</span></td><td>免疫グロブリン</td><td>抗体の別名。IgG, IgM, IgA, IgE, IgDの5種類がある</td></tr>
+    <tr><td><span class="en-term">neutralizing antibody</span></td><td>中和抗体</td><td>病原体の感染性を無効化する抗体</td></tr>
+  </tbody>
+</table>
+<div class="warn-box">
+  ⚠️ antigen（抗原）と antibody（抗体）は似ているので混同注意！<br>
+  <strong>anti-gen</strong>（「生む」から免疫応答を生む物質）、<strong>anti-body</strong>（抗体は体が作る武器）と覚えましょう。
+</div>`
+      },
+      {
+        title: '炎症と免疫細胞',
+        icon: '🔥',
+        content: `
+<p><span class="en-term">inflammation</span>（炎症）は感染や傷害への防御反応です。</p>
+<table class="term-table">
+  <thead><tr><th>細胞名</th><th>英語</th><th>主な機能</th></tr></thead>
+  <tbody>
+    <tr><td>好中球</td><td><span class="en-term">neutrophil</span></td><td>細菌を貪食する最前線の細胞</td></tr>
+    <tr><td>マクロファージ</td><td><span class="en-term">macrophage</span></td><td>貪食・抗原提示・サイトカイン産生</td></tr>
+    <tr><td>T細胞</td><td><span class="en-term">T lymphocyte</span></td><td>細胞性免疫の主役（Tc, Th, Treg）</td></tr>
+    <tr><td>B細胞</td><td><span class="en-term">B lymphocyte</span></td><td>抗体産生（→形質細胞へ分化）</td></tr>
+    <tr><td>NK細胞</td><td><span class="en-term">natural killer cell</span></td><td>ウイルス感染細胞・腫瘍細胞を殺傷</td></tr>
+  </tbody>
+</table>
+<div class="highlight-box">
+  <strong>cytokine（サイトカイン）</strong>：免疫細胞が産生・分泌するシグナルタンパク質の総称。<br>
+  interferon（インターフェロン）, interleukin（インターロイキン）, chemokine（ケモカイン）などが含まれます。
+</div>`
+      }
+    ],
+    quizzes: [
+      {
+        q: '生まれつき備わっている非特異的な免疫を何と言いますか？',
+        options: ['adaptive immunity', 'acquired immunity', 'innate immunity', 'humoral immunity'],
+        answer: 2,
+        explanation: 'innate immunity（自然免疫）は生まれつきの非特異的防御機構です。adaptive immunity（適応免疫）と対をなします。'
+      },
+      {
+        q: 'B細胞が産生するタンパク質はどれですか？',
+        options: ['antigen（抗原）', 'antibody（抗体）', 'cytokine（サイトカイン）', 'neutrophil（好中球）'],
+        answer: 1,
+        explanation: 'B細胞は刺激を受けると形質細胞に分化し、antibody（抗体）=免疫グロブリンを産生します。'
+      }
+    ]
+  },
+
+  {
+    id: 'ch5',
+    icon: '🩺',
+    title: '主要症候と鑑別診断',
+    badge: '症候探偵',
+    slides: [
+      {
+        title: '主要症候とは？',
+        icon: '📋',
+        content: `
+<p>医学教育では「主要症候（chief complaint / presenting symptom）」から鑑別診断を考える訓練を行います。これが<span class="keyword">臨床推論（clinical reasoning）</span>の出発点です。</p>
+<div class="highlight-box">
+  <strong>主要症候 → 鑑別疾患 → 病歴・検査 → 診断</strong>というプロセスが基本です。
+</div>
+<p>モデル・コア・カリキュラムでは34の主要症候が定められています。代表的なものを学びます。</p>`
+      },
+      {
+        title: '発熱（fever）の鑑別',
+        icon: '🌡️',
+        content: `
+<p><span class="en-term">fever</span>（発熱）は最も頻繁な主要症候の一つです。</p>
+<table class="term-table">
+  <thead><tr><th>分類</th><th>代表的な鑑別疾患（英語）</th></tr></thead>
+  <tbody>
+    <tr><td>上気道</td><td>upper respiratory tract infection（上気道炎）, influenza（インフルエンザ）, tonsillitis（扁桃炎）</td></tr>
+    <tr><td>下気道</td><td>pneumonia（肺炎）, tuberculosis（結核）</td></tr>
+    <tr><td>消化器</td><td>cholecystitis（胆嚢炎）, cholangitis（胆管炎）</td></tr>
+    <tr><td>泌尿器</td><td>urinary tract infection（尿路感染症）</td></tr>
+    <tr><td>神経</td><td>meningitis（髄膜炎）, encephalitis（脳炎）</td></tr>
+    <tr><td>その他</td><td>drug fever（薬剤熱）, infective endocarditis（感染性心内膜炎）</td></tr>
+  </tbody>
+</table>`
+      },
+      {
+        title: '呼吸困難（dyspnea）と咳・痰の鑑別',
+        icon: '🫁',
+        content: `
+<p><span class="en-term">dyspnea</span>（呼吸困難）・<span class="en-term">cough</span>（咳）・<span class="en-term">sputum</span>（痰）は呼吸器系の重要な症候です。</p>
+<table class="term-table">
+  <thead><tr><th>緊急度</th><th>疾患</th><th>英語</th></tr></thead>
+  <tbody>
+    <tr><td>⚠️ 緊急</td><td>気管支喘息</td><td>bronchial asthma</td></tr>
+    <tr><td>⚠️ 緊急</td><td>肺塞栓症</td><td>pulmonary embolism</td></tr>
+    <tr><td>⚠️ 緊急</td><td>気胸</td><td>pneumothorax</td></tr>
+    <tr><td>🔶 重要</td><td>肺炎</td><td>pneumonia</td></tr>
+    <tr><td>🔶 重要</td><td>慢性閉塞性肺疾患</td><td>COPD（chronic obstructive pulmonary disease）</td></tr>
+    <tr><td>🔷 慢性</td><td>間質性肺疾患</td><td>interstitial lung disease</td></tr>
+  </tbody>
+</table>`
+      },
+      {
+        title: '腹痛（abdominal pain）の鑑別',
+        icon: '🫃',
+        content: `
+<p><span class="en-term">abdominal pain</span>（腹痛）は部位・性状・随伴症状から鑑別を絞ります。</p>
+<table class="term-table">
+  <thead><tr><th>部位</th><th>代表的な疾患</th><th>英語</th></tr></thead>
+  <tbody>
+    <tr><td>右上腹部</td><td>胆嚢炎</td><td>cholecystitis</td></tr>
+    <tr><td>右下腹部</td><td>虫垂炎</td><td>appendicitis</td></tr>
+    <tr><td>心窩部</td><td>消化性潰瘍</td><td>peptic ulcer</td></tr>
+    <tr><td>全腹部</td><td>腹膜炎</td><td>peritonitis</td></tr>
+    <tr><td>左腰背部</td><td>尿路結石</td><td>urolithiasis</td></tr>
+  </tbody>
+</table>
+<div class="warn-box">⚠️ 胸部疾患（急性冠症候群・大動脈解離）も腹痛を呈することがあります。見逃しに注意！</div>`
+      }
+    ],
+    quizzes: [
+      {
+        q: '「dyspnea」の日本語として正しいものはどれですか？',
+        options: ['発熱', '呼吸困難', '腹痛', '頭痛'],
+        answer: 1,
+        explanation: 'dyspnea（ディスプネア）は呼吸困難を意味します。dys-（異常）+ pnea（呼吸）から成り立っています。'
+      },
+      {
+        q: '右下腹部痛の代表的な鑑別疾患はどれですか？',
+        options: ['cholecystitis（胆嚢炎）', 'appendicitis（虫垂炎）', 'peptic ulcer（消化性潰瘍）', 'peritonitis（腹膜炎）'],
+        answer: 1,
+        explanation: 'appendicitis（虫垂炎）は右下腹部痛の代表的な疾患です。McBurney点（臍と右上前腸骨棘を結ぶ線の外側1/3）が圧痛の典型的な部位です。'
+      },
+      {
+        q: '「meningitis」が鑑別にあがる主要症候はどれですか？',
+        options: ['腹痛', '動悸', '発熱', '黄疸'],
+        answer: 2,
+        explanation: 'meningitis（髄膜炎）は発熱の鑑別疾患の一つです。他に頭痛、項部硬直が3主徴として知られています。'
+      }
+    ]
+  }
+];
+
+// ============================================================
+// 状態管理
+// ============================================================
+let state = {
+  currentChapter: 0,
+  currentSlide: 0,
+  inQuiz: false,
+  quizIndex: 0,
+  quizAnswered: false,
+  completedChapters: new Set(),
+  totalSlides: 0,
+  completedSlides: 0
+};
+
+// 総スライド数計算
+function calcTotals() {
+  state.totalSlides = CHAPTERS.reduce((sum, ch) => sum + ch.slides.length + ch.quizzes.length, 0);
+}
+
+// ============================================================
+// UI構築
+// ============================================================
+function buildSidebar() {
+  const nav = document.getElementById('sidebarNav');
+  nav.innerHTML = CHAPTERS.map((ch, i) => `
+    <div class="chapter-group">
+      <button class="chapter-btn ${i === 0 ? 'active' : ''}" 
+              onclick="goChapter(${i})" id="sidebar-ch-${i}">
+        <span class="ch-icon">${ch.icon}</span>
+        <span style="flex:1; line-height:1.3;">${ch.title}</span>
+        <span class="ch-num" id="ch-num-${i}">Ch.${i+1}</span>
+      </button>
+    </div>
+  `).join('');
+}
+
+function renderSlide() {
+  const ch = CHAPTERS[state.currentChapter];
+  const area = document.getElementById('slideArea');
+  const totalInChap = ch.slides.length;
+  const quizLen = ch.quizzes.length;
+  const isQuizPhase = state.inQuiz;
+  const isComplete = state.currentSlide >= totalInChap + quizLen;
+
+  if (isComplete) {
+    renderComplete(ch);
+    return;
+  }
+
+  if (!isQuizPhase) {
+    renderSlideContent(ch);
+  } else {
+    renderQuiz(ch);
+  }
+  updateProgress();
+}
+
+function renderSlideContent(ch) {
+  const slide = ch.slides[state.currentSlide];
+  const total = ch.slides.length;
+  const isLast = state.currentSlide === total - 1;
+
+  document.getElementById('slideArea').innerHTML = `
+    <div class="slide-card active" id="mainCard">
+      <div class="slide-eyebrow">
+        <span>${ch.icon} ${ch.title}</span>
+        <span>スライド ${state.currentSlide + 1} / ${total}</span>
+      </div>
+      <div class="slide-body">
+        <h2 class="slide-title"><span class="icon">${slide.icon}</span>${slide.title}</h2>
+        <div class="slide-content">${slide.content}</div>
+      </div>
+      <div class="slide-nav">
+        <button class="btn btn-ghost btn-sm" onclick="prevSlide()" ${state.currentSlide === 0 ? 'disabled' : ''}>← 前へ</button>
+        <span class="slide-counter">Ch.${state.currentChapter+1} — ${state.currentSlide+1}/${total}</span>
+        <button class="btn ${isLast ? 'btn-amber' : 'btn-accent'} btn-sm" onclick="nextSlide()">
+          ${isLast ? 'クイズへ ✏️' : '次へ →'}
+        </button>
+      </div>
+    </div>`;
+}
+
+function renderQuiz(ch) {
+  const qi = state.quizIndex;
+  const quiz = ch.quizzes[qi];
+  const total = ch.quizzes.length;
+
+  document.getElementById('slideArea').innerHTML = `
+    <div class="quiz-card active">
+      <div class="quiz-header">✏️ 確認クイズ ${qi+1} / ${total} — ${ch.title}</div>
+      <div class="quiz-body">
+        <div class="quiz-q">Q. ${quiz.q}</div>
+        <div class="quiz-options">
+          ${quiz.options.map((opt, i) => `
+            <button class="quiz-option" id="opt-${i}" onclick="answerQuiz(${i})">
+              ${String.fromCharCode(65+i)}. ${opt}
+            </button>`).join('')}
+        </div>
+        <div class="quiz-feedback" id="quizFeedback"></div>
+        <div class="quiz-next-btn" id="quizNext">
+          <button class="btn btn-accent" onclick="nextQuiz()">
+            ${qi < total - 1 ? '次の問題 →' : 'チャプター完了 🎉'}
+          </button>
+        </div>
+      </div>
+    </div>`;
+}
+
+function renderComplete(ch) {
+  document.getElementById('slideArea').innerHTML = `
+    <div class="chapter-complete active card">
+      <div class="big-badge">${ch.icon}</div>
+      <h2>「${ch.title}」完了！</h2>
+      <p>バッジ <strong>${ch.badge}</strong> を獲得しました 🎉</p>
+      <div style="display:flex; gap:12px; justify-content:center; flex-wrap:wrap;">
+        ${state.currentChapter < CHAPTERS.length - 1 ? `
+          <button class="btn btn-accent" onclick="goChapter(${state.currentChapter + 1})">
+            次のチャプターへ →
+          </button>` : `
+          <div class="highlight-box" style="max-width:400px; margin:0 auto;">
+            <strong>🏆 全チャプター完了！</strong><br>
+            すべてのバッジを獲得しました。辞書ツールもぜひ活用してください。
+          </div>`}
+        <button class="btn btn-ghost" onclick="goChapter(${state.currentChapter})">
+          もう一度このチャプターを学ぶ
+        </button>
+        <a href="index.html" class="btn btn-primary">ポータルへ戻る</a>
+      </div>
+    </div>`;
+}
+
+// ============================================================
+// ナビゲーション
+// ============================================================
+function goChapter(idx) {
+  state.currentChapter = idx;
+  state.currentSlide = 0;
+  state.inQuiz = false;
+  state.quizIndex = 0;
+  state.quizAnswered = false;
+
+  // サイドバーハイライト
+  document.querySelectorAll('.chapter-btn').forEach((b, i) => {
+    b.classList.toggle('active', i === idx);
+  });
+
+  renderSlide();
+  window.scrollTo({ top: 60, behavior: 'smooth' });
+}
+
+function nextSlide() {
+  const ch = CHAPTERS[state.currentChapter];
+  state.completedSlides++;
+  if (state.currentSlide < ch.slides.length - 1) {
+    state.currentSlide++;
+    renderSlide();
+  } else {
+    // クイズへ
+    state.inQuiz = true;
+    state.quizIndex = 0;
+    renderSlide();
+  }
+}
+
+function prevSlide() {
+  if (state.currentSlide > 0) {
+    state.currentSlide--;
+    renderSlide();
+  }
+}
+
+function answerQuiz(selected) {
+  if (state.quizAnswered) return;
+  state.quizAnswered = true;
+
+  const ch = CHAPTERS[state.currentChapter];
+  const quiz = ch.quizzes[state.quizIndex];
+  const correct = selected === quiz.answer;
+
+  document.querySelectorAll('.quiz-option').forEach((btn, i) => {
+    btn.disabled = true;
+    if (i === quiz.answer) btn.classList.add('correct');
+    else if (i === selected && !correct) btn.classList.add('wrong');
+  });
+
+  const fb = document.getElementById('quizFeedback');
+  fb.textContent = (correct ? '✅ 正解！ ' : '❌ 不正解。正解は ' + String.fromCharCode(65 + quiz.answer) + ' です。\n') + quiz.explanation;
+  fb.className = 'quiz-feedback show ' + (correct ? 'ok' : 'ng');
+
+  document.getElementById('quizNext').classList.add('show');
+  state.completedSlides++;
+  updateProgress();
+}
+
+function nextQuiz() {
+  const ch = CHAPTERS[state.currentChapter];
+  state.quizAnswered = false;
+
+  if (state.quizIndex < ch.quizzes.length - 1) {
+    state.quizIndex++;
+    renderSlide();
+  } else {
+    // チャプター完了
+    state.completedChapters.add(state.currentChapter);
+    earnBadge(ch.id);
+    const sideBtn = document.getElementById(`sidebar-ch-${state.currentChapter}`);
+    if (sideBtn) sideBtn.classList.add('done');
+    state.inQuiz = false;
+    state.currentSlide = ch.slides.length + ch.quizzes.length; // complete state
+    renderSlide();
+    updateProgress();
+  }
+}
+
+// ============================================================
+// バッジ・進捗
+// ============================================================
+function earnBadge(chId) {
+  const badge = document.querySelector(`.badge[data-badge="${chId}"]`);
+  if (badge) badge.classList.add('earned');
+}
+
+function updateProgress() {
+  const total = state.totalSlides;
+  const done = state.completedSlides;
+  const pct = Math.min(100, Math.round((done / total) * 100));
+
+  document.getElementById('progressFill').style.width = pct + '%';
+  document.getElementById('progressPct').textContent = pct + '%';
+  document.getElementById('progressLabel').textContent = `学習進捗 ${done}/${total}`;
+}
+
+// ============================================================
+// 初期化
+// ============================================================
+calcTotals();
+buildSidebar();
+renderSlide();
+</script>
+</body>
+</html>

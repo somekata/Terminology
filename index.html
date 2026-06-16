@@ -1,122 +1,281 @@
 <!DOCTYPE html>
 <html lang="ja">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Terminology Entry</title>
-    <link rel="stylesheet" href="style.css" />
-  </head>
-  <body>
-    <h1>ようこそ</h1>
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>医学英語ポータル</title>
+  <link rel="stylesheet" href="css/common.css" />
+  <style>
+    /* --- index 固有 --- */
+    body {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
 
-    <!-- 開始ボタン -->
-    <button class="btn" id="startBtn" onclick="startGame()">医学用語集</button>
-    <button class="btn" id="prefixBtn" onclick="startPrefix()">
-      Prefix/Suffix
-    </button>
-    <button class="btn" id="symptomBtn" onclick="startSymptom()">
+    .hero {
+      background: linear-gradient(135deg, var(--navy) 0%, #2a6496 60%, var(--teal) 100%);
+      color: var(--white);
+      text-align: center;
+      padding: 48px 24px 40px;
+    }
+
+    .hero h1 {
+      font-size: 2rem;
+      margin: 0 0 8px;
+      letter-spacing: .05em;
+    }
+
+    .hero p {
+      font-size: 1rem;
+      opacity: .85;
+      margin: 0 0 28px;
+    }
+
+    .hero-buttons {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 14px;
+    }
+
+    .hero-btn {
+      display: inline-flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 4px;
+      padding: 14px 28px;
+      border-radius: 12px;
+      border: 2px solid rgba(255,255,255,.4);
+      background: rgba(255,255,255,.15);
+      color: var(--white);
+      cursor: pointer;
+      font-family: inherit;
+      font-size: 1rem;
+      font-weight: bold;
+      text-decoration: none;
+      transition: background .2s, border-color .2s, transform .1s;
+      backdrop-filter: blur(4px);
+      min-width: 160px;
+    }
+
+    .hero-btn:hover {
+      background: rgba(255,255,255,.28);
+      border-color: rgba(255,255,255,.7);
+    }
+
+    .hero-btn:active { transform: scale(.97); }
+
+    .hero-btn .icon { font-size: 1.6rem; }
+    .hero-btn .sub  { font-size: .75rem; opacity: .8; font-weight: normal; }
+
+    .hero-btn.highlight {
+      background: var(--amber);
+      border-color: var(--amber);
+    }
+    .hero-btn.highlight:hover { background: #c07a18; border-color: #c07a18; }
+
+    /* カード群 */
+    .content-area {
+      flex: 1;
+      max-width: 820px;
+      margin: 0 auto;
+      padding: 28px 16px;
+      width: 100%;
+    }
+
+    /* スライドパネル */
+    .info-panel {
+      background: var(--white);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      overflow: hidden;
+      margin-bottom: 24px;
+    }
+
+    .panel-tabs {
+      display: flex;
+      border-bottom: 2px solid var(--gray-3);
+    }
+
+    .panel-tab {
+      flex: 1;
+      padding: 12px;
+      text-align: center;
+      font-size: 13px;
+      font-weight: bold;
+      cursor: pointer;
+      border: none;
+      background: none;
+      color: var(--gray-2);
+      font-family: inherit;
+      transition: color .2s, border-bottom .2s;
+      border-bottom: 3px solid transparent;
+      margin-bottom: -2px;
+    }
+
+    .panel-tab.active {
+      color: var(--navy);
+      border-bottom-color: var(--teal);
+    }
+
+    .panel-tab:hover:not(.active) { color: var(--navy); background: #f5f8fb; }
+
+    .panel-body { padding: 20px 24px; }
+
+    .panel-section { display: none; }
+    .panel-section.active { display: block; }
+
+    .panel-section h2 {
+      font-size: 1rem;
+      color: var(--navy);
+      margin: 0 0 10px;
+    }
+
+    .panel-section p { margin: 0 0 10px; }
+
+    /* バージョン履歴 */
+    .version-list { list-style: none; margin: 0; padding: 0; }
+    .version-list li {
+      display: flex;
+      gap: 12px;
+      align-items: baseline;
+      padding: 6px 0;
+      border-bottom: 1px solid var(--gray-3);
+      font-size: 13px;
+    }
+    .version-list li:last-child { border-bottom: none; }
+    .ver-badge {
+      background: var(--navy);
+      color: var(--white);
+      font-size: 11px;
+      border-radius: 10px;
+      padding: 1px 8px;
+      white-space: nowrap;
+    }
+    .ver-date { color: var(--gray-2); white-space: nowrap; }
+
+    @media (max-width: 520px) {
+      .hero h1 { font-size: 1.4rem; }
+      .hero-btn { min-width: 130px; padding: 12px 16px; font-size: .9rem; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ヘッダー -->
+<header class="site-header">
+  <span class="site-title">📚 医学英語ポータル</span>
+</header>
+
+<!-- ヒーロー -->
+<section class="hero">
+  <h1>感染症を学ぶ医学英語</h1>
+  <p>辞書で調べる・授業スタイルで学ぶ、2つのアプローチで医学英語を習得</p>
+  <div class="hero-buttons">
+    <a href="learn.html" class="hero-btn highlight">
+      <span class="icon">🎓</span>
+      授業で学ぶ
+      <span class="sub">★ 学習サイト（新）</span>
+    </a>
+    <a href="Terminology.html" class="hero-btn">
+      <span class="icon">📖</span>
+      医学用語集
+      <span class="sub">辞書形式</span>
+    </a>
+    <a href="prefixSuffix.html" class="hero-btn">
+      <span class="icon">🔤</span>
+      Prefix / Suffix
+      <span class="sub">語根・接辞一覧</span>
+    </a>
+    <a href="majorSymptom.html" class="hero-btn">
+      <span class="icon">🩺</span>
       主要症候
-    </button>
+      <span class="sub">鑑別疾患一覧</span>
+    </a>
+  </div>
+</section>
 
-    <!-- 進行状況バー -->
-    <div id="progressContainer">
-      <div id="progressBar"></div>
+<!-- メインコンテンツ -->
+<main class="content-area">
+
+  <!-- タブパネル -->
+  <div class="info-panel">
+    <div class="panel-tabs" role="tablist">
+      <button class="panel-tab active" onclick="switchTab(0)" role="tab">このサイトについて</button>
+      <button class="panel-tab" onclick="switchTab(1)" role="tab">各ツールの使い方</button>
+      <button class="panel-tab" onclick="switchTab(2)" role="tab">更新履歴</button>
     </div>
+    <div class="panel-body">
 
-    <!-- 領域1 -->
-    <div id="section1" class="section active">
-      <h2>説明</h2>
-      <p>
-        　本用語集は、学生の学習を促進・支援する目的で作成しています。許可なく複製をしないようにお願いします。
-        内容の確認は行っていますが、誤りを含む場合があるため注意してください。
-        また、不定期に内容を更新することがあります。
-        医学用語集、Prefix/Suffix一覧、主要症候の3つの入り口を用意しています。
-      </p>
-    </div>
-
-    <!-- 領域2 -->
-    <div id="section2" class="section">
-      <h2>操作説明</h2>
-      <p>
-        　医学用語集は、表示数を10、25、50、100に変更することが可能です。
-        用語、主区分、副区分、説明はソートが可能です。また、検索窓に入力すると、入力した文字列を含む行だけ抽出することができます。
-      </p>
-    </div>
-
-    <!-- 領域3 -->
-    <div id="section3" class="section">
-      <h2>バージョン情報</h2>
-      <div class="version-history">
-        <dl>
-          <dt>2024-7-7 <span>バージョン 0.001</span></dt>
-          <dd>β版</dd>
-          <dt>2024-7-8 <span>バージョン 0.002</span></dt>
-          <dd>修正版</dd>
-          <dt>2024-9-26 <span>バージョン 1.000</span></dt>
-          <dd>初版-Plicy用に変更</dd>
-          <dt>2024-10-11 <span>バージョン 1.001</span></dt>
-          <dd>styleの一部変更</dd>
-        </dl>
+      <div class="panel-section active">
+        <h2>ようこそ</h2>
+        <p>本サイトは、医学生の英語学習を支援するために作成されています。感染症を中心とした医学英語用語・接辞・症候を収録しています。</p>
+        <p>上の4つのボタンから目的のコンテンツへ進めます。<strong>「授業で学ぶ」</strong>は、解説→クイズ形式で段階的に学べる新しい学習モードです。</p>
+        <p>内容の確認は行っていますが誤りを含む場合があります。不定期に更新します。</p>
       </div>
-    </div>
 
-    <!-- ナビゲーションボタン -->
-    <div id="navigation">
-      <button id="prevBtn" onclick="showPrevSection()">戻る</button>
-      <button id="nextBtn" onclick="showNextSection()">次へ</button>
-    </div>
+      <div class="panel-section">
+        <h2>医学用語集</h2>
+        <p>表示件数を 10 / 25 / 50 / 100 件に切り替え可能。用語・主区分・副区分・説明でソート可能。検索窓で絞り込みもできます。</p>
+        <h2 style="margin-top:14px;">Prefix / Suffix</h2>
+        <p>医学用語でよく使われる語根・接頭辞・接尾辞を一覧表示。例を含めて確認できます。</p>
+        <h2 style="margin-top:14px;">主要症候</h2>
+        <p>モデル・コア・カリキュラムに基づく主要症候と鑑別疾患の一覧です。</p>
+        <h2 style="margin-top:14px;">授業で学ぶ（学習サイト）</h2>
+        <p>チャプター制のスライド形式で解説を読み、確認クイズに答えながら進めます。バッジで進捗を確認できます。</p>
+      </div>
 
-    <script>
-      // 現在のセクションのインデックス
-      let currentSection = 0;
+      <div class="panel-section">
+        <ul class="version-list">
+          <li>
+            <span class="ver-date">2024-7-7</span>
+            <span class="ver-badge">v0.001</span>
+            <span>β版</span>
+          </li>
+          <li>
+            <span class="ver-date">2024-7-8</span>
+            <span class="ver-badge">v0.002</span>
+            <span>修正版</span>
+          </li>
+          <li>
+            <span class="ver-date">2024-9-26</span>
+            <span class="ver-badge">v1.000</span>
+            <span>初版（Plicy用に変更）</span>
+          </li>
+          <li>
+            <span class="ver-date">2024-10-11</span>
+            <span class="ver-badge">v1.001</span>
+            <span>スタイル一部変更</span>
+          </li>
+          <li>
+            <span class="ver-date">2025-6-16</span>
+            <span class="ver-badge">v2.000</span>
+            <span>デザイン全面刷新・学習サイト追加</span>
+          </li>
+        </ul>
+      </div>
 
-      // セクションの要素を取得
-      const sections = document.querySelectorAll(".section");
+    </div><!-- /.panel-body -->
+  </div><!-- /.info-panel -->
 
-      // プログレスバーの要素を取得
-      const progressBar = document.getElementById("progressBar");
+</main>
 
-      // 初期化
-      updateProgressBar();
+<!-- フッター -->
+<footer class="site-footer">
+  <p>本テキストは AI（Claude, Anthropic）を用いて作成されました。内容には誤りが含まれる可能性があります。<br>
+  医療上の判断には必ず公式の教科書・文献・専門家の指導を参照してください。</p>
+  <p>二次利用・再配布は自己責任のもとで可能です。その際、本注記の保持を推奨します。</p>
+</footer>
 
-      // 次へボタンを押したとき
-      function showNextSection() {
-        sections[currentSection].classList.remove("active");
-        currentSection = Math.min(currentSection + 1, sections.length - 1);
-        sections[currentSection].classList.add("active");
-        updateProgressBar();
-      }
+<script>
+  const tabs = document.querySelectorAll('.panel-tab');
+  const sections = document.querySelectorAll('.panel-section');
 
-      // 戻るボタンを押したとき
-      function showPrevSection() {
-        sections[currentSection].classList.remove("active");
-        currentSection = Math.max(currentSection - 1, 0);
-        sections[currentSection].classList.add("active");
-        updateProgressBar();
-      }
-
-      // プログレスバーの更新
-      function updateProgressBar() {
-        const progress = ((currentSection + 1) / sections.length) * 100;
-        progressBar.style.width = progress + "%";
-        // 戻る/次へボタンの有効・無効状態の設定
-        document.getElementById("prevBtn").disabled = currentSection === 0;
-        document.getElementById("nextBtn").disabled =
-          currentSection === sections.length - 1;
-      }
-
-      // 「開始する」ボタンがクリックされたら、Terminology.htmlに移動
-      function startGame() {
-        window.location.href = "Terminology.html";
-      }
-      // 「開始する」ボタンがクリックされたら、Terminology.htmlに移動
-      function startPrefix() {
-        window.location.href = "prefixSuffix.html";
-      }
-      // 「開始する」ボタンがクリックされたら、Terminology.htmlに移動
-      function startSymptom() {
-        window.location.href = "majorSymptom.html";
-      }
-    </script>
-  </body>
+  function switchTab(idx) {
+    tabs.forEach((t, i) => t.classList.toggle('active', i === idx));
+    sections.forEach((s, i) => s.classList.toggle('active', i === idx));
+  }
+</script>
+</body>
 </html>
