@@ -1,67 +1,235 @@
+/* ===== Medical Terms — Common Design System ===== */
+/* Palette:
+   --navy    #1a3a5c  (primary, headers)
+   --teal    #1e8a7a  (accent, links, badges)
+   --amber   #e08a1e  (highlight, quiz, badge)
+   --cream   #f7f5f0  (page background)
+   --white   #ffffff
+   --gray-1  #4a4a4a  (body text)
+   --gray-2  #888888  (muted)
+   --gray-3  #dde3eb  (borders, stripes)
+*/
+
+:root {
+  --navy:   #1a3a5c;
+  --teal:   #1e8a7a;
+  --amber:  #e08a1e;
+  --cream:  #f7f5f0;
+  --white:  #ffffff;
+  --gray-1: #4a4a4a;
+  --gray-2: #888888;
+  --gray-3: #dde3eb;
+  --radius: 8px;
+  --shadow: 0 2px 10px rgba(0,0,0,.10);
+}
+
+/* ----- Reset & Base ----- */
+*, *::before, *::after { box-sizing: border-box; }
+
+html { scroll-behavior: smooth; }
+
 body {
-    font-family: 'Meiryo', Arial, sans-serif;
-    font-size: 14px;
-    line-height: 1.6;
-    background-color: #f4f4f9;
-    margin: 0;
-    padding: 10px;
+  font-family: 'Meiryo', 'Hiragino Sans', Arial, sans-serif;
+  font-size: 14px;
+  line-height: 1.7;
+  background-color: var(--cream);
+  color: var(--gray-1);
+  margin: 0;
+  padding: 0;
 }
-.container {
-    width: 80%;
-    margin: 0 auto;
-    padding: 20px;
-    background-color: #fff;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-    border-radius: 8px;
+
+/* ----- Page wrapper ----- */
+.page-wrapper {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 0 16px 60px;
 }
-.title {
-    text-align: center;
-    font-size: 2em;
-    margin-bottom: 20px;
-    color: #333;
+
+/* ----- Site header ----- */
+.site-header {
+  background: var(--navy);
+  color: var(--white);
+  padding: 14px 24px;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  box-shadow: var(--shadow);
+  position: sticky;
+  top: 0;
+  z-index: 100;
 }
-.border {
-    border-color: #ddd;
-    border: solid 1px;
-    padding: 5px 2px 3px 2px;
-    font-size: 12px;
-    line-height: normal;
+
+.site-header .site-title {
+  font-size: 1.1rem;
+  font-weight: bold;
+  letter-spacing: .05em;
+  text-decoration: none;
+  color: var(--white);
+  flex: 1;
 }
+
+/* ----- Page title ----- */
+.page-title {
+  font-size: 1.6rem;
+  font-weight: bold;
+  color: var(--navy);
+  border-left: 5px solid var(--teal);
+  padding-left: 14px;
+  margin: 28px 0 18px;
+}
+
+/* ----- Card ----- */
+.card {
+  background: var(--white);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  padding: 20px 24px;
+  margin-bottom: 20px;
+}
+
+/* ----- Inline label badges (kakomi) ----- */
 .kakomi {
-    border-color: #333;
-    border: solid 1px;
-    border-radius: 5px;
-    padding: 2px 4px 0px 4px;
-    font-size: smaller;
-    background-color: #f0f0f0;
-    margin-right: 5px;
+  display: inline-block;
+  border: 1px solid var(--navy);
+  border-radius: 4px;
+  padding: 0 5px;
+  font-size: 11px;
+  line-height: 1.5;
+  background: #eef2f7;
+  color: var(--navy);
+  margin-right: 4px;
+  vertical-align: middle;
+  white-space: nowrap;
 }
-.dataTables_wrapper .dataTables_length, 
-.dataTables_wrapper .dataTables_filter, 
-.dataTables_wrapper .dataTables_info, 
+
+/* ----- DataTables overrides ----- */
+.dataTables_wrapper .dataTables_length,
+.dataTables_wrapper .dataTables_filter,
+.dataTables_wrapper .dataTables_info,
 .dataTables_wrapper .dataTables_paginate {
-    color: #333;
+  color: var(--gray-1);
+  margin: 8px 0;
 }
+
+.dataTables_wrapper .dataTables_filter input {
+  border: 1px solid var(--gray-3);
+  border-radius: 4px;
+  padding: 4px 8px;
+}
+
 .dataTables_wrapper .dataTables_paginate .paginate_button {
-    padding: 0.2em 1em;
+  border-radius: 4px !important;
+  padding: 4px 10px !important;
 }
+
+.dataTables_wrapper .dataTables_paginate .paginate_button.current {
+  background: var(--teal) !important;
+  color: var(--white) !important;
+  border-color: var(--teal) !important;
+}
+
 table.dataTable thead th {
-    background-color: #007bff;
-    color: #fff;
-    text-align: center;
-    font-weight: bold;
-    padding: 10px 5px;
-    border-bottom: 2px solid #ddd;
+  background-color: var(--navy);
+  color: var(--white);
+  text-align: center;
+  font-weight: bold;
+  padding: 10px 8px;
+  border-bottom: 2px solid var(--teal);
 }
+
 table.dataTable tbody tr {
-    background-color: #f9f9f9;
+  background-color: var(--white);
 }
+
 table.dataTable tbody tr:nth-child(even) {
-    background-color: #e9e9e9;
+  background-color: #f0f4f8;
 }
-table.dataTable tbody th, 
+
+table.dataTable tbody tr:hover {
+  background-color: #e4f0f8 !important;
+}
+
 table.dataTable tbody td {
-    text-align: left;
-    padding: 8px 10px;
-    line-height: 2;
+  padding: 8px 10px;
+  line-height: 1.8;
+  vertical-align: top;
+}
+
+/* ----- Navigation button bar ----- */
+.nav-buttons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  align-items: center;
+  margin-bottom: 16px;
+}
+
+/* ----- Buttons ----- */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 18px;
+  border: none;
+  border-radius: 20px;
+  font-size: 14px;
+  cursor: pointer;
+  transition: background .2s, transform .1s;
+  font-family: inherit;
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.btn:active { transform: scale(.97); }
+
+.btn-primary {
+  background: var(--navy);
+  color: var(--white);
+}
+.btn-primary:hover { background: #274f78; }
+
+.btn-accent {
+  background: var(--teal);
+  color: var(--white);
+}
+.btn-accent:hover { background: #176e62; }
+
+.btn-amber {
+  background: var(--amber);
+  color: var(--white);
+}
+.btn-amber:hover { background: #c07a18; }
+
+.btn-ghost {
+  background: var(--white);
+  color: var(--navy);
+  border: 2px solid var(--navy);
+}
+.btn-ghost:hover { background: #eef2f7; }
+
+.btn-sm {
+  padding: 5px 12px;
+  font-size: 13px;
+}
+
+/* ----- Footer ----- */
+.site-footer {
+  background: var(--navy);
+  color: rgba(255,255,255,.75);
+  font-size: 12px;
+  line-height: 1.7;
+  padding: 20px 24px;
+  margin-top: 40px;
+  text-align: center;
+}
+
+.site-footer a {
+  color: rgba(255,255,255,.85);
+}
+
+/* ----- Responsive ----- */
+@media (max-width: 640px) {
+  .page-title { font-size: 1.2rem; }
+  .site-header { padding: 10px 14px; }
+  table.dataTable tbody td { font-size: 13px; }
 }
