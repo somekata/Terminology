@@ -1,0 +1,1219 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>医学英語の勉強 — 大阪公立大学 医学研究推進コース</title>
+  <link rel="stylesheet" href="css/common.css" />
+  <style>
+/* ===== english_study.html 専用スタイル ===== */
+body { background: var(--cream); }
+
+/* --- レイアウト --- */
+.learn-container {
+  display: grid;
+  grid-template-columns: 280px 1fr;
+  min-height: 100vh;
+}
+
+/* --- 進捗ヘッダー --- */
+.progress-header {
+  grid-column: 1 / 3;
+  background: white;
+  border-bottom: 1px solid var(--gray-3);
+  padding: 0 20px;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  height: 58px;
+  position: sticky;
+  top: 0;
+  z-index: 200;
+  box-shadow: 0 1px 4px rgba(0,0,0,.07);
+}
+
+.progress-label { font-size: 12px; color: var(--gray-2); white-space: nowrap; }
+.progress-track { flex:1; height:6px; background:var(--gray-3); border-radius:3px; overflow:hidden; }
+.progress-fill  { height:100%; background:linear-gradient(90deg, var(--teal), var(--amber)); border-radius:3px; transition:width .4s; }
+.progress-pct   { font-size:13px; font-weight:bold; color:var(--navy); white-space:nowrap; }
+
+.badge-row { display:flex; gap:6px; margin-left:auto; }
+.badge { font-size:17px; opacity:.2; transition:opacity .3s, transform .3s; cursor:default; }
+.badge.earned { opacity:1; transform:scale(1.12); }
+
+/* --- サイドバー --- */
+.sidebar {
+  background: var(--navy);
+  color: rgba(255,255,255,.85);
+  padding: 14px 0;
+  position: sticky;
+  top: 58px;
+  height: calc(100vh - 58px);
+  overflow-y: auto;
+}
+
+.sidebar-title {
+  font-size: 10px;
+  letter-spacing:.12em;
+  text-transform:uppercase;
+  color:rgba(255,255,255,.4);
+  padding: 0 16px 10px;
+  border-bottom:1px solid rgba(255,255,255,.1);
+  margin-bottom:6px;
+}
+
+.chapter-btn {
+  width:100%; text-align:left; background:none; border:none;
+  padding: 9px 16px; font-family:inherit; font-size:12.5px;
+  color:rgba(255,255,255,.72); cursor:pointer;
+  display:flex; align-items:center; gap:9px;
+  transition:background .15s;
+}
+.chapter-btn:hover { background:rgba(255,255,255,.08); }
+.chapter-btn.active { background:var(--teal); color:#fff; }
+.chapter-btn.done   { color:rgba(255,255,255,.55); }
+.chapter-btn.done .ch-check { color:#6ee9cb; }
+
+.ch-icon { font-size:1.1em; flex-shrink:0; }
+.ch-label { flex:1; line-height:1.3; }
+.ch-check { font-size:.85em; margin-left:auto; }
+
+/* --- メインエリア --- */
+.learn-main { padding:24px 28px 64px; max-width:900px; }
+
+/* --- スライドカード --- */
+.slide-card {
+  background:white; border-radius:12px;
+  box-shadow:0 3px 14px rgba(0,0,0,.09);
+  overflow:hidden; margin-bottom:22px;
+  display:none; animation:fadeIn .28s ease;
+}
+.slide-card.active { display:block; }
+
+@keyframes fadeIn { from{opacity:0;transform:translateY(7px)} to{opacity:1;transform:translateY(0)} }
+
+.slide-eyebrow {
+  background:var(--navy); color:rgba(255,255,255,.72);
+  font-size:11px; padding:7px 18px;
+  display:flex; justify-content:space-between;
+}
+
+.slide-body { padding:22px 26px 18px; }
+
+.slide-title {
+  font-size:1.25rem; font-weight:bold; color:var(--navy);
+  margin:0 0 16px; display:flex; align-items:center; gap:10px;
+}
+.slide-title .icon { font-size:1.4rem; }
+.slide-content { line-height:1.9; color:var(--gray-1); }
+.slide-content p { margin:0 0 13px; }
+
+/* ハイライトボックス */
+.hl { background:#eef6f4; border-left:4px solid var(--teal); border-radius:4px; padding:12px 16px; margin:12px 0; }
+.wn { background:#fff8ee; border-left:4px solid var(--amber); border-radius:4px; padding:12px 16px; margin:12px 0; }
+.en-section { background:#f5f8fc; border:1px solid var(--gray-3); border-radius:6px; padding:14px 18px; margin:12px 0; }
+.en-section .en-label { font-size:10px; letter-spacing:.1em; color:var(--teal); font-weight:bold; text-transform:uppercase; margin-bottom:6px; }
+.en-text { color:#2c3e50; font-style:italic; line-height:1.8; }
+.jp-text { color:var(--gray-1); margin-top:8px; padding-top:8px; border-top:1px solid var(--gray-3); font-size:.95em; line-height:1.8; }
+
+/* 表 */
+.term-table { width:100%; border-collapse:collapse; margin:12px 0; font-size:13px; }
+.term-table th { background:var(--navy); color:white; padding:8px 12px; text-align:left; }
+.term-table td { padding:7px 12px; border-bottom:1px solid var(--gray-3); vertical-align:top; }
+.term-table tr:nth-child(even) td { background:#f5f8fc; }
+
+.en-term { font-style:italic; color:var(--navy); font-weight:600; }
+.keyword { background:#fff3cd; padding:1px 4px; border-radius:3px; font-weight:600; }
+
+/* スライドナビ */
+.slide-nav {
+  padding:13px 18px; border-top:1px solid var(--gray-3);
+  display:flex; justify-content:space-between; align-items:center; gap:10px; flex-wrap:wrap;
+}
+.slide-counter { font-size:12px; color:var(--gray-2); }
+
+/* --- クイズ --- */
+.quiz-card {
+  background:white; border-radius:12px;
+  box-shadow:0 3px 14px rgba(0,0,0,.09);
+  overflow:hidden; margin-bottom:22px;
+  display:none; animation:fadeIn .28s ease;
+}
+.quiz-card.active { display:block; }
+
+.quiz-header {
+  background:linear-gradient(90deg, var(--teal), #1a6b5e);
+  color:white; padding:13px 20px; font-weight:bold; font-size:1rem;
+}
+.quiz-body { padding:18px 22px; }
+.quiz-q { font-size:1.02rem; color:var(--navy); font-weight:bold; margin-bottom:14px; }
+.quiz-options { display:flex; flex-direction:column; gap:9px; }
+
+.quiz-option {
+  border:2px solid var(--gray-3); border-radius:8px; padding:11px 15px;
+  cursor:pointer; font-family:inherit; font-size:13.5px;
+  text-align:left; background:white; color:var(--gray-1);
+  transition:border-color .15s, background .15s;
+}
+.quiz-option:hover:not(:disabled) { border-color:var(--teal); background:#f0f9f7; }
+.quiz-option.correct { border-color:var(--teal); background:#e6f5f2; color:#0a5c4e; font-weight:bold; }
+.quiz-option.wrong   { border-color:#e74c3c; background:#fdf0ef; color:#a93226; }
+.quiz-option:disabled { cursor:default; }
+
+.quiz-feedback { margin-top:13px; padding:12px 16px; border-radius:8px; font-size:13.5px; display:none; }
+.quiz-feedback.show { display:block; }
+.quiz-feedback.ok { background:#e6f5f2; color:#0a5c4e; border-left:4px solid var(--teal); }
+.quiz-feedback.ng { background:#fdf0ef; color:#a93226; border-left:4px solid #e74c3c; }
+.quiz-next-btn { margin-top:13px; display:none; }
+.quiz-next-btn.show { display:block; }
+
+/* --- チャプター完了 --- */
+.chapter-complete { text-align:center; padding:40px 20px; display:none; }
+.chapter-complete.active { display:block; }
+.chapter-complete .big-badge { font-size:4.5rem; margin-bottom:12px; }
+.chapter-complete h2 { color:var(--navy); margin-bottom:8px; }
+.chapter-complete p { color:var(--gray-2); margin-bottom:20px; }
+
+/* モバイル */
+@media (max-width:720px) {
+  .learn-container { grid-template-columns:1fr; }
+  .sidebar { position:static; height:auto; display:flex; flex-wrap:wrap; padding:6px 0; }
+  .chapter-btn { width:auto; flex:1; min-width:110px; font-size:11.5px; }
+  .learn-main { padding:14px 12px 40px; }
+}
+  </style>
+</head>
+<body>
+<div class="learn-container">
+
+<!-- 進捗ヘッダー -->
+<header class="progress-header">
+  <a href="index.html" style="text-decoration:none;color:var(--navy);font-weight:bold;font-size:.9rem;white-space:nowrap;">← ポータル</a>
+  <span class="progress-label" id="progressLabel">学習進捗</span>
+  <div class="progress-track"><div class="progress-fill" id="progressFill" style="width:0%"></div></div>
+  <span class="progress-pct" id="progressPct">0%</span>
+  <div class="badge-row" id="badgeRow">
+    <span class="badge" data-badge="ch1" title="学習開始">🚀</span>
+    <span class="badge" data-badge="ch2" title="語幹マスター①">🦴</span>
+    <span class="badge" data-badge="ch3" title="語幹マスター②">🔬</span>
+    <span class="badge" data-badge="ch4" title="接辞の達人">🔤</span>
+    <span class="badge" data-badge="ch5" title="動詞・表現力UP">✍️</span>
+    <span class="badge" data-badge="ch6" title="English Session①">🇬🇧</span>
+    <span class="badge" data-badge="ch7" title="English Session②">📐</span>
+    <span class="badge" data-badge="ch8" title="臨床英語完全制覇">🏥</span>
+  </div>
+</header>
+
+<!-- サイドバー -->
+<aside class="sidebar" id="sidebar">
+  <div class="sidebar-title">チャプター一覧</div>
+  <div id="sidebarNav"></div>
+</aside>
+
+<!-- メイン -->
+<main class="learn-main" id="learnMain">
+  <div id="slideArea"></div>
+</main>
+
+</div><!-- /.learn-container -->
+
+<footer class="site-footer" style="margin-top:0;">
+  <p>本テキストは AI（Claude, Anthropic）を用いて作成されました。内容には誤りが含まれる可能性があります。<br>
+  医療上の判断には必ず公式の教科書・文献・専門家の指導を参照してください。</p>
+  <p>二次利用・再配布は自己責任のもとで可能です。その際、本注記の保持を推奨します。</p>
+</footer>
+
+<script>
+// ============================================================
+// チャプターデータ
+// ============================================================
+const CHAPTERS = [
+
+// ===== Ch.1 はじめに =====
+{
+  id:'ch1', icon:'🚀', title:'はじめに — なぜ医学英語を学ぶのか',
+  badge:'学習開始',
+  slides:[
+    {
+      title:'医学英語が重要な理由', icon:'🎯',
+      content:`
+<p>残念ながら、我々の母語である日本語は世界の共通語ではありません。<strong>学術論文の多くは英語で書かれており</strong>、世界基準での情報を入手するためには英語論文は避けて通れません。</p>
+<div class="hl">
+  <strong>理想の姿：</strong>英文論文がスラスラ読める自分。<br>
+  今は苦労しても、そうなれたらカッコいいと思いませんか？そんな理想を思い浮かべて、一緒に学びましょう。
+</div>
+<p>本コンテンツでは、論文でよく使われる専門用語・フレーズを体系的に学びます。医学英語には法則があり、それを身につけると<span class="keyword">初見の単語も類推</span>できるようになります。</p>`
+    },
+    {
+      title:'語彙カバー率と読解力', icon:'📊',
+      content:`
+<p>文章中で知っている語彙の割合を<span class="keyword">語彙カバー率</span>といいます。研究によれば、<strong>95%以上</strong>の語彙カバー率があれば概ね理解できるとされています。</p>
+<div class="hl">
+  <strong>目安：</strong>20語に1語程度わからない単語があっても読める。<br>
+  論文Abstractは約200〜250語。未知語が<strong>10語以内</strong>なら何とか読める。
+</div>
+<div class="wn">
+  ⚠️ 個人的な経験から、要約部分での「全く見当がつかない」未知語が5語以上あると読むのにかなり苦戦します。<br>
+  目標：<strong>完全未知語を2%未満</strong>に抑えること。
+</div>
+<p>次のスライドにある英文（COVID-19に関する教育用Abstract）を読んで、自分の未知語数を数えてみましょう。</p>`
+    },
+    {
+      title:'練習：論文Abstractを読んでみよう', icon:'📄',
+      content:`
+<div class="en-section">
+  <div class="en-label">Educational Abstract — Non-pharmaceutical interventions and COVID-19</div>
+  <p class="en-text" style="line-height:2;">
+    <strong>Background:</strong> Non-pharmaceutical interventions (NPIs) — including school closures, workplace restrictions, mask mandates, and physical distancing measures — were widely implemented during the COVID-19 pandemic to reduce transmission and mortality. However, the relative effectiveness of individual measures and the critical role of implementation timing remained subjects of active investigation.<br><br>
+    <strong>Methods:</strong> We synthesized evidence from multiple systematic reviews, meta-analyses, and observational studies encompassing data from over 130 countries during the first two pandemic waves (2020–2021). Outcomes of interest included daily case growth rates, reproduction numbers (R), ICU admissions, and mortality.<br><br>
+    <strong>Results:</strong> NPIs significantly reduced key epidemiological outcomes: daily case growth rates declined by approximately 4.7%, reproduction numbers decreased by 1.90 on average, and ICU admissions fell by 16.5%. School and workplace closures demonstrated the greatest impact on mortality. Crucially, early implementation — before widespread community transmission was established — was consistently more effective than delayed implementation of identical measures, regardless of intervention stringency. A 10-day delay in stay-at-home orders was associated with nearly 15,000 additional deaths in U.S. counties alone. Individual protective measures, including hand hygiene and mask wearing, each reduced incidence by approximately 53%.<br><br>
+    <strong>Conclusion:</strong> The effectiveness of NPIs against COVID-19 is well established; however, timing is a more critical determinant of outcome than stringency. Combinations of interventions produced synergistic reductions in transmission. These findings have important implications for pandemic preparedness and future outbreak response.
+  </p>
+  <div class="jp-text">
+    <strong>【日本語訳】</strong><br>
+    <strong>背景：</strong>COVID-19パンデミックにおいて、学校閉鎖・職場制限・マスク着用義務・身体的距離確保などの非薬理学的介入（NPI）が感染拡大と死亡抑制を目的として広く実施された。しかし、個々の措置の相対的有効性と実施タイミングの重要性については、引き続き検討が行われた。<br><br>
+    <strong>方法：</strong>130か国以上のデータを含む複数のシステマティックレビュー・メタ解析・観察研究を統合した（第1〜2波、2020〜2021年）。評価指標は日次感染増加率・基本再生産数（R）・ICU入院率・死亡率とした。<br><br>
+    <strong>結果：</strong>NPIは重要な疫学的指標を有意に改善した：日次感染増加率は約4.7%低下、Rは平均1.90低下、ICU入院率は16.5%減少した。学校・職場閉鎖は死亡率への影響が最も大きかった。重要なことに、市中感染拡大前の早期実施は、介入の厳格さに関わらず、遅延実施より一貫して有効であった。外出自粛命令を10日遅らせると、米国の郡レベルで約15,000人の追加死亡と関連した。手指衛生・マスク着用といった個人予防措置はそれぞれ感染率を約53%低下させた。<br><br>
+    <strong>結論：</strong>COVID-19に対するNPIの有効性は確立されているが、厳格さよりもタイミングが転帰のより重要な決定因子である。複数の介入の組み合わせは相乗的な感染低減をもたらした。これらの知見はパンデミック準備と将来のアウトブレイク対応に重要な示唆を与える。<br><br>
+    <strong>【参考文献】</strong><br>
+    <span style="font-size:12px; line-height:2.0;">
+    1. Iezadi S, et al. Effectiveness of Non-Pharmaceutical Public Health Interventions Against COVID-19: A Systematic Review and Meta-Analysis. <i>PLoS One.</i> 2021;16(11):e0260371.<br>
+    2. Mendez-Brito A, et al. Systematic Review of Empirical Studies Comparing the Effectiveness of Non-Pharmaceutical Interventions Against COVID-19. <i>J Infect.</i> 2021;83(3):281–293.<br>
+    3. Stokes J, et al. The Relative Effects of Non-Pharmaceutical Interventions on Wave One Covid-19 Mortality: Natural Experiment in 130 Countries. <i>BMC Public Health.</i> 2022;22(1):1113.<br>
+    4. Audirac M, et al. Impact of the Timing of Stay-at-Home Orders and Mobility Reductions on First-Wave COVID-19 Deaths in US Counties. <i>Am J Epidemiol.</i> 2022;191(5):900–907.<br>
+    5. Talic S, et al. Effectiveness of Public Health Measures in Reducing the Incidence of Covid-19, SARS-CoV-2 Transmission, and Covid-19 Mortality. <i>BMJ.</i> 2021;375:e068302.<br>
+    6. Li Y, et al. The Temporal Association of Introducing and Lifting Non-Pharmaceutical Interventions With the Time-Varying Reproduction Number (R) of SARS-CoV-2. <i>Lancet Infect Dis.</i> 2021;21(2):193–202.
+    </span><br><br>
+    <em style="font-size:11px; color:var(--gray-2);">※ 本Abstractは上記文献の知見を統合して教育目的で作成されたオリジナル要約文です（Claude, Anthropic）。特定の論文の転載ではありません。</em>
+  </div>
+</div>
+<div class="wn">💡 未知語を数えましたか？特に <em>non-pharmaceutical interventions, reproduction number, stringency, synergistic</em> などは医学論文の頻出語です。次のチャプターで語彙を増やしていきましょう。</div>`
+    }
+  ],
+  quizzes:[
+    {
+      q:'語彙カバー率が何%以上あれば英文を概ね理解できるとされていますか？',
+      options:['80%','90%','95%','99%'],
+      answer:2,
+      explanation:'研究では95%以上の語彙カバー率があれば概ね理解できるとされています。20語に1語程度の未知語なら読み進められます。'
+    },
+    {
+      q:'上のAbstractで "NPIs reduced the reproduction number (R) by 1.90 on average" とあります。"reproduction number"（再生産数）とは何を表しますか？',
+      options:['1人の感染者が平均何人に感染させるかを示す指標','ウイルスが細胞内で複製される速度','ワクチンの有効率を示す指標','入院患者数の増加率'],
+      answer:0,
+      explanation:'再生産数（reproduction number, R）は1人の感染者が平均して何人に感染させるかを示す疫学的指標です。R>1で流行拡大、R<1で収束を意味します。'
+    },
+    {
+      q:'Abstractの結論（Conclusion）で最も強調されているメッセージはどれですか？',
+      options:['マスク着用だけで感染を完全に防止できる','NPIの有効性は確立されており、厳格さよりもタイミングが重要','ロックダウンは経済的コストが大きいため推奨されない','ワクチンがNPIより常に優れている'],
+      answer:1,
+      explanation:'Conclusionでは "timing is a more critical determinant of outcome than stringency"（タイミングは厳格さよりも重要な決定因子）と明記されています。これがこのAbstractの中心的メッセージです。'
+    }
+  ]
+},
+
+// ===== Ch.2 語幹①（解剖・生理）=====
+{
+  id:'ch2', icon:'🦴', title:'語幹①— 解剖学・生理学',
+  badge:'語幹マスター①',
+  slides:[
+    {
+      title:'語幹（stem）を覚える意義', icon:'🌱',
+      content:`
+<p>医学英語の専門用語は、<span class="keyword">語幹（stem）</span>＋接頭辞・接尾辞の組み合わせで成り立っています。語幹を覚えることで、初見の単語でも意味を類推できるようになります。</p>
+<div class="hl">
+  <strong>例：</strong><span class="en-term">Hepat-</span>（肝）を知っていれば…<br>
+  hepatitis（肝炎）、hepatocyte（肝細胞）、hepatomegaly（肝腫大）がすべて理解できる！
+</div>
+<p>このチャプターでは<strong>解剖学・生理学</strong>に関連する語幹を学びます。</p>`
+    },
+    {
+      title:'解剖学関連の語幹①', icon:'🫀',
+      content:`
+<table class="term-table">
+  <thead><tr><th>語幹</th><th>意味</th><th>例</th></tr></thead>
+  <tbody>
+    <tr><td><span class="en-term">Cardio-</span></td><td>心臓</td><td>Cardiomyopathy（心筋症）、Cardiology（循環器内科）</td></tr>
+    <tr><td><span class="en-term">Hepato-</span></td><td>肝臓</td><td>Hepatomegaly（肝腫大）、Hepatitis（肝炎）</td></tr>
+    <tr><td><span class="en-term">Nephro- / Reno-</span></td><td>腎臓</td><td>Nephrectomy（腎切除）、Renal failure（腎不全）</td></tr>
+    <tr><td><span class="en-term">Neuro-</span></td><td>神経</td><td>Neurology（神経内科）、Neuropathy（神経障害）</td></tr>
+    <tr><td><span class="en-term">Pneumo- / Pulmo-</span></td><td>肺</td><td>Pneumonia（肺炎）、Pulmonary embolism（肺塞栓症）</td></tr>
+    <tr><td><span class="en-term">Gastro-</span></td><td>胃</td><td>Gastrectomy（胃切除術）、Gastritis（胃炎）</td></tr>
+    <tr><td><span class="en-term">Entero-</span></td><td>腸</td><td>Enteritis（腸炎）、Gastroenteritis（胃腸炎）</td></tr>
+  </tbody>
+</table>`
+    },
+    {
+      title:'解剖学関連の語幹②', icon:'🧠',
+      content:`
+<table class="term-table">
+  <thead><tr><th>語幹</th><th>意味</th><th>例</th></tr></thead>
+  <tbody>
+    <tr><td><span class="en-term">Cerebro- / Encephalo-</span></td><td>脳</td><td>Cerebrospinal（脳脊髄の）、Encephalitis（脳炎）</td></tr>
+    <tr><td><span class="en-term">Arthro-</span></td><td>関節</td><td>Arthroscopy（関節鏡検査）、Arthritis（関節炎）</td></tr>
+    <tr><td><span class="en-term">Osteo-</span></td><td>骨</td><td>Osteoporosis（骨粗鬆症）、Osteocyte（骨細胞）</td></tr>
+    <tr><td><span class="en-term">Myo-</span></td><td>筋肉</td><td>Myopathy（筋症）、Myocardium（心筋）</td></tr>
+    <tr><td><span class="en-term">Dermato- / Derm-</span></td><td>皮膚</td><td>Dermatology（皮膚科）、Dermatitis（皮膚炎）</td></tr>
+    <tr><td><span class="en-term">Vasculo-</span></td><td>血管</td><td>Vascular（血管の）、Cardiovascular（心血管の）</td></tr>
+    <tr><td><span class="en-term">Hemato- / Hemo-</span></td><td>血液</td><td>Hematology（血液学）、Hemodynamics（血液動態）</td></tr>
+  </tbody>
+</table>`
+    },
+    {
+      title:'生理学関連の語幹', icon:'⚡',
+      content:`
+<table class="term-table">
+  <thead><tr><th>語幹</th><th>意味</th><th>例</th></tr></thead>
+  <tbody>
+    <tr><td><span class="en-term">Glyco-</span></td><td>糖</td><td>Glycolysis（解糖系）、Glycemia（血糖）</td></tr>
+    <tr><td><span class="en-term">Lipo-</span></td><td>脂肪</td><td>Lipolysis（脂肪分解）、Lipid（脂質）</td></tr>
+    <tr><td><span class="en-term">Thermo-</span></td><td>熱・体温</td><td>Thermoregulation（体温調節）、Hypothermia（低体温）</td></tr>
+    <tr><td><span class="en-term">Pharmaco-</span></td><td>薬</td><td>Pharmacology（薬理学）、Pharmacodynamics（薬力学）</td></tr>
+    <tr><td><span class="en-term">Osmo-</span></td><td>浸透</td><td>Osmoregulation（浸透圧調節）、Osmolality（浸透圧）</td></tr>
+    <tr><td><span class="en-term">Necro-</span></td><td>死・壊死</td><td>Necrosis（壊死）、Necrotizing（壊死性の）</td></tr>
+  </tbody>
+</table>
+<div class="hl">💡 <strong>Glyco-</strong>は接頭辞としても語幹としても使われます。hyperglycemia（高血糖）のglyc-も同じ語源です。</div>`
+    }
+  ],
+  quizzes:[
+    {
+      q:'"Hepatomegaly" の語幹 "Hepato-" が意味するものはどれですか？',
+      options:['腎臓','心臓','肝臓','肺'],
+      answer:2,
+      explanation:'Hepato-は「肝臓」を意味します。Hepatitis（肝炎）、Hepatocyte（肝細胞）など多くの用語に使われます。'
+    },
+    {
+      q:'"Myocardium"（心筋）に含まれる語幹 "Myo-" の意味はどれですか？',
+      options:['心臓','筋肉','神経','骨'],
+      answer:1,
+      explanation:'Myo-は「筋肉」を意味します。Cardia（心臓）と組み合わせてMyocardium（心筋）となります。'
+    },
+    {
+      q:'"Glycolysis"（解糖系）の語幹 "Glyco-" が意味するものはどれですか？',
+      options:['脂肪','タンパク質','糖','浸透圧'],
+      answer:2,
+      explanation:'Glyco-は「糖（グルコース）」を意味します。Hyperglycemia（高血糖）、Hypoglycemia（低血糖）のglyc-も同語源です。'
+    }
+  ]
+},
+
+// ===== Ch.3 語幹②（免疫・微生物・薬理・病理）=====
+{
+  id:'ch3', icon:'🔬', title:'語幹②— 免疫・微生物・薬理・病理',
+  badge:'語幹マスター②',
+  slides:[
+    {
+      title:'免疫学・細胞生物学の語幹', icon:'🛡️',
+      content:`
+<table class="term-table">
+  <thead><tr><th>語幹</th><th>意味</th><th>例</th></tr></thead>
+  <tbody>
+    <tr><td><span class="en-term">Immun-</span></td><td>免疫</td><td>Immunology（免疫学）、Immunotherapy（免疫療法）</td></tr>
+    <tr><td><span class="en-term">Lympho-</span></td><td>リンパ</td><td>Lymphocyte（リンパ球）、Lymphoma（リンパ腫）</td></tr>
+    <tr><td><span class="en-term">Phago-</span></td><td>食（貪食）</td><td>Phagocyte（食細胞）、Phagocytosis（貪食作用）</td></tr>
+    <tr><td><span class="en-term">Cyto-</span></td><td>細胞</td><td>Cytology（細胞学）、Cytokine（サイトカイン）</td></tr>
+    <tr><td><span class="en-term">Auto-</span></td><td>自己</td><td>Autoimmune（自己免疫）、Autophagy（オートファジー）</td></tr>
+    <tr><td><span class="en-term">Leuko-</span></td><td>白い</td><td>Leukocyte（白血球）、Leukemia（白血病）</td></tr>
+    <tr><td><span class="en-term">Apopto-</span></td><td>離脱・脱落</td><td>Apoptosis（アポトーシス、プログラム細胞死）</td></tr>
+  </tbody>
+</table>`
+    },
+    {
+      title:'微生物学・病理学の語幹', icon:'🦠',
+      content:`
+<table class="term-table">
+  <thead><tr><th>語幹</th><th>意味</th><th>例</th></tr></thead>
+  <tbody>
+    <tr><td><span class="en-term">Bacterio-</span></td><td>細菌</td><td>Bacteriology（細菌学）、Bacteremia（菌血症）</td></tr>
+    <tr><td><span class="en-term">Viro-</span></td><td>ウイルス</td><td>Virology（ウイルス学）、Viremia（ウイルス血症）</td></tr>
+    <tr><td><span class="en-term">Myco-</span></td><td>真菌</td><td>Mycology（真菌学）、<i>Mycobacterium</i>（抗酸菌属）</td></tr>
+    <tr><td><span class="en-term">Patho-</span></td><td>病気・病原</td><td>Pathology（病理学）、Pathogen（病原体）</td></tr>
+    <tr><td><span class="en-term">Onco-</span></td><td>腫瘍</td><td>Oncology（腫瘍学）、Oncogene（がん遺伝子）</td></tr>
+    <tr><td><span class="en-term">Fibro-</span></td><td>線維</td><td>Fibrosis（線維症）、Fibroblast（線維芽細胞）</td></tr>
+  </tbody>
+</table>
+<div class="wn">⚠️ <i>Mycobacterium tuberculosis</i>（結核菌）の "Myco-" は「真菌様」の意味で、実際には細菌（抗酸菌）です。分類に惑わされないように注意！</div>`
+    },
+    {
+      title:'遺伝学・生化学の語幹', icon:'🧬',
+      content:`
+<table class="term-table">
+  <thead><tr><th>語幹</th><th>意味</th><th>例</th></tr></thead>
+  <tbody>
+    <tr><td><span class="en-term">Geno-</span></td><td>遺伝子</td><td>Genomics（ゲノム学）、Genotype（遺伝子型）</td></tr>
+    <tr><td><span class="en-term">Pheno-</span></td><td>表現型</td><td>Phenotype（表現型）、Phenotypic（表現型の）</td></tr>
+    <tr><td><span class="en-term">Muta-</span></td><td>変異</td><td>Mutation（突然変異）、Mutant（変異体）</td></tr>
+    <tr><td><span class="en-term">Phospho-</span></td><td>リン酸</td><td>Phosphorylation（リン酸化）、Phospholipid（リン脂質）</td></tr>
+    <tr><td><span class="en-term">Toxico-</span></td><td>毒</td><td>Toxicology（毒物学）、Toxin（毒素）</td></tr>
+    <tr><td><span class="en-term">Epidemi-</span></td><td>疫学・流行</td><td>Epidemiology（疫学）、Epidemic（流行病）</td></tr>
+  </tbody>
+</table>`
+    }
+  ],
+  quizzes:[
+    {
+      q:'"Phagocytosis"（貪食作用）の語幹 "Phago-" が意味するものはどれですか？',
+      options:['免疫','食べる・貪食','細胞','白い'],
+      answer:1,
+      explanation:'Phago-は「食べる・貪食する」を意味します。Phagocyte（食細胞）はこの語幹から来ています。'
+    },
+    {
+      q:'"Oncology"（腫瘍学）の語幹 "Onco-" が意味するものはどれですか？',
+      options:['病気','細菌','腫瘍','遺伝子'],
+      answer:2,
+      explanation:'Onco-は「腫瘍（mass・bulk）」を意味します。Oncogene（がん遺伝子）、Oncologist（腫瘍内科医）などに使われます。'
+    }
+  ]
+},
+
+// ===== Ch.4 接頭辞・接尾辞 =====
+{
+  id:'ch4', icon:'🔤', title:'接頭辞・接尾辞（Prefix / Suffix）',
+  badge:'接辞の達人',
+  slides:[
+    {
+      title:'epi- と para-', icon:'📌',
+      content:`
+<p><span class="en-term">epi-</span>は「上方・上に」、<span class="en-term">para-</span>は「傍の・隣の」を表す接頭辞です。</p>
+<table class="term-table">
+  <thead><tr><th>接頭辞</th><th>意味</th><th>代表例</th></tr></thead>
+  <tbody>
+    <tr><td><span class="en-term">epi-</span></td><td>上に</td><td>Epiglottis（喉頭蓋）= glottis（声門）の上にある。Epinephrine（エピネフリン）= 腎臓（nephros）の上の副腎から。Epidermis（表皮）= derma（皮膚）の上層</td></tr>
+    <tr><td><span class="en-term">para-</span></td><td>傍の・副</td><td>Parathyroid gland（副甲状腺）= thyroid（甲状腺）の傍にある。Parameter（パラメータ）= 傍に置かれた変数</td></tr>
+  </tbody>
+</table>
+<div class="hl">💡 <strong>epinephrine = adrenaline</strong>：語源は異なりますが同じホルモン。<i>epi/ad</i>（上に）+ <i>nephr/renal</i>（腎臓）→ 副腎（adrenal gland）から分泌されるホルモン。</div>`
+    },
+    {
+      title:'-emia と -osis', icon:'🩸',
+      content:`
+<p><span class="en-term">-emia</span>は「血液の状態・〜血症」、<span class="en-term">-osis</span>は「病的状態・〜症」を表す接尾辞です。</p>
+<table class="term-table">
+  <thead><tr><th>接尾辞</th><th>意味</th><th>例</th></tr></thead>
+  <tbody>
+    <tr><td><span class="en-term">-emia</span></td><td>血液中の状態</td><td>Candidemia（カンジダ血症）、Bacteremia（菌血症）、Anemia（貧血）、Acidemia（アシデミア）</td></tr>
+    <tr><td><span class="en-term">-osis</span></td><td>病的状態</td><td>Candidosis（カンジダ症）、Nephrosis（ネフローゼ）、Acidosis（アシドーシス）、Aspergillosis（アスペルギルス症）</td></tr>
+  </tbody>
+</table>
+<div class="hl">
+  <strong>例で理解：</strong><br>
+  <span class="en-term">Candida</span>が血液中にいる → <strong>Candidemia</strong>（カンジダ血症）<br>
+  <span class="en-term">Candida</span>による疾患全般 → <strong>Candidosis</strong>（カンジダ症）
+</div>`
+    },
+    {
+      title:'-itis（炎症）と -otomy / -ectomy（手術）', icon:'🔪',
+      content:`
+<table class="term-table">
+  <thead><tr><th>接尾辞</th><th>意味</th><th>例</th></tr></thead>
+  <tbody>
+    <tr><td><span class="en-term">-itis</span></td><td>炎症（〜炎）</td><td>Gastritis（胃炎）、Encephalitis（脳炎）、Stomatitis（口内炎）、Hepatitis（肝炎）</td></tr>
+    <tr><td><span class="en-term">-otomy</span></td><td>切開（incision）</td><td>Laparotomy（開腹術）、Tracheotomy（気管切開術）、Lobotomy（葉切断術）</td></tr>
+    <tr><td><span class="en-term">-ectomy</span></td><td>切除（excision）</td><td>Appendectomy（虫垂切除術）、Gastrectomy（胃切除術）、Lobectomy（葉切除術）</td></tr>
+  </tbody>
+</table>
+<div class="wn">
+  ⚠️ <strong>-otomy vs -ectomy の違い：</strong><br>
+  -otomy → 切り口を入れるだけ（取り除かない）。英語では <em>incision</em>。<br>
+  -ectomy → 切り取る・摘出する。英語では <em>excision</em>。
+</div>`
+    },
+    {
+      title:'-philia / -phobia / -penia と -oma / -oid', icon:'⚗️',
+      content:`
+<table class="term-table">
+  <thead><tr><th>接尾辞</th><th>意味</th><th>例</th></tr></thead>
+  <tbody>
+    <tr><td><span class="en-term">-philia</span></td><td>好む・嗜好</td><td>Hemophilia（血友病）、<i>Haemophilus</i>（血液を好む細菌属）</td></tr>
+    <tr><td><span class="en-term">-phobia</span></td><td>恐怖・嫌悪</td><td>Photophobia（羞明）、Acrophobia（高所恐怖症）</td></tr>
+    <tr><td><span class="en-term">-penia</span></td><td>乏しい・減少</td><td>Neutropenia（好中球減少症）、Sarcopenia（サルコペニア）、Leukopenia（白血球減少症）</td></tr>
+    <tr><td><span class="en-term">-oma</span></td><td>腫瘍（〜腫）</td><td>Carcinoma（癌腫）、Sarcoma（肉腫）、Lymphoma（リンパ腫）</td></tr>
+    <tr><td><span class="en-term">-oid</span></td><td>〜様・もどき</td><td>Carcinoid（カルチノイド）、Spheroid（球状体）、Android（人間に似たもの）</td></tr>
+  </tbody>
+</table>
+<div class="hl">💡 好中球（neutrophil）、好酸球（eosinophil）、好塩基球（basophil）の "-phil" も "-philia" と同語源。それぞれ中性・酸性・塩基性の色素で染まるから「好む」！</div>`
+    },
+    {
+      title:'量・速度の接頭辞まとめ', icon:'⚖️',
+      content:`
+<table class="term-table">
+  <thead><tr><th>接頭辞</th><th>意味</th><th>例</th></tr></thead>
+  <tbody>
+    <tr><td><span class="en-term">hyper-</span></td><td>過剰・高</td><td>Hyperglycemia（高血糖）、Hypertension（高血圧）、Hyperplasia（過形成）</td></tr>
+    <tr><td><span class="en-term">hypo-</span></td><td>不足・低</td><td>Hypoglycemia（低血糖）、Hypotension（低血圧）、Hypothermia（低体温）</td></tr>
+    <tr><td><span class="en-term">tachy-</span></td><td>速い・頻</td><td>Tachycardia（頻脈）、Tachypnea（頻呼吸）</td></tr>
+    <tr><td><span class="en-term">brady-</span></td><td>遅い・徐</td><td>Bradycardia（徐脈）、Bradypnea（徐呼吸）</td></tr>
+    <tr><td><span class="en-term">poly-</span></td><td>多い</td><td>Polydipsia（多飲症）、Polyuria（多尿）、Polypeptide（ポリペプチド）</td></tr>
+    <tr><td><span class="en-term">oligo-</span></td><td>少ない</td><td>Oliguria（乏尿）、Oligopeptide（オリゴペプチド）</td></tr>
+    <tr><td><span class="en-term">dys-</span></td><td>異常・困難</td><td>Dyspnea（呼吸困難）、Dysphagia（嚥下障害）、Dysplasia（異形成）</td></tr>
+    <tr><td><span class="en-term">a- / an-</span></td><td>無・欠如</td><td>Anemia（貧血）、Asymptomatic（無症状の）、Apnea（無呼吸）</td></tr>
+  </tbody>
+</table>`
+    }
+  ],
+  quizzes:[
+    {
+      q:'"Tachycardia"（頻脈）の "tachy-" が意味するのはどれですか？',
+      options:['遅い','速い','多い','少ない'],
+      answer:1,
+      explanation:'tachy-は「速い・頻」を意味します。Bradycardia（徐脈）のbradyと対をなします。'
+    },
+    {
+      q:'"Neutropenia"（好中球減少症）の "-penia" が意味するのはどれですか？',
+      options:['好む','恐怖','乏しい・減少','腫瘍'],
+      answer:2,
+      explanation:'-peniaは「乏しい・減少」を意味します。Sarcopenia（サルコペニア）、Leukopenia（白血球減少症）にも使われます。'
+    },
+    {
+      q:'"Appendectomy"（虫垂切除術）と "Laparotomy"（開腹術）の違いとして正しいものはどれですか？',
+      options:['どちらも同じ意味','-ectomyは切開だけ、-otomyは切除','-ectomyは切除、-otomyは切開（取り除かない）','どちらも腫瘍の切除を意味する'],
+      answer:2,
+      explanation:'-ectomyは「切除・摘出（excision）」、-otomyは「切開（incision）」で取り除かないことを指します。'
+    }
+  ]
+},
+
+// ===== Ch.5 動詞・修飾語 =====
+{
+  id:'ch5', icon:'✍️', title:'学術動詞・修飾語 — 論文で使う表現',
+  badge:'動詞・表現力UP',
+  slides:[
+    {
+      title:'なぜ論文の動詞は違うのか？', icon:'📝',
+      content:`
+<p>日常英語では <span class="en-term">get</span> を多用しますが、学術論文では <span class="en-term">obtain</span> や <span class="en-term">acquire</span> が使われます。その理由は：</p>
+<div class="hl">
+  <strong>①多義性の回避：</strong>getは意味が広すぎてニュアンスが伝わりにくい<br>
+  <strong>②フォーマル性：</strong>学術誌では硬い表現の方が「すわりがいい」
+</div>
+<p>論文の動詞は<strong>意味のグループ</strong>で覚えると効率的です。</p>`
+    },
+    {
+      title:'意味グループ別：重要動詞①', icon:'📊',
+      content:`
+<table class="term-table">
+  <thead><tr><th>日本語</th><th>論文でよく使う動詞</th></tr></thead>
+  <tbody>
+    <tr><td>示す・表す</td><td><span class="en-term">show, present, exhibit, demonstrate, indicate, describe, report</span></td></tr>
+    <tr><td>評価する</td><td><span class="en-term">assess, evaluate, examine</span></td></tr>
+    <tr><td>明らかにする</td><td><span class="en-term">reveal, clarify, disclose, elucidate, unravel</span></td></tr>
+    <tr><td>示唆する</td><td><span class="en-term">suggest, imply</span></td></tr>
+    <tr><td>関連する</td><td><span class="en-term">associate, link, relate</span></td></tr>
+    <tr><td>獲得する</td><td><span class="en-term">obtain, acquire</span>（getは口語的）</td></tr>
+    <tr><td>実施する</td><td><span class="en-term">perform, conduct, carry out</span></td></tr>
+  </tbody>
+</table>`
+    },
+    {
+      title:'意味グループ別：重要動詞②', icon:'🔧',
+      content:`
+<table class="term-table">
+  <thead><tr><th>日本語</th><th>論文でよく使う動詞</th></tr></thead>
+  <tbody>
+    <tr><td>決める・定義する</td><td><span class="en-term">decide, determine, define</span></td></tr>
+    <tr><td>修正する</td><td><span class="en-term">revise, amend, correct</span></td></tr>
+    <tr><td>区別する</td><td><span class="en-term">differ, distinguish, separate</span></td></tr>
+    <tr><td>注意・注目する</td><td><span class="en-term">note, observe</span>（Note that S+V. = SがVすることに注意）</td></tr>
+    <tr><td>含む・除外する</td><td><span class="en-term">include / exclude</span></td></tr>
+    <tr><td>増える・減る</td><td><span class="en-term">increase / decrease, reduce, diminish</span></td></tr>
+    <tr><td>適応する・採用する</td><td><span class="en-term">adapt（適応）/ adopt（採用）</span>スペルが似ているので注意！</td></tr>
+  </tbody>
+</table>
+<div class="wn">⚠️ <strong>adapt vs adopt</strong>：<br>
+<i>adapt</i> = 環境に適応させる（adaptive immunity: 適応免疫）<br>
+<i>adopt</i> = 方針・手法を採用する（adopt a new guideline）</div>`
+    },
+    {
+      title:'修飾語：形容詞・副詞の違い', icon:'🎯',
+      content:`
+<div class="hl">
+  <strong>very → extremely</strong>：論文ではextremelyなど、よりフォーマルな副詞が好まれます。
+</div>
+<table class="term-table">
+  <thead><tr><th>よく似た語</th><th>意味・ニュアンスの違い</th></tr></thead>
+  <tbody>
+    <tr><td><span class="en-term">probable / possible</span></td><td>probable = 確からしい（likely）　possible = 可能性がある</td></tr>
+    <tr><td><span class="en-term">personal</span></td><td>他人と区別した「個人の」。反対語はsocial。例：personal protective equipment（個人防護具）</td></tr>
+    <tr><td><span class="en-term">private</span></td><td>公的ではない「私的な」。反対語はpublic。例：private hospital（私立病院）</td></tr>
+    <tr><td><span class="en-term">individual</span></td><td>集団の中の「個々の」。反対語はgroup（概念）。例：individual patient（個々の患者）</td></tr>
+  </tbody>
+</table>
+<div class="hl">💡 <strong>Personal / Private / Individual</strong>の違いは日本語に訳すとどれも「個人の」になりますが、コンテキストで使い分けが必要です。</div>`
+    }
+  ],
+  quizzes:[
+    {
+      q:'論文で「結果を示す」という意味で最も適切な動詞はどれですか？',
+      options:['get','show / demonstrate','tell','say'],
+      answer:1,
+      explanation:'論文ではshow、demonstrate、indicate、reportなどが「示す」の意味で使われます。getは口語的すぎて学術文では避けます。'
+    },
+    {
+      q:'"The patient adapted well to the new medication." の "adapt" の意味として正しいものはどれですか？',
+      options:['採用した','適応した','拒絶した','服用した'],
+      answer:1,
+      explanation:'adapt = 適応する（to adapt to new conditions）。adopt（採用する）とスペルが似ているので注意が必要です。'
+    },
+    {
+      q:'"probable" と "possible" の違いとして正しいものはどれですか？',
+      options:['どちらも同じ意味','probable = 確からしい、possible = 可能性がある','probable = 不可能、possible = 確実','どちらも「不可能」を意味する'],
+      answer:1,
+      explanation:'probable = 確からしい（likely）、possible = 可能性がある（might be）。probableの方が可能性が高いニュアンスです。'
+    }
+  ]
+},
+
+// ===== Ch.6 English Session① =====
+{
+  id:'ch6', icon:'🇬🇧', title:'English Session ①— 対義語ペアで学ぶ医学英語',
+  badge:'English Session①',
+  slides:[
+    {
+      title:'Acute and Chronic', icon:'⏱️',
+      content:`
+<div class="en-section">
+  <div class="en-label">English</div>
+  <p class="en-text">The term "acute" is an adjective that describes a condition with a rapid onset and a relatively short duration. Examples of its use include "acute onset", "acute disease" and "acute hepatitis". Conversely, "chronic" is an adjective indicating a condition characterized by a slow onset and a long duration. This term is often used in phrases such as "chronic disease" and "chronic hepatitis", signifying ongoing, long-term health challenges.</p>
+  <div class="jp-text">
+    <strong>【日本語解説】</strong><br>
+    <span class="en-term">acute</span>（急性の）：急速に発症し、比較的短期間で経過する状態を表す形容詞。"acute onset"（急性発症）、"acute hepatitis"（急性肝炎）のように使う。<br>
+    <span class="en-term">chronic</span>（慢性の）：緩やかに発症し、長期間続く状態を表す形容詞。"chronic disease"（慢性疾患）、"chronic hepatitis"（慢性肝炎）のように使う。<br><br>
+    💡 acute ⇔ chronic は医学英語で最も基本的な対義語ペアの一つ。
+  </div>
+</div>`
+    },
+    {
+      title:'Deficiency and Failure', icon:'❗',
+      content:`
+<div class="en-section">
+  <div class="en-label">English</div>
+  <p class="en-text">"Deficiency" denotes a lack or shortage of a necessary quality or element within the body. For example, "vitamin C deficiency" indicates an inadequate level of vitamin C, and "hormone deficiencies" suggest a shortfall in one or more hormones. Its adjective form is "deficient". "Insufficiency" is often used interchangeably with "deficiency". "Failure", on the other hand, refers to the complete malfunction of a system or organ. Common usages include "heart failure" and "kidney failure".</p>
+  <div class="jp-text">
+    <strong>【日本語解説】</strong><br>
+    <span class="en-term">deficiency / insufficiency</span>（不足・欠乏）：必要な物質や機能が不足している状態。vitamin C deficiency（ビタミンC欠乏症）、adrenal insufficiency（副腎不全）のように使う。形容詞形は deficient。<br>
+    <span class="en-term">failure</span>（不全・機能喪失）：臓器やシステムが完全に機能しなくなった状態。heart failure（心不全）、kidney failure（腎不全）のように使う。<br><br>
+    💡 deficiency = 不足（部分的）、failure = 不全（機能喪失）という程度の違いがある。
+  </div>
+</div>`
+    },
+    {
+      title:'Congenital and Acquired', icon:'🧬',
+      content:`
+<div class="en-section">
+  <div class="en-label">English</div>
+  <p class="en-text">"Congenital" refers to conditions or traits a person has at birth, often due to genetic reasons. Examples include congenital heart defects or congenital blindness. "Acquired" describes conditions or traits that develop after birth, influenced by environmental exposure, lifestyle, or disease. For instance, acquired immunodeficiency syndrome (AIDS) results from infection with HIV.</p>
+  <div class="jp-text">
+    <strong>【日本語解説】</strong><br>
+    <span class="en-term">congenital</span>（先天性の）：生まれつきの状態や形質。遺伝的原因によることが多い。congenital heart defect（先天性心疾患）、congenital blindness（先天性失明）。<br>
+    <span class="en-term">acquired</span>（後天性の）：出生後に環境・生活習慣・疾患の影響で発症した状態。AIDS（後天性免疫不全症候群）はHIV感染によって生じるため「acquired」。<br><br>
+    💡 congenital ⇔ acquired は先天 ⇔ 後天という基本の対。
+  </div>
+</div>`
+    },
+    {
+      title:'Innate and Acquired（免疫の文脈で）', icon:'🛡️',
+      content:`
+<div class="en-section">
+  <div class="en-label">English</div>
+  <p class="en-text">"Innate" traits, like innate immunity, are present at birth, providing general, non-specific defense mechanisms such as skin barriers and inflammation. These attributes are genetically programmed and ready to protect against pathogens immediately, without prior exposure. Conversely, "acquired" characteristics develop through life from experiences, including exposure to pathogens. Acquired immunity emerges after the body encounters specific pathogens, leading to a targeted and more effective immune response during future encounters, thanks to memory cells and antibodies.</p>
+  <div class="jp-text">
+    <strong>【日本語解説】</strong><br>
+    <span class="en-term">innate immunity</span>（自然免疫）：生まれつき備わっている非特異的な防御機構。皮膚バリア・炎症反応などが該当。病原体への事前曝露なしに即座に機能する。<br>
+    <span class="en-term">acquired immunity</span>（獲得免疫・適応免疫）：病原体に曝露された後に獲得される特異的免疫応答。記憶細胞と抗体が鍵となり、次回の感染時により強力に機能する。<br><br>
+    💡 innate = 生来の（非特異的・即時）、acquired = 経験を通じて獲得（特異的・記憶あり）。
+  </div>
+</div>`
+    },
+    {
+      title:'Diagnosis and Prognosis', icon:'🔍',
+      content:`
+<div class="en-section">
+  <div class="en-label">English</div>
+  <p class="en-text">"Diagnosis" is a noun referring to the process of identifying a disease from its signs and symptoms, or the conclusion reached through this process. Common phrases include "differential diagnosis" and "diagnosis of exclusion". Conversely, "prognosis" indicates the likely outcome or course of a disease, including the chances of recovery. It is often used in expressions such as "poor prognosis" and "prognosis prediction".</p>
+  <div class="jp-text">
+    <strong>【日本語解説】</strong><br>
+    <span class="en-term">diagnosis</span>（診断）：症状・徴候から疾患を特定するプロセス、またはその結論。differential diagnosis（鑑別診断）、diagnosis of exclusion（除外診断）などのフレーズで使う。<br>
+    <span class="en-term">prognosis</span>（予後）：疾患の見通し。回復の可能性や経過の予測を意味する。poor prognosis（予後不良）、favorable prognosis（予後良好）。<br><br>
+    💡 dia- = through（通して）、pro- = before（前に）。診断は「通して見る」、予後は「前を見る」。
+  </div>
+</div>`
+    },
+    {
+      title:'Benign and Malignant', icon:'⚕️',
+      content:`
+<div class="en-section">
+  <div class="en-label">English</div>
+  <p class="en-text">"Benign" is an adjective describing a mild condition that does not threaten health or life. Examples include "benign tumor" and "benign disorder". Its noun form is "benignity". Conversely, "malignant" indicates a tendency to produce death or deterioration, often associated with cancer. Used in "malignant tumor" and "malignant disease". Its noun form is "malignancy".</p>
+  <div class="jp-text">
+    <strong>【日本語解説】</strong><br>
+    <span class="en-term">benign</span>（良性の）：生命を脅かさない穏やかな病態。benign tumor（良性腫瘍）。名詞形はbenignity（良性）。<br>
+    <span class="en-term">malignant</span>（悪性の）：死亡や悪化をもたらす傾向のある病態。主に癌と関連して使われる。malignant tumor（悪性腫瘍）。名詞形はmalignancy（悪性度・悪性腫瘍）。<br><br>
+    💡 benign ⇔ malignant は腫瘍の分類で最も頻出の対義語。
+  </div>
+</div>`
+    },
+    {
+      title:'Symptom and Sign', icon:'🩺',
+      content:`
+<div class="en-section">
+  <div class="en-label">English</div>
+  <p class="en-text">"Symptom" describes the subjective evidence of disease observed by the patient. Its adjective form is "symptomatic"; conversely, "asymptomatic" refers to the absence of symptoms. "Sign" denotes objective evidence of disease observable by someone other than the patient. Symptoms are subjective experiences, while signs are objective findings. Pain is a symptom, but tenderness — pain upon palpation — is usually classified as a sign.</p>
+  <div class="jp-text">
+    <strong>【日本語解説】</strong><br>
+    <span class="en-term">symptom</span>（症状）：患者自身が感じる主観的な異常。咳・痛み・倦怠感など。形容詞はsymptomatic（有症状の）/ asymptomatic（無症状の）。<br>
+    <span class="en-term">sign</span>（徴候）：医療者が客観的に観察・測定できる異常。発熱・黄疸・圧痛など。<br><br>
+    💡 痛み（pain）はsymptom、圧痛（tenderness）はsign — 同じ「痛み」でも患者主訴か医師確認かで分類が変わる。
+  </div>
+</div>`
+    },
+    {
+      title:'Onset and Outcome', icon:'📅',
+      content:`
+<div class="en-section">
+  <div class="en-label">English</div>
+  <p class="en-text">"Onset" describes the beginning of a disease. Phrases include "acute onset" for a rapid beginning and "sudden onset" for diseases that begin abruptly. Conversely, "outcome" denotes the result or consequent events following a disease. It is used in "clinical outcome" (observable results of treatment) and "primary outcome" (the main result that a study or treatment aims to measure).</p>
+  <div class="jp-text">
+    <strong>【日本語解説】</strong><br>
+    <span class="en-term">onset</span>（発症・発症時期）：疾患の始まり。acute onset（急性発症）、sudden onset（突然発症）のように使う。<br>
+    <span class="en-term">outcome</span>（転帰・アウトカム）：疾患または治療の結果。clinical outcome（臨床転帰）、primary outcome（主要アウトカム）は臨床試験で頻出。<br><br>
+    💡 論文でprimary outcome（主要エンドポイント）とsecondary outcome（副次エンドポイント）は必ず登場する重要用語。
+  </div>
+</div>`
+    }
+  ],
+  quizzes:[
+    {
+      q:'"Chronic disease"（慢性疾患）の "chronic" の特徴として正しいものはどれですか？',
+      options:['急速発症・短期経過','緩徐発症・長期経過','突然死を来す','先天性の'],
+      answer:1,
+      explanation:'chronic = 緩徐に発症し長期間続く状態。acute（急性）と対をなします。'
+    },
+    {
+      q:'医師が聴診器で聴いた「心雑音」はsymptomとsignのどちらですか？',
+      options:['symptom（症状）：患者が感じる主観的なもの','sign（徴候）：医師が客観的に観察できるもの','どちらでもない','両方に当てはまる'],
+      answer:1,
+      explanation:'sign（徴候）は医師など他者が客観的に観察・測定できる所見です。心雑音は聴診で確認できるのでsignに分類されます。'
+    },
+    {
+      q:'"Poor prognosis"（予後不良）の "prognosis" が意味するのはどれですか？',
+      options:['診断プロセス','疾患の見通し・予後','治療法の選択','症状の記録'],
+      answer:1,
+      explanation:'prognosis = 疾患の見通し（予後）。診断（diagnosis）とは異なり、今後の経過や回復の見込みを意味します。'
+    }
+  ]
+},
+
+// ===== Ch.7 English Session② =====
+{
+  id:'ch7', icon:'📐', title:'English Session ②— 解剖・診療科・予防の用語',
+  badge:'English Session②',
+  slides:[
+    {
+      title:'Anatomy and Physiology', icon:'🏛️',
+      content:`
+<div class="en-section">
+  <div class="en-label">English</div>
+  <p class="en-text">Anatomy studies the structure of the body, like "gross anatomy" for visible parts and "histology" for microscopic details. Its adjective form is "anatomical". Conversely, physiology explores body functions, such as "cardiovascular physiology" for the heart and "neurophysiology" for the nervous system. Its adjective forms are "physiological" or "physiologic". Both are crucial for medical understanding.</p>
+  <div class="jp-text">
+    <strong>【日本語解説】</strong><br>
+    <span class="en-term">anatomy</span>（解剖学）：身体の構造を研究する学問。gross anatomy（肉眼解剖学）、histology（組織学、顕微鏡解剖学）を含む。形容詞はanatomical。<br>
+    <span class="en-term">physiology</span>（生理学）：身体の機能を研究する学問。cardiovascular physiology（心血管生理学）、neurophysiology（神経生理学）など。形容詞はphysiological / physiologic。<br><br>
+    💡 anatomy（構造）→ physiology（機能）→ pathology（病態）の順に学ぶのが基本的な流れ。
+  </div>
+</div>`
+    },
+    {
+      title:'Histology and Pathology', icon:'🔭',
+      content:`
+<div class="en-section">
+  <div class="en-label">English</div>
+  <p class="en-text">Histology, also known as microscopic anatomy, is the study of the microscopic structure of tissues. The adjective form is "histological". Pathology, the medical study focused on diseases, investigates their essential nature along with structural and functional changes. Adjectives "pathological" or "pathologic" relate to disease states. Both histology and pathology are essential for comprehending disease mechanisms and are foundational to developing treatments.</p>
+  <div class="jp-text">
+    <strong>【日本語解説】</strong><br>
+    <span class="en-term">histology</span>（組織学）：顕微鏡を用いて組織・細胞の構造を研究する学問（別名：microscopic anatomy）。形容詞はhistological。<br>
+    <span class="en-term">pathology</span>（病理学）：疾患の本質・構造的・機能的変化を研究する学問。病理診断にも使われる。形容詞はpathological。histopathology（組織病理学）として両者が交差する。<br><br>
+    💡 病院の「病理診断科」は英語でDepartment of Pathology。
+  </div>
+</div>`
+    },
+    {
+      title:'Therapy and Treatment', icon:'💊',
+      content:`
+<div class="en-section">
+  <div class="en-label">English</div>
+  <p class="en-text">Therapy, often used interchangeably with treatment, refers to the range of interventions designed to alleviate symptoms, cure diseases, or promote recovery. The adjective form is "therapeutic". Therapies may include medications, surgical procedures, physical therapy, psychotherapy, and more. Treatment can also specifically denote the medical management intended to cure or mitigate a disease. Both therapy and treatment are central to the practice of medicine.</p>
+  <div class="jp-text">
+    <strong>【日本語解説】</strong><br>
+    <span class="en-term">therapy</span>（療法）：症状軽減・疾患治癒・回復促進を目的とした介入の総称。形容詞はtherapeutic（治療的な）。antimicrobial therapy（抗菌薬療法）のように使う。<br>
+    <span class="en-term">treatment</span>（治療）：therapyとほぼ同義だが、より広い「医学的管理」を指すこともある。treatment of infection（感染症の治療）のように使う。<br><br>
+    💡 論文では "antimicrobial therapy" と "antimicrobial treatment" はほぼ互換的に使われる。
+  </div>
+</div>`
+    },
+    {
+      title:'Prevention, Prophylaxis and Precaution', icon:'🛡️',
+      content:`
+<div class="en-section">
+  <div class="en-label">English</div>
+  <p class="en-text">Prevention encompasses actions to thwart the onset of diseases before they manifest, focusing on long-term health maintenance. Prophylaxis, meaning "to guard beforehand" in Greek, refers to specific medical actions taken to prevent illness, such as "antibiotic prophylaxis before dental procedures". Precaution suggests careful measures taken in advance to secure safety, like "using gloves as a precaution during patient care". In essence, prevention is broad in scope, prophylaxis is targeted prevention, and precaution is immediate action to avoid potential risks.</p>
+  <div class="jp-text">
+    <strong>【日本語解説】</strong><br>
+    <span class="en-term">prevention</span>（予防）：疾患の発症を未然に防ぐ広い概念。長期的な健康維持が目的。<br>
+    <span class="en-term">prophylaxis</span>（予防薬・予防的処置）：ギリシャ語で「事前に守る」。特定の医学的手段による予防。antibiotic prophylaxis（抗菌薬予防投与）が典型例。<br>
+    <span class="en-term">precaution</span>（予防措置・注意）：潜在的リスクを避けるための即時的・具体的な安全措置。手袋着用、患者隔離など。<br><br>
+    💡 prevention（広い）> prophylaxis（標的型）> precaution（即時的安全措置）の関係。
+  </div>
+</div>`
+    },
+    {
+      title:'解剖学的方向用語', icon:'🧭',
+      content:`
+<p>解剖学的方向用語は対義語のペアで理解します。</p>
+<table class="term-table">
+  <thead><tr><th>英語ペア</th><th>日本語</th><th>例</th></tr></thead>
+  <tbody>
+    <tr><td><span class="en-term">Anterior / Posterior</span></td><td>前方 / 後方</td><td>The chest is anterior to the spine.（胸部は脊柱の前方）</td></tr>
+    <tr><td><span class="en-term">Dorsal / Ventral</span></td><td>背側 / 腹側</td><td>Dorsal = back side; Ventral = belly side</td></tr>
+    <tr><td><span class="en-term">Superior / Inferior</span></td><td>上方 / 下方</td><td>Superior vena cava（上大静脈）/ Inferior vena cava（下大静脈）</td></tr>
+    <tr><td><span class="en-term">Medial / Lateral</span></td><td>内側 / 外側</td><td>Medial meniscus（内側半月板）</td></tr>
+    <tr><td><span class="en-term">Proximal / Distal</span></td><td>近位 / 遠位</td><td>Proximal femur（大腿骨近位部）</td></tr>
+    <tr><td><span class="en-term">Superficial / Deep</span></td><td>表層 / 深層</td><td>Superficial wound（表在性創傷）</td></tr>
+    <tr><td><span class="en-term">Cranial（Cephalic）/ Caudal</span></td><td>頭側 / 尾側</td><td>Cranial nerve（脳神経）</td></tr>
+  </tbody>
+</table>`
+    }
+  ],
+  quizzes:[
+    {
+      q:'"Superior vena cava"（上大静脈）の "superior" が意味するのはどれですか？',
+      options:['下方・尾側','上方・頭側','前方','外側'],
+      answer:1,
+      explanation:'superior = 上方・頭側。inferior = 下方・尾側と対をなします。Superior vena cava（上大静脈）はInferior vena cava（下大静脈）と対になります。'
+    },
+    {
+      q:'"Antibiotic prophylaxis"（抗菌薬予防投与）の "prophylaxis" が最も正確に意味するものはどれですか？',
+      options:['治療','長期的な健康維持のための一般的予防','特定の医学的手段による標的型予防','即時的な安全措置'],
+      answer:2,
+      explanation:'prophylaxisはギリシャ語で「事前に守る」を意味し、特定の医学的手段による標的型の予防を指します。general preventionより具体的です。'
+    }
+  ]
+},
+
+// ===== Ch.8 診療科・主要症候・代表疾患 =====
+{
+  id:'ch8', icon:'🏥', title:'診療科・主要症候・代表疾患',
+  badge:'臨床英語完全制覇',
+  slides:[
+    {
+      title:'診療科の英語名（コアカリキュラム準拠）', icon:'🏨',
+      content:`
+<table class="term-table">
+  <thead><tr><th>日本語</th><th>英語</th></tr></thead>
+  <tbody>
+    <tr><td>内科</td><td><span class="en-term">Internal Medicine</span></td></tr>
+    <tr><td>外科</td><td><span class="en-term">Surgery</span></td></tr>
+    <tr><td>小児科</td><td><span class="en-term">Pediatrics</span></td></tr>
+    <tr><td>産婦人科</td><td><span class="en-term">Obstetrics and Gynecology (OB/GYN)</span></td></tr>
+    <tr><td>精神科</td><td><span class="en-term">Psychiatry</span></td></tr>
+    <tr><td>総合診療科</td><td><span class="en-term">General Practice / Family Medicine</span></td></tr>
+    <tr><td>救急科</td><td><span class="en-term">Emergency Medicine</span></td></tr>
+    <tr><td>皮膚科</td><td><span class="en-term">Dermatology</span></td></tr>
+    <tr><td>整形外科</td><td><span class="en-term">Orthopedic Surgery</span></td></tr>
+    <tr><td>眼科</td><td><span class="en-term">Ophthalmology</span></td></tr>
+    <tr><td>耳鼻咽喉科</td><td><span class="en-term">Otolaryngology / ENT</span></td></tr>
+    <tr><td>放射線科</td><td><span class="en-term">Radiology</span></td></tr>
+    <tr><td>麻酔科</td><td><span class="en-term">Anesthesiology</span></td></tr>
+    <tr><td>病理診断科</td><td><span class="en-term">Pathology</span></td></tr>
+    <tr><td>リハビリテーション科</td><td><span class="en-term">Rehabilitation Medicine</span></td></tr>
+  </tbody>
+</table>`
+    },
+    {
+      title:'専門科の語幹：odonto-, ophthalmo-, dermato-', icon:'👁️',
+      content:`
+<div class="hl">
+  <strong>Odontology（歯学）vs Dentistry（歯科）：</strong><br>
+  Odontology = 歯の構造・発生・疾患の科学的研究（学術的）<br>
+  Dentist = 歯の予防・診断・治療を実践する医療職（臨床的）
+</div>
+<div class="hl">
+  <strong>Ophthalmology（眼科学）：</strong><br>
+  ophthalmo-（眼）+ -logy（学問）。眼科医（ophthalmologist）は眼の診察・手術・薬処方を行う医師。<br>
+  ※ Optometrist（検眼士）とは異なり、ophthalmologistはMD（医師）。
+</div>
+<div class="hl">
+  <strong>Dermatology（皮膚科学）：</strong><br>
+  dermato-（皮膚）+ -logy（学問）。皮膚・毛髪・爪・粘膜の疾患を扱う。生検・外科的切除・レーザー治療も実施。
+</div>`
+    },
+    {
+      title:'主要症候の英語（コアカリキュラム準拠）', icon:'📋',
+      content:`
+<table class="term-table">
+  <thead><tr><th>日本語</th><th>英語</th><th>日本語</th><th>英語</th></tr></thead>
+  <tbody>
+    <tr><td>発熱</td><td><span class="en-term">Fever</span></td><td>全身倦怠感</td><td><span class="en-term">General Fatigue / Malaise</span></td></tr>
+    <tr><td>意識障害</td><td><span class="en-term">Consciousness Disturbance</span></td><td>失神</td><td><span class="en-term">Syncope</span></td></tr>
+    <tr><td>けいれん</td><td><span class="en-term">Seizures</span></td><td>めまい</td><td><span class="en-term">Dizziness / Vertigo</span></td></tr>
+    <tr><td>浮腫</td><td><span class="en-term">Edema</span></td><td>発疹</td><td><span class="en-term">Rash</span></td></tr>
+    <tr><td>呼吸困難</td><td><span class="en-term">Dyspnea</span></td><td>胸痛</td><td><span class="en-term">Chest Pain</span></td></tr>
+    <tr><td>腹痛</td><td><span class="en-term">Abdominal Pain</span></td><td>黄疸</td><td><span class="en-term">Jaundice</span></td></tr>
+    <tr><td>頭痛</td><td><span class="en-term">Headache</span></td><td>関節痛</td><td><span class="en-term">Arthralgia</span></td></tr>
+    <tr><td>血尿</td><td><span class="en-term">Hematuria</span></td><td>嚥下困難</td><td><span class="en-term">Dysphagia</span></td></tr>
+  </tbody>
+</table>
+<p style="font-size:12px;color:var(--gray-2);">※令和4年度改訂版医学教育モデル・コア・カリキュラムより抜粋</p>`
+    },
+    {
+      title:'代表疾患：糖尿病 (Diabetes Mellitus)', icon:'🩸',
+      content:`
+<div class="en-section">
+  <div class="en-label">English</div>
+  <p class="en-text">Diabetes mellitus is a chronic metabolic disorder characterized by abnormally high levels of glucose in the blood. Type 1 diabetes is characterized by the autoimmune destruction of the pancreatic beta cells, leading to an absolute deficiency of insulin (approximately 5–10% of adult cases). Type 2 diabetes is the most prevalent form, accounting for more than 90% of cases, and is characterized by hyperglycemia due to a progressive decline in insulin secretion superimposed on insulin resistance.</p>
+  <div class="jp-text">
+    <strong>【日本語解説】</strong><br>
+    糖尿病（diabetes mellitus）は血糖値が異常に高い状態が続く慢性代謝疾患。<br>
+    <strong>1型：</strong>膵臓β細胞の自己免疫的破壊 → インスリン絶対的欠乏。成人糖尿病の約5〜10%。<br>
+    <strong>2型：</strong>最多（90%以上）。インスリン抵抗性を背景にインスリン分泌が進行性に低下 → 相対的インスリン欠乏による高血糖（hyperglycemia）。
+  </div>
+</div>`
+    },
+    {
+      title:'代表疾患：高血圧 (Hypertension)', icon:'❤️',
+      content:`
+<div class="en-section">
+  <div class="en-label">English</div>
+  <p class="en-text">Hypertension stands for high blood pressure and is a chronic condition where blood pressure against artery walls is too high, increasing the risk for heart disease and stroke. There are two types: primary (essential) hypertension, with no clear cause but gradual development; and secondary hypertension, resulting from other medical conditions such as pheochromocytoma and renovascular hypertension. Management includes lifestyle changes and possibly medication.</p>
+  <div class="jp-text">
+    <strong>【日本語解説】</strong><br>
+    高血圧（hypertension）：動脈壁への血圧が過剰に高い慢性疾患。心疾患・脳卒中のリスクを増加させる。<br>
+    <strong>一次性（原発性）高血圧：</strong>明確な原因がなく徐々に発症（primary / essential hypertension）。高血圧全体の約90%。<br>
+    <strong>二次性高血圧：</strong>褐色細胞腫（pheochromocytoma）、腎血管性高血圧（renovascular hypertension）など基礎疾患による。<br>
+    管理は生活習慣改善と必要に応じた薬物療法。
+  </div>
+</div>`
+    }
+  ],
+  quizzes:[
+    {
+      q:'"Dyspnea"（呼吸困難）に含まれる接頭辞 "dys-" の意味はどれですか？',
+      options:['速い','異常・困難','多い','無・欠如'],
+      answer:1,
+      explanation:'dys-は「異常・困難」を意味します。dysphagia（嚥下障害）、dysplasia（異形成）なども同じ接頭辞です。'
+    },
+    {
+      q:'耳鼻咽喉科の英語略称として正しいものはどれですか？',
+      options:['OB/GYN','ENT','ICU','ECG'],
+      answer:1,
+      explanation:'耳鼻咽喉科はENT（Ear, Nose, and Throat）またはOtolaryngologyと表記します。OB/GYNは産婦人科です。'
+    },
+    {
+      q:'2型糖尿病（Type 2 diabetes）の主な病態として正しいものはどれですか？',
+      options:['膵β細胞の自己免疫的破壊によるインスリン絶対的欠乏','インスリン抵抗性を背景にしたインスリン分泌の進行性低下','ウイルス感染による急性膵炎','遺伝子変異による先天性インスリン欠損'],
+      answer:1,
+      explanation:'2型糖尿病はインスリン抵抗性を背景にインスリン分泌が進行性に低下する病態です。1型は膵β細胞の自己免疫的破壊です。'
+    }
+  ]
+}
+
+]; // end CHAPTERS
+
+// ============================================================
+// 状態管理
+// ============================================================
+const state = {
+  currentChapter: 0, currentSlide: 0,
+  inQuiz: false, quizIndex: 0, quizAnswered: false,
+  completedChapters: new Set(),
+  totalUnits: 0, completedUnits: 0
+};
+
+function calcTotals() {
+  state.totalUnits = CHAPTERS.reduce((s, ch) => s + ch.slides.length + ch.quizzes.length, 0);
+}
+
+// ============================================================
+// サイドバー
+// ============================================================
+function buildSidebar() {
+  document.getElementById('sidebarNav').innerHTML = CHAPTERS.map((ch, i) => `
+    <button class="chapter-btn ${i===0?'active':''}" onclick="goChapter(${i})" id="sb-${i}">
+      <span class="ch-icon">${ch.icon}</span>
+      <span class="ch-label">${ch.title}</span>
+      <span class="ch-check" id="sbcheck-${i}"></span>
+    </button>`).join('');
+}
+
+// ============================================================
+// レンダリング
+// ============================================================
+function render() {
+  const ch = CHAPTERS[state.currentChapter];
+  const total = ch.slides.length;
+  const qTotal = ch.quizzes.length;
+  const isDone = state.currentSlide >= total + qTotal;
+
+  if (isDone)       { renderComplete(ch); return; }
+  if (state.inQuiz) { renderQuiz(ch); }
+  else              { renderSlideContent(ch); }
+  updateProgress();
+}
+
+function renderSlideContent(ch) {
+  const sl = ch.slides[state.currentSlide];
+  const total = ch.slides.length;
+  const isLast = state.currentSlide === total - 1;
+  document.getElementById('slideArea').innerHTML = `
+    <div class="slide-card active">
+      <div class="slide-eyebrow">
+        <span>${ch.icon} ${ch.title}</span>
+        <span>スライド ${state.currentSlide+1} / ${total}</span>
+      </div>
+      <div class="slide-body">
+        <h2 class="slide-title"><span class="icon">${sl.icon}</span>${sl.title}</h2>
+        <div class="slide-content">${sl.content}</div>
+      </div>
+      <div class="slide-nav">
+        <button class="btn btn-ghost btn-sm" onclick="prevSlide()" ${state.currentSlide===0?'disabled':''}>← 前へ</button>
+        <span class="slide-counter">Ch.${state.currentChapter+1} — ${state.currentSlide+1}/${total}</span>
+        <button class="btn ${isLast?'btn-amber':'btn-accent'} btn-sm" onclick="nextSlide()">
+          ${isLast?'クイズへ ✏️':'次へ →'}
+        </button>
+      </div>
+    </div>`;
+}
+
+function renderQuiz(ch) {
+  const qi = state.quizIndex;
+  const quiz = ch.quizzes[qi];
+  const total = ch.quizzes.length;
+  document.getElementById('slideArea').innerHTML = `
+    <div class="quiz-card active">
+      <div class="quiz-header">✏️ 確認クイズ ${qi+1} / ${total} — ${ch.title}</div>
+      <div class="quiz-body">
+        <div class="quiz-q">Q. ${quiz.q}</div>
+        <div class="quiz-options">
+          ${quiz.options.map((o,i)=>`
+            <button class="quiz-option" id="opt-${i}" onclick="answerQuiz(${i})">
+              ${String.fromCharCode(65+i)}. ${o}
+            </button>`).join('')}
+        </div>
+        <div class="quiz-feedback" id="qfb"></div>
+        <div class="quiz-next-btn" id="qnext">
+          <button class="btn btn-accent" onclick="nextQuiz()">
+            ${qi<total-1?'次の問題 →':'チャプター完了 🎉'}
+          </button>
+        </div>
+      </div>
+    </div>`;
+}
+
+function renderComplete(ch) {
+  document.getElementById('slideArea').innerHTML = `
+    <div class="chapter-complete active card">
+      <div class="big-badge">${ch.icon}</div>
+      <h2>「${ch.title}」完了！</h2>
+      <p>バッジ <strong>${ch.badge}</strong> を獲得しました 🎉</p>
+      <div style="display:flex;gap:12px;justify-content:center;flex-wrap:wrap;">
+        ${state.currentChapter < CHAPTERS.length-1 ? `
+          <button class="btn btn-accent" onclick="goChapter(${state.currentChapter+1})">次のチャプターへ →</button>` :
+          `<div class="hl" style="max-width:420px;margin:0 auto;">
+            <strong>🏆 全チャプター完了！</strong><br>すべてのバッジを獲得しました。
+          </div>`}
+        <button class="btn btn-ghost" onclick="goChapter(${state.currentChapter})">もう一度このChを学ぶ</button>
+        <a href="index.html" class="btn btn-primary">ポータルへ戻る</a>
+      </div>
+    </div>`;
+}
+
+// ============================================================
+// ナビゲーション
+// ============================================================
+function goChapter(idx) {
+  state.currentChapter = idx;
+  state.currentSlide = 0;
+  state.inQuiz = false;
+  state.quizIndex = 0;
+  state.quizAnswered = false;
+  document.querySelectorAll('.chapter-btn').forEach((b,i) => b.classList.toggle('active', i===idx));
+  render();
+  window.scrollTo({top:58, behavior:'smooth'});
+}
+
+function nextSlide() {
+  const ch = CHAPTERS[state.currentChapter];
+  state.completedUnits++;
+  if (state.currentSlide < ch.slides.length-1) {
+    state.currentSlide++;
+  } else {
+    state.inQuiz = true;
+    state.quizIndex = 0;
+  }
+  render();
+}
+
+function prevSlide() {
+  if (state.currentSlide > 0) { state.currentSlide--; render(); }
+}
+
+function answerQuiz(sel) {
+  if (state.quizAnswered) return;
+  state.quizAnswered = true;
+  const quiz = CHAPTERS[state.currentChapter].quizzes[state.quizIndex];
+  const ok = sel === quiz.answer;
+  document.querySelectorAll('.quiz-option').forEach((b,i) => {
+    b.disabled = true;
+    if (i===quiz.answer) b.classList.add('correct');
+    else if (i===sel && !ok) b.classList.add('wrong');
+  });
+  const fb = document.getElementById('qfb');
+  fb.textContent = (ok ? '✅ 正解！ ' : `❌ 不正解。正解は ${String.fromCharCode(65+quiz.answer)} です。\n`) + quiz.explanation;
+  fb.className = 'quiz-feedback show ' + (ok?'ok':'ng');
+  document.getElementById('qnext').classList.add('show');
+  state.completedUnits++;
+  updateProgress();
+}
+
+function nextQuiz() {
+  const ch = CHAPTERS[state.currentChapter];
+  state.quizAnswered = false;
+  if (state.quizIndex < ch.quizzes.length-1) {
+    state.quizIndex++;
+    render();
+  } else {
+    state.completedChapters.add(state.currentChapter);
+    earnBadge(ch.id);
+    document.getElementById(`sb-${state.currentChapter}`).classList.add('done');
+    document.getElementById(`sbcheck-${state.currentChapter}`).textContent = '✓';
+    state.inQuiz = false;
+    state.currentSlide = ch.slides.length + ch.quizzes.length;
+    render();
+    updateProgress();
+  }
+}
+
+// ============================================================
+// バッジ・進捗
+// ============================================================
+function earnBadge(id) {
+  const b = document.querySelector(`.badge[data-badge="${id}"]`);
+  if (b) b.classList.add('earned');
+}
+
+function updateProgress() {
+  const pct = Math.min(100, Math.round((state.completedUnits / state.totalUnits) * 100));
+  document.getElementById('progressFill').style.width = pct + '%';
+  document.getElementById('progressPct').textContent = pct + '%';
+  document.getElementById('progressLabel').textContent = `進捗 ${state.completedUnits}/${state.totalUnits}`;
+}
+
+// ============================================================
+// 初期化
+// ============================================================
+calcTotals();
+buildSidebar();
+render();
+</script>
+</body>
+</html>
