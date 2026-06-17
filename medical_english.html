@@ -1,0 +1,1175 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>現場で使える医学英語</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+JP:wght@400;700&family=Noto+Sans+JP:wght@300;400;500;700&family=JetBrains+Mono&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --navy: #1a3a5c;
+    --blue: #2e86ab;
+    --blue-light: #4da6c8;
+    --bg: #f8fafb;
+    --bg-section: #e8f4f8;
+    --bg-card: #ffffff;
+    --gold: #f0a500;
+    --green: #27ae60;
+    --red: #e74c3c;
+    --gray: #6c7a89;
+    --text: #1c2b3a;
+    --border: #cde0ec;
+    --shadow: 0 2px 12px rgba(30,58,92,0.10);
+  }
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body {
+    font-family: 'Noto Sans JP', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.75;
+    font-size: 15px;
+  }
+
+  /* ─── HEADER ─── */
+  header {
+    background: linear-gradient(135deg, var(--navy) 0%, #234e7a 60%, var(--blue) 100%);
+    color: #fff;
+    padding: 56px 24px 48px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+  header::before {
+    content: "＋";
+    position: absolute; top: -20px; right: 5%;
+    font-size: 200px; opacity: 0.05; color: #fff;
+    font-family: serif; line-height: 1;
+  }
+  header .subtitle {
+    font-size: 13px; letter-spacing: 0.18em; text-transform: uppercase;
+    color: #a8d8f0; margin-bottom: 12px; font-family: 'Noto Sans JP';
+  }
+  header h1 {
+    font-family: 'Noto Serif JP', serif;
+    font-size: clamp(24px, 5vw, 40px);
+    font-weight: 700; letter-spacing: 0.04em;
+    line-height: 1.3; margin-bottom: 16px;
+  }
+  header .lead {
+    font-size: 15px; color: #c8e8f8; max-width: 600px;
+    margin: 0 auto; font-weight: 300;
+  }
+
+  /* ─── NAV TABS ─── */
+  nav.tabs {
+    position: sticky; top: 0; z-index: 100;
+    background: var(--navy);
+    display: flex; overflow-x: auto; gap: 0;
+    border-bottom: 3px solid var(--blue);
+    scrollbar-width: none;
+  }
+  nav.tabs::-webkit-scrollbar { display: none; }
+  nav.tabs button {
+    background: none; border: none; color: #a8c8e8;
+    padding: 14px 20px; font-size: 13px; font-weight: 500;
+    cursor: pointer; white-space: nowrap;
+    font-family: 'Noto Sans JP'; transition: all 0.2s;
+    border-bottom: 3px solid transparent; margin-bottom: -3px;
+  }
+  nav.tabs button:hover { color: #fff; background: rgba(255,255,255,0.05); }
+  nav.tabs button.active { color: #fff; border-bottom-color: var(--gold); }
+
+  /* ─── SECTIONS ─── */
+  .section { display: none; }
+  .section.active { display: block; }
+  .container { max-width: 860px; margin: 0 auto; padding: 40px 20px 60px; }
+
+  /* ─── SECTION TITLE ─── */
+  .sec-title {
+    font-family: 'Noto Serif JP', serif;
+    font-size: clamp(20px, 4vw, 28px);
+    color: var(--navy); margin-bottom: 8px;
+    border-left: 4px solid var(--blue);
+    padding-left: 16px; line-height: 1.3;
+  }
+  .sec-lead {
+    color: var(--gray); font-size: 14px;
+    margin-bottom: 32px; padding-left: 20px;
+  }
+
+  /* ─── SIGNIFICANCE BOXES ─── */
+  .merit-grid {
+    display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 16px; margin-bottom: 32px;
+  }
+  .merit-card {
+    background: var(--bg-card); border-radius: 12px;
+    padding: 24px 20px; border: 1px solid var(--border);
+    box-shadow: var(--shadow);
+  }
+  .merit-card .icon { font-size: 32px; margin-bottom: 12px; }
+  .merit-card h3 {
+    font-size: 15px; font-weight: 700; color: var(--navy); margin-bottom: 8px;
+  }
+  .merit-card p { font-size: 13px; color: var(--gray); line-height: 1.6; }
+  .tip-box {
+    background: linear-gradient(135deg, #e8f4f8, #d4edf8);
+    border-left: 4px solid var(--blue);
+    border-radius: 0 8px 8px 0;
+    padding: 16px 20px; margin: 24px 0; font-size: 14px;
+  }
+  .tip-box strong { color: var(--navy); }
+
+  /* ─── PHRASE SECTION ─── */
+  .scene-selector {
+    display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 28px;
+  }
+  .scene-btn {
+    background: var(--bg-card); border: 2px solid var(--border);
+    border-radius: 20px; padding: 7px 16px; font-size: 13px;
+    cursor: pointer; font-family: 'Noto Sans JP'; transition: all 0.2s;
+    color: var(--navy); font-weight: 500;
+  }
+  .scene-btn:hover { border-color: var(--blue); color: var(--blue); }
+  .scene-btn.active {
+    background: var(--blue); border-color: var(--blue);
+    color: #fff;
+  }
+  .phrase-panel { display: none; }
+  .phrase-panel.active { display: block; }
+  .phrase-panel h3 {
+    font-family: 'Noto Serif JP'; font-size: 17px; color: var(--navy);
+    margin-bottom: 16px; padding-bottom: 8px;
+    border-bottom: 2px solid var(--border);
+  }
+  .phrase-table { width: 100%; border-collapse: collapse; margin-bottom: 8px; }
+  .phrase-table th {
+    background: var(--navy); color: #fff;
+    padding: 10px 14px; text-align: left; font-size: 13px;
+    font-weight: 500;
+  }
+  .phrase-table th:first-child { border-radius: 8px 0 0 0; }
+  .phrase-table th:last-child { border-radius: 0 8px 0 0; }
+  .phrase-table td {
+    padding: 10px 14px; border-bottom: 1px solid var(--border);
+    font-size: 13.5px; vertical-align: top;
+  }
+  .phrase-table tr:nth-child(even) td { background: var(--bg-section); }
+  .phrase-table tr:last-child td { border-bottom: none; }
+  .phrase-table .en { font-weight: 500; color: var(--navy); }
+  .phrase-table .jp { color: var(--gray); font-size: 12px; }
+
+  /* ─── DIALOGUE SECTION ─── */
+  .dialogue-nav {
+    display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 24px;
+  }
+  .dlg-btn {
+    background: var(--bg-card); border: 2px solid var(--border);
+    border-radius: 8px; padding: 8px 14px; font-size: 12px;
+    cursor: pointer; font-family: 'Noto Sans JP'; transition: all 0.2s;
+    color: var(--navy);
+  }
+  .dlg-btn:hover { border-color: var(--blue); }
+  .dlg-btn.active { background: var(--navy); color: #fff; border-color: var(--navy); }
+
+  .dialogue-card {
+    display: none;
+    background: var(--bg-card); border-radius: 16px;
+    border: 1px solid var(--border); overflow: hidden;
+    box-shadow: var(--shadow);
+  }
+  .dialogue-card.active { display: block; }
+  .dialogue-card .dlg-header {
+    background: var(--navy); color: #fff;
+    padding: 16px 24px; display: flex; align-items: center; gap: 12px;
+  }
+  .dialogue-card .dlg-header .scene-icon { font-size: 28px; }
+  .dialogue-card .dlg-header h3 {
+    font-family: 'Noto Serif JP'; font-size: 16px;
+  }
+  .dialogue-card .dlg-header p { font-size: 12px; color: #a8c8e8; margin-top: 2px; }
+  .dialogue-body { padding: 24px; }
+  .bubble-wrap { display: flex; gap: 10px; margin-bottom: 16px; align-items: flex-start; }
+  .bubble-wrap.right { flex-direction: row-reverse; }
+  .bubble-avatar {
+    width: 38px; height: 38px; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 18px; flex-shrink: 0;
+  }
+  .bubble-avatar.doc { background: #d4edf8; }
+  .bubble-avatar.pt  { background: #fde8cc; }
+  .bubble-content { max-width: 80%; }
+  .bubble-label {
+    font-size: 11px; font-weight: 700; margin-bottom: 4px;
+    letter-spacing: 0.05em;
+  }
+  .bubble-wrap:not(.right) .bubble-label { color: var(--blue); }
+  .bubble-wrap.right .bubble-label { color: #e07800; text-align: right; }
+  .bubble {
+    padding: 11px 16px; border-radius: 16px;
+    font-size: 13.5px; line-height: 1.65;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.07);
+  }
+  .bubble.doc {
+    background: #e8f4f8; border-radius: 4px 16px 16px 16px;
+    color: var(--text);
+  }
+  .bubble.pt {
+    background: #fff3e0; border-radius: 16px 4px 16px 16px;
+    color: var(--text);
+  }
+  .bubble .en { font-weight: 500; }
+  .bubble .jp { color: var(--gray); font-size: 12px; margin-top: 3px; }
+  .dlg-note {
+    margin-top: 16px; padding: 12px 16px;
+    background: #f0f8ff; border-radius: 8px; border-left: 3px solid var(--gold);
+    font-size: 12.5px; color: var(--gray);
+  }
+
+  /* ─── QUIZ ─── */
+  .quiz-intro {
+    background: linear-gradient(135deg, var(--navy), #234e7a);
+    color: #fff; border-radius: 16px; padding: 32px;
+    text-align: center; margin-bottom: 28px;
+  }
+  .quiz-intro h2 { font-family: 'Noto Serif JP'; font-size: 22px; margin-bottom: 8px; }
+  .quiz-intro p { color: #a8c8e8; font-size: 14px; }
+  #start-quiz-btn {
+    margin-top: 20px; background: var(--gold); color: var(--navy);
+    border: none; border-radius: 24px; padding: 12px 36px;
+    font-size: 16px; font-weight: 700; cursor: pointer;
+    font-family: 'Noto Sans JP'; transition: transform 0.15s;
+  }
+  #start-quiz-btn:hover { transform: scale(1.04); }
+
+  #quiz-area { display: none; }
+  .quiz-progress {
+    display: flex; align-items: center; gap: 12px; margin-bottom: 24px;
+  }
+  .progress-bar {
+    flex: 1; height: 6px; background: var(--border); border-radius: 3px; overflow: hidden;
+  }
+  .progress-fill { height: 100%; background: var(--blue); transition: width 0.3s; }
+  .progress-text { font-size: 13px; color: var(--gray); min-width: 60px; text-align: right; }
+
+  .quiz-card {
+    background: var(--bg-card); border-radius: 16px;
+    border: 1px solid var(--border); padding: 28px;
+    box-shadow: var(--shadow);
+  }
+  .quiz-card .q-scene {
+    font-size: 12px; color: var(--blue); font-weight: 700;
+    letter-spacing: 0.1em; margin-bottom: 8px;
+  }
+  .quiz-card .q-text {
+    font-size: 16px; font-weight: 700; color: var(--navy);
+    margin-bottom: 8px; line-height: 1.5;
+  }
+  .quiz-card .q-context {
+    font-size: 13px; color: var(--gray); margin-bottom: 20px;
+    background: var(--bg-section); padding: 10px 14px; border-radius: 8px;
+    font-style: italic;
+  }
+  .options { display: flex; flex-direction: column; gap: 10px; }
+  .opt-btn {
+    background: var(--bg); border: 2px solid var(--border);
+    border-radius: 10px; padding: 13px 18px; text-align: left;
+    cursor: pointer; font-size: 14px; font-family: 'Noto Sans JP';
+    transition: all 0.2s; color: var(--text);
+    display: flex; align-items: flex-start; gap: 10px;
+  }
+  .opt-btn:hover:not(:disabled) { border-color: var(--blue); background: #f0f8ff; }
+  .opt-btn .opt-label {
+    width: 24px; height: 24px; border-radius: 50%;
+    background: var(--border); display: inline-flex;
+    align-items: center; justify-content: center;
+    font-size: 12px; font-weight: 700; flex-shrink: 0;
+    color: var(--navy);
+  }
+  .opt-btn.correct {
+    border-color: var(--green); background: #eafaf1;
+  }
+  .opt-btn.correct .opt-label { background: var(--green); color: #fff; }
+  .opt-btn.wrong {
+    border-color: var(--red); background: #fef0ee;
+  }
+  .opt-btn.wrong .opt-label { background: var(--red); color: #fff; }
+  .opt-btn:disabled { cursor: default; }
+
+  .q-feedback {
+    display: none; margin-top: 16px;
+    padding: 14px 18px; border-radius: 10px; font-size: 13.5px;
+    line-height: 1.65;
+  }
+  .q-feedback.show { display: block; }
+  .q-feedback.correct-fb { background: #eafaf1; border-left: 4px solid var(--green); }
+  .q-feedback.wrong-fb { background: #fef0ee; border-left: 4px solid var(--red); }
+  .q-feedback .fb-title { font-weight: 700; margin-bottom: 4px; }
+  .q-feedback.correct-fb .fb-title { color: var(--green); }
+  .q-feedback.wrong-fb .fb-title { color: var(--red); }
+
+  #next-btn {
+    display: none; margin-top: 20px; width: 100%;
+    background: var(--navy); color: #fff; border: none;
+    border-radius: 10px; padding: 13px; font-size: 15px;
+    font-weight: 700; cursor: pointer; font-family: 'Noto Sans JP';
+    transition: background 0.2s;
+  }
+  #next-btn:hover { background: var(--blue); }
+
+  /* ─── RESULT ─── */
+  #result-area { display: none; }
+  .result-card {
+    background: var(--bg-card); border-radius: 20px;
+    border: 1px solid var(--border); padding: 40px 32px;
+    text-align: center; box-shadow: var(--shadow);
+  }
+  .score-circle {
+    width: 140px; height: 140px; border-radius: 50%;
+    border: 8px solid var(--blue);
+    display: flex; flex-direction: column;
+    align-items: center; justify-content: center;
+    margin: 0 auto 24px;
+  }
+  .score-circle .score-num {
+    font-size: 40px; font-weight: 700; color: var(--navy);
+    font-family: 'Noto Serif JP'; line-height: 1;
+  }
+  .score-circle .score-denom { font-size: 16px; color: var(--gray); }
+  .grade-msg { font-size: 20px; font-weight: 700; color: var(--navy); margin-bottom: 8px; }
+  .grade-sub { font-size: 14px; color: var(--gray); margin-bottom: 24px; }
+  .review-list { text-align: left; margin-top: 24px; }
+  .review-item {
+    padding: 12px 16px; border-radius: 8px; margin-bottom: 8px;
+    font-size: 13px; display: flex; gap: 10px; align-items: flex-start;
+  }
+  .review-item.ok { background: #eafaf1; }
+  .review-item.ng { background: #fef0ee; }
+  .review-item .ri-icon { font-size: 16px; flex-shrink: 0; }
+  .review-item .ri-q { font-weight: 500; margin-bottom: 2px; color: var(--navy); }
+  .review-item .ri-a { font-size: 12px; color: var(--gray); }
+  #retry-btn {
+    margin-top: 24px; background: var(--blue); color: #fff; border: none;
+    border-radius: 24px; padding: 12px 40px; font-size: 15px;
+    font-weight: 700; cursor: pointer; font-family: 'Noto Sans JP';
+    transition: background 0.2s;
+  }
+  #retry-btn:hover { background: var(--navy); }
+
+  /* ─── FOOTER ─── */
+  footer {
+    background: var(--navy); color: #8aaccf;
+    text-align: center; padding: 24px 20px;
+    font-size: 12px; line-height: 1.8;
+    border-top: 3px solid var(--blue);
+  }
+  footer a { color: #a8c8e8; }
+
+  @media (max-width: 600px) {
+    .merit-grid { grid-template-columns: 1fr 1fr; }
+    .bubble-content { max-width: 88%; }
+    .quiz-card { padding: 20px; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <p class="subtitle">Medical English for Clinical Practice</p>
+  <h1>現場で使える医学英語</h1>
+  <p class="lead">外来・救急・病棟で、今日から使えるフレーズと会話文を学ぶ</p>
+</header>
+
+<nav class="tabs">
+  <button class="active" onclick="showSection('intro', this)">① 学ぶ意義</button>
+  <button onclick="showSection('phrases', this)">② 場面別フレーズ集</button>
+  <button onclick="showSection('dialogues', this)">③ 実践会話文</button>
+  <button onclick="showSection('quiz', this)">④ ミニテスト</button>
+</nav>
+
+<!-- ══════════════════════════════════════
+     SECTION 1: 学ぶ意義
+══════════════════════════════════════ -->
+<div class="section active" id="intro">
+<div class="container">
+  <h2 class="sec-title">医学英語を学ぶ意義</h2>
+  <p class="sec-lead">国際化が進む医療現場で、なぜ今、医学英語が必要なのか。</p>
+
+  <div class="merit-grid">
+    <div class="merit-card">
+      <div class="icon">🌍</div>
+      <h3>外国人患者への対応</h3>
+      <p>インバウンドの増加や在住外国人の増加により、英語で診察を行う場面が増えています。通訳なしでも基本情報を得る力が必要です。</p>
+    </div>
+    <div class="merit-card">
+      <div class="icon">📄</div>
+      <h3>国際学術論文の読み書き</h3>
+      <p>最新のエビデンスはほぼ英語で発信されます。論文を読み、自らの研究成果を世界へ発信するために医学英語の習得は必須です。</p>
+    </div>
+    <div class="merit-card">
+      <div class="icon">🏥</div>
+      <h3>救急・緊急対応</h3>
+      <p>救急搬送された外国人患者に迅速に対応するため、症状聴取や処置説明を英語で行う能力が医療安全に直結します。</p>
+    </div>
+    <div class="merit-card">
+      <div class="icon">🤝</div>
+      <h3>国際学会・連携</h3>
+      <p>国際学会での口頭発表・ポスター発表、海外の医師との診療連携・遠隔相談において、英語によるコミュニケーション能力が求められます。</p>
+    </div>
+    <div class="merit-card">
+      <div class="icon">💊</div>
+      <h3>添付文書・ガイドラインの理解</h3>
+      <p>WHOや世界の主要学会のガイドライン、添付文書の英語記述を正確に理解することで、安全な薬物療法・治療選択が可能になります。</p>
+    </div>
+    <div class="merit-card">
+      <div class="icon">🎓</div>
+      <h3>医学教育・研修</h3>
+      <p>海外での研修留学や国際的な医学教育プログラムへの参加には、英語でのケースプレゼンテーションやディスカッション能力が求められます。</p>
+    </div>
+  </div>
+
+  <div class="tip-box">
+    <strong>💡 学習のポイント：</strong>　医学英語は「完璧な文法」より「正確に伝わること」が優先されます。まず決まり文句（フレーズ）をそのまま覚え、現場で使いながら徐々に表現を広げましょう。患者さんは医師が英語で話しかけてくれること自体を大変安心します。
+  </div>
+
+  <div class="tip-box" style="background:linear-gradient(135deg,#fff8e8,#fdf3d0);border-left-color:#f0a500;">
+    <strong>📌 本テキストの構成：</strong><br>
+    <strong>② 場面別フレーズ集</strong> ― 10の臨床場面ごとに使えるフレーズを一覧化<br>
+    <strong>③ 実践会話文</strong> ― 医師と患者の対話を英語＋日本語訳で提示<br>
+    <strong>④ ミニテスト</strong> ― 3択10問で理解度チェック＋採点
+  </div>
+
+  <div style="margin-top:28px; padding:24px 28px; background:#fff; border:1px solid var(--border); border-radius:12px; box-shadow:var(--shadow); font-size:14px; line-height:1.9; color:#3a4a5a;">
+    <p style="font-family:'Noto Serif JP',serif; font-size:15px; font-weight:700; color:var(--navy); margin-bottom:12px;">📝 このページを作った経緯</p>
+    <p>生成AIが翻訳を担ってくれる今、英語表現をすべて覚える必要はないのかもしれない。それでも、診察室で患者に直接声をかけるとき、ぎこちなくても自分の言葉で伝えようとすることには意味がある。そんな気持ちで、このページを作った。</p>
+    <p style="margin-top:10px;">内容の大半は生成AI任せで、誤りが残っている可能性もある。それでも私が一人で書くより信用できる、と割り切って公開している。気軽に、でも鵜呑みにせず活用してほしい。</p>
+  </div>
+</div>
+</div>
+
+<!-- ══════════════════════════════════════
+     SECTION 2: フレーズ集
+══════════════════════════════════════ -->
+<div class="section" id="phrases">
+<div class="container">
+  <h2 class="sec-title">場面別フレーズ集</h2>
+  <p class="sec-lead">10の臨床場面を選んで、よく使うフレーズを確認しましょう。</p>
+
+  <div class="scene-selector">
+    <button class="scene-btn active" onclick="showPhrase('p1', this)">1. 受付・問診</button>
+    <button class="scene-btn" onclick="showPhrase('p2', this)">2. 内科健診</button>
+    <button class="scene-btn" onclick="showPhrase('p3', this)">3. 発熱</button>
+    <button class="scene-btn" onclick="showPhrase('p4', this)">4. 外傷・怪我</button>
+    <button class="scene-btn" onclick="showPhrase('p5', this)">5. 意識障害</button>
+    <button class="scene-btn" onclick="showPhrase('p6', this)">6. 腹痛</button>
+    <button class="scene-btn" onclick="showPhrase('p7', this)">7. 呼吸困難</button>
+    <button class="scene-btn" onclick="showPhrase('p8', this)">8. 胸痛</button>
+    <button class="scene-btn" onclick="showPhrase('p9', this)">9. 処置・検査説明</button>
+    <button class="scene-btn" onclick="showPhrase('p10', this)">10. 入退院・処方</button>
+  </div>
+
+  <!-- Scene 1 -->
+  <div class="phrase-panel active" id="p1">
+    <h3>🏥 Scene 1：受付・問診 (Reception & History Taking)</h3>
+    <table class="phrase-table">
+      <thead><tr><th style="width:50%">English</th><th>日本語</th></tr></thead>
+      <tbody>
+        <tr><td class="en">Do you speak English?</td><td class="jp">英語は話せますか？</td></tr>
+        <tr><td class="en">What brings you here today?</td><td class="jp">今日はどうされましたか？</td></tr>
+        <tr><td class="en">How long have you had this symptom?</td><td class="jp">いつから症状がありますか？</td></tr>
+        <tr><td class="en">Do you have any allergies?</td><td class="jp">アレルギーはありますか？</td></tr>
+        <tr><td class="en">Are you taking any medications?</td><td class="jp">何か薬を服用していますか？</td></tr>
+        <tr><td class="en">Have you had this before?</td><td class="jp">以前にも同じようなことがありましたか？</td></tr>
+        <tr><td class="en">Do you have your health insurance card?</td><td class="jp">保険証はお持ちですか？</td></tr>
+        <tr><td class="en">Please have a seat. The doctor will see you shortly.</td><td class="jp">お座りください。まもなく診察します。</td></tr>
+        <tr><td class="en">Can you rate your pain from 1 to 10?</td><td class="jp">痛みを1から10で表すとどのくらいですか？</td></tr>
+        <tr><td class="en">Is there anything else you'd like to tell me?</td><td class="jp">他に何かお伝えしたいことはありますか？</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Scene 2 -->
+  <div class="phrase-panel" id="p2">
+    <h3>🩺 Scene 2：内科健康診断 (Internal Medicine Check-up)</h3>
+    <table class="phrase-table">
+      <thead><tr><th style="width:50%">English</th><th>日本語</th></tr></thead>
+      <tbody>
+        <tr><td class="en">Take a deep breath, please.</td><td class="jp">深呼吸してください。</td></tr>
+        <tr><td class="en">Hold your breath for a moment.</td><td class="jp">息を止めてください。</td></tr>
+        <tr><td class="en">Now breathe normally.</td><td class="jp">普通に呼吸してください。</td></tr>
+        <tr><td class="en">I'm going to listen to your heart and lungs.</td><td class="jp">心臓と肺の音を聴診します。</td></tr>
+        <tr><td class="en">Please roll up your sleeve.</td><td class="jp">袖をまくってください。</td></tr>
+        <tr><td class="en">I'm going to check your blood pressure.</td><td class="jp">血圧を測ります。</td></tr>
+        <tr><td class="en">Your blood pressure is slightly high / within normal range.</td><td class="jp">血圧がやや高め / 正常範囲です。</td></tr>
+        <tr><td class="en">Please lie down on your back.</td><td class="jp">仰向けに横になってください。</td></tr>
+        <tr><td class="en">I'm going to feel your abdomen. Tell me if it hurts.</td><td class="jp">お腹を触診します。痛ければ教えてください。</td></tr>
+        <tr><td class="en">Your overall check-up results look normal.</td><td class="jp">全体的な健診の結果は問題なさそうです。</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Scene 3 -->
+  <div class="phrase-panel" id="p3">
+    <h3>🌡️ Scene 3：発熱 (Fever)</h3>
+    <table class="phrase-table">
+      <thead><tr><th style="width:50%">English</th><th>日本語</th></tr></thead>
+      <tbody>
+        <tr><td class="en">You have a fever. Your temperature is 38.5°C.</td><td class="jp">熱があります。体温は38.5度です。</td></tr>
+        <tr><td class="en">When did the fever start?</td><td class="jp">いつから熱が出ましたか？</td></tr>
+        <tr><td class="en">Do you have any chills or sweating?</td><td class="jp">悪寒や発汗はありますか？</td></tr>
+        <tr><td class="en">Do you have a cough, sore throat, or runny nose?</td><td class="jp">咳、のどの痛み、鼻水はありますか？</td></tr>
+        <tr><td class="en">Have you traveled abroad recently?</td><td class="jp">最近、海外に行きましたか？</td></tr>
+        <tr><td class="en">I'd like to run some blood tests.</td><td class="jp">血液検査をしたいと思います。</td></tr>
+        <tr><td class="en">I'll prescribe an antipyretic (fever-reducing medicine).</td><td class="jp">解熱薬を処方します。</td></tr>
+        <tr><td class="en">Make sure to stay hydrated and get plenty of rest.</td><td class="jp">水分をしっかり取り、十分に休んでください。</td></tr>
+        <tr><td class="en">If your fever goes above 39°C, come back right away.</td><td class="jp">熱が39度を超えたら、すぐに来てください。</td></tr>
+        <tr><td class="en">We need to rule out influenza / COVID-19.</td><td class="jp">インフルエンザ / COVID-19を除外する必要があります。</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Scene 4 -->
+  <div class="phrase-panel" id="p4">
+    <h3>🩹 Scene 4：外傷・怪我 (Trauma / Injury)</h3>
+    <table class="phrase-table">
+      <thead><tr><th style="width:50%">English</th><th>日本語</th></tr></thead>
+      <tbody>
+        <tr><td class="en">How did this happen?</td><td class="jp">どのようにして怪我をしましたか？</td></tr>
+        <tr><td class="en">Did you hit your head?</td><td class="jp">頭を打ちましたか？</td></tr>
+        <tr><td class="en">Can you move your fingers / toes?</td><td class="jp">指 / 足の指を動かせますか？</td></tr>
+        <tr><td class="en">Does it hurt when I press here?</td><td class="jp">ここを押すと痛みますか？</td></tr>
+        <tr><td class="en">I think you may have a fracture. We need an X-ray.</td><td class="jp">骨折の可能性があります。レントゲンが必要です。</td></tr>
+        <tr><td class="en">I need to clean this wound.</td><td class="jp">この傷口を洗浄する必要があります。</td></tr>
+        <tr><td class="en">This will need a few stitches.</td><td class="jp">数針縫合が必要です。</td></tr>
+        <tr><td class="en">Have you had a tetanus shot recently?</td><td class="jp">最近、破傷風の予防接種を受けましたか？</td></tr>
+        <tr><td class="en">I'll give you a local anesthetic — you'll feel a small sting.</td><td class="jp">局所麻酔をします。少しチクっとします。</td></tr>
+        <tr><td class="en">Keep the wound dry and come back in 7 days to remove the sutures.</td><td class="jp">傷口を乾燥させ、7日後に抜糸に来てください。</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Scene 5 -->
+  <div class="phrase-panel" id="p5">
+    <h3>🧠 Scene 5：意識障害 (Altered Consciousness)</h3>
+    <table class="phrase-table">
+      <thead><tr><th style="width:50%">English</th><th>日本語</th></tr></thead>
+      <tbody>
+        <tr><td class="en">Can you hear me? Open your eyes.</td><td class="jp">聞こえますか？目を開けてください。</td></tr>
+        <tr><td class="en">What is your name? Do you know where you are?</td><td class="jp">お名前は？今どこにいるか分かりますか？</td></tr>
+        <tr><td class="en">Squeeze my hand if you can hear me.</td><td class="jp">聞こえていたら私の手を握ってください。</td></tr>
+        <tr><td class="en">The patient is unresponsive. Call a code.</td><td class="jp">患者さんは反応がありません。コードを呼んでください。</td></tr>
+        <tr><td class="en">Start CPR. Get the defibrillator.</td><td class="jp">CPRを開始してください。AEDを持ってきてください。</td></tr>
+        <tr><td class="en">We need an urgent CT scan of the head.</td><td class="jp">緊急で頭部CTが必要です。</td></tr>
+        <tr><td class="en">Check the blood glucose level immediately.</td><td class="jp">すぐに血糖値を測定してください。</td></tr>
+        <tr><td class="en">Did they lose consciousness suddenly or gradually?</td><td class="jp">意識を失ったのは突然でしたか、それとも徐々にでしたか？</td></tr>
+        <tr><td class="en">Is there any history of seizures, diabetes, or stroke?</td><td class="jp">痙攣、糖尿病、脳卒中の既往はありますか？</td></tr>
+        <tr><td class="en">The patient's GCS is 9 — we need to secure the airway.</td><td class="jp">患者さんのGCSは9です。気道を確保する必要があります。</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Scene 6 -->
+  <div class="phrase-panel" id="p6">
+    <h3>🤢 Scene 6：腹痛 (Abdominal Pain)</h3>
+    <table class="phrase-table">
+      <thead><tr><th style="width:50%">English</th><th>日本語</th></tr></thead>
+      <tbody>
+        <tr><td class="en">Where exactly does it hurt? Can you point to it?</td><td class="jp">どこが痛いですか？指で示してもらえますか？</td></tr>
+        <tr><td class="en">Is the pain constant or does it come and go?</td><td class="jp">痛みは持続していますか、それとも波がありますか？</td></tr>
+        <tr><td class="en">Does it radiate anywhere — to your back or shoulder?</td><td class="jp">背中や肩へ広がる痛みはありますか？</td></tr>
+        <tr><td class="en">Have you had nausea, vomiting, or diarrhea?</td><td class="jp">吐き気、嘔吐、下痢はありますか？</td></tr>
+        <tr><td class="en">When did you last have a bowel movement?</td><td class="jp">最後に排便したのはいつですか？</td></tr>
+        <tr><td class="en">I'm going to press on your abdomen. Please tell me if it's tender.</td><td class="jp">お腹を押します。圧痛があれば教えてください。</td></tr>
+        <tr><td class="en">There is rebound tenderness — this is concerning.</td><td class="jp">反跳痛があります。これは懸念されます。</td></tr>
+        <tr><td class="en">I suspect appendicitis. We need a CT scan.</td><td class="jp">虫垂炎が疑われます。CTが必要です。</td></tr>
+        <tr><td class="en">Please avoid eating or drinking for now.</td><td class="jp">今は何も食べたり飲んだりしないでください。</td></tr>
+        <tr><td class="en">We may need surgical consultation.</td><td class="jp">外科のコンサルトが必要かもしれません。</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Scene 7 -->
+  <div class="phrase-panel" id="p7">
+    <h3>😮‍💨 Scene 7：呼吸困難 (Dyspnea)</h3>
+    <table class="phrase-table">
+      <thead><tr><th style="width:50%">English</th><th>日本語</th></tr></thead>
+      <tbody>
+        <tr><td class="en">How long have you been short of breath?</td><td class="jp">息苦しさはいつからですか？</td></tr>
+        <tr><td class="en">Is it worse when you lie flat?</td><td class="jp">横になると悪化しますか？</td></tr>
+        <tr><td class="en">Do you have a history of asthma or COPD?</td><td class="jp">喘息やCOPDの既往はありますか？</td></tr>
+        <tr><td class="en">Your oxygen saturation is 92%. We need to give you oxygen.</td><td class="jp">酸素飽和度が92%です。酸素投与が必要です。</td></tr>
+        <tr><td class="en">I can hear wheezing on auscultation.</td><td class="jp">聴診でwheezing（喘鳴）が聴こえます。</td></tr>
+        <tr><td class="en">We'll start a bronchodilator nebulizer treatment.</td><td class="jp">気管支拡張薬のネブライザー吸入を始めます。</td></tr>
+        <tr><td class="en">I need to do a chest X-ray.</td><td class="jp">胸部レントゲンを撮る必要があります。</td></tr>
+        <tr><td class="en">Breathe in slowly through your nose, and out through your mouth.</td><td class="jp">鼻からゆっくり吸って、口から吐いてください。</td></tr>
+        <tr><td class="en">Your breathing has improved. The medication is working.</td><td class="jp">呼吸が改善しています。薬が効いています。</td></tr>
+        <tr><td class="en">We'll admit you for observation overnight.</td><td class="jp">一晩、経過観察のために入院してもらいます。</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Scene 8 -->
+  <div class="phrase-panel" id="p8">
+    <h3>💔 Scene 8：胸痛 (Chest Pain)</h3>
+    <table class="phrase-table">
+      <thead><tr><th style="width:50%">English</th><th>日本語</th></tr></thead>
+      <tbody>
+        <tr><td class="en">Where is the chest pain? Is it crushing or sharp?</td><td class="jp">胸のどこが痛いですか？締め付けられる感じですか、鋭い痛みですか？</td></tr>
+        <tr><td class="en">Does the pain spread to your left arm or jaw?</td><td class="jp">痛みは左腕やあごに広がりますか？</td></tr>
+        <tr><td class="en">Do you have sweating or nausea along with the pain?</td><td class="jp">痛みと一緒に発汗や吐き気はありますか？</td></tr>
+        <tr><td class="en">We need an ECG right away.</td><td class="jp">すぐに心電図が必要です。</td></tr>
+        <tr><td class="en">I'm concerned about a heart attack. We're going to act quickly.</td><td class="jp">心筋梗塞が心配です。迅速に対応します。</td></tr>
+        <tr><td class="en">I'll give you aspirin to chew — please chew it, don't swallow whole.</td><td class="jp">アスピリンを噛んで飲んでもらいます。丸飲みせず噛んでください。</td></tr>
+        <tr><td class="en">We're checking your cardiac enzymes (troponin).</td><td class="jp">心筋逸脱酵素（トロポニン）を測定します。</td></tr>
+        <tr><td class="en">Please lie still and try to stay calm.</td><td class="jp">じっとして、落ち着いてください。</td></tr>
+        <tr><td class="en">We may need to perform a coronary angiography.</td><td class="jp">冠動脈造影が必要になる可能性があります。</td></tr>
+        <tr><td class="en">Is there a cardiologist on call?</td><td class="jp">循環器科の当直医はいますか？</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Scene 9 -->
+  <div class="phrase-panel" id="p9">
+    <h3>🔬 Scene 9：処置・検査説明 (Procedures & Tests)</h3>
+    <table class="phrase-table">
+      <thead><tr><th style="width:50%">English</th><th>日本語</th></tr></thead>
+      <tbody>
+        <tr><td class="en">I need to take a blood sample.</td><td class="jp">採血が必要です。</td></tr>
+        <tr><td class="en">Please make a fist. I'll find a vein.</td><td class="jp">握りこぶしを作ってください。血管を探します。</td></tr>
+        <tr><td class="en">You'll feel a small prick.</td><td class="jp">少しチクっとします。</td></tr>
+        <tr><td class="en">I need to insert an IV line.</td><td class="jp">点滴のルートを確保します。</td></tr>
+        <tr><td class="en">We need a urine sample. Please use this cup.</td><td class="jp">尿の検査が必要です。このカップを使ってください。</td></tr>
+        <tr><td class="en">I'll explain the procedure before we begin.</td><td class="jp">始める前に処置の説明をします。</td></tr>
+        <tr><td class="en">This procedure carries some risks, including...</td><td class="jp">この処置には、…などのリスクが伴います。</td></tr>
+        <tr><td class="en">Do you consent to this procedure? Please sign here.</td><td class="jp">この処置に同意しますか？ここにサインをお願いします。</td></tr>
+        <tr><td class="en">The results will be back in about an hour.</td><td class="jp">検査結果は約1時間で出ます。</td></tr>
+        <tr><td class="en">Try to stay as still as possible during the scan.</td><td class="jp">検査中はできるだけ動かないでください。</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Scene 10 -->
+  <div class="phrase-panel" id="p10">
+    <h3>📋 Scene 10：入退院・処方 (Admission, Discharge & Prescription)</h3>
+    <table class="phrase-table">
+      <thead><tr><th style="width:50%">English</th><th>日本語</th></tr></thead>
+      <tbody>
+        <tr><td class="en">We need to admit you to the hospital for further evaluation.</td><td class="jp">さらに評価するため、入院が必要です。</td></tr>
+        <tr><td class="en">You're ready to be discharged today.</td><td class="jp">今日退院できます。</td></tr>
+        <tr><td class="en">I'll prescribe you an antibiotic / an antimicrobial agent.</td><td class="jp">抗菌薬を処方します。</td></tr>
+        <tr><td class="en">Take this twice a day with meals.</td><td class="jp">食事と一緒に1日2回服用してください。</td></tr>
+        <tr><td class="en">Finish the entire course, even if you feel better.</td><td class="jp">症状が改善しても、全量飲み切ってください。</td></tr>
+        <tr><td class="en">Do not drink alcohol while taking this medication.</td><td class="jp">この薬を服用中はアルコールを飲まないでください。</td></tr>
+        <tr><td class="en">Side effects may include nausea or a rash.</td><td class="jp">副作用として吐き気や発疹が出ることがあります。</td></tr>
+        <tr><td class="en">Please follow up with your doctor in one week.</td><td class="jp">1週間後に外来で受診してください。</td></tr>
+        <tr><td class="en">Go to the emergency room if symptoms worsen.</td><td class="jp">症状が悪化したら救急外来を受診してください。</td></tr>
+        <tr><td class="en">Here is your discharge summary. Please show this to your home doctor.</td><td class="jp">退院サマリーです。かかりつけ医に見せてください。</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+</div>
+</div>
+
+<!-- ══════════════════════════════════════
+     SECTION 3: 会話文
+══════════════════════════════════════ -->
+<div class="section" id="dialogues">
+<div class="container">
+  <h2 class="sec-title">実践会話文</h2>
+  <p class="sec-lead">10の場面で医師（Dr.）と患者（Pt.）の実際のやりとりを確認しましょう。</p>
+
+  <div class="dialogue-nav">
+    <button class="dlg-btn active" onclick="showDialogue('d1', this)">1.受付</button>
+    <button class="dlg-btn" onclick="showDialogue('d2', this)">2.内科健診</button>
+    <button class="dlg-btn" onclick="showDialogue('d3', this)">3.発熱</button>
+    <button class="dlg-btn" onclick="showDialogue('d4', this)">4.外傷</button>
+    <button class="dlg-btn" onclick="showDialogue('d5', this)">5.意識障害</button>
+    <button class="dlg-btn" onclick="showDialogue('d6', this)">6.腹痛</button>
+    <button class="dlg-btn" onclick="showDialogue('d7', this)">7.呼吸困難</button>
+    <button class="dlg-btn" onclick="showDialogue('d8', this)">8.胸痛</button>
+    <button class="dlg-btn" onclick="showDialogue('d9', this)">9.処置説明</button>
+    <button class="dlg-btn" onclick="showDialogue('d10', this)">10.退院処方</button>
+  </div>
+
+  <!-- D1 -->
+  <div class="dialogue-card active" id="d1">
+    <div class="dlg-header">
+      <span class="scene-icon">🏥</span>
+      <div><h3>Scene 1: 受付・問診</h3><p>外来受付 / Outpatient Reception</p></div>
+    </div>
+    <div class="dialogue-body">
+      <div class="bubble-wrap"><div class="bubble-avatar doc">👨‍⚕️</div><div class="bubble-content"><div class="bubble-label">Dr.</div><div class="bubble doc"><span class="en">Hello, I'm Dr. Tanaka. Do you speak English?</span><div class="jp">こんにちは、田中医師です。英語は話せますか？</div></div></div></div>
+      <div class="bubble-wrap right"><div class="bubble-avatar pt">🧑</div><div class="bubble-content"><div class="bubble-label">Pt.</div><div class="bubble pt"><span class="en">Yes, I do. I'm not feeling well.</span><div class="jp">はい。具合が悪いんです。</div></div></div></div>
+      <div class="bubble-wrap"><div class="bubble-avatar doc">👨‍⚕️</div><div class="bubble-content"><div class="bubble-label">Dr.</div><div class="bubble doc"><span class="en">What brings you here today? What symptoms are you having?</span><div class="jp">今日はどうされましたか？どのような症状がありますか？</div></div></div></div>
+      <div class="bubble-wrap right"><div class="bubble-avatar pt">🧑</div><div class="bubble-content"><div class="bubble-label">Pt.</div><div class="bubble pt"><span class="en">I have a headache and I feel tired. It started yesterday evening.</span><div class="jp">頭痛と倦怠感があります。昨夜から始まりました。</div></div></div></div>
+      <div class="bubble-wrap"><div class="bubble-avatar doc">👨‍⚕️</div><div class="bubble-content"><div class="bubble-label">Dr.</div><div class="bubble doc"><span class="en">I see. Do you have any allergies or are you taking any medications?</span><div class="jp">わかりました。アレルギーや服用中の薬はありますか？</div></div></div></div>
+      <div class="bubble-wrap right"><div class="bubble-avatar pt">🧑</div><div class="bubble-content"><div class="bubble-label">Pt.</div><div class="bubble pt"><span class="en">I'm allergic to penicillin, and I take a daily aspirin for my heart.</span><div class="jp">ペニシリンにアレルギーがあります。心臓のために毎日アスピリンを飲んでいます。</div></div></div></div>
+      <div class="bubble-wrap"><div class="bubble-avatar doc">👨‍⚕️</div><div class="bubble-content"><div class="bubble-label">Dr.</div><div class="bubble doc"><span class="en">Thank you, that's very helpful. I'll note that in your chart. Let me examine you now.</span><div class="jp">ありがとうございます、非常に助かります。カルテに記録します。では診察しましょう。</div></div></div></div>
+      <div class="dlg-note">⚑ ペニシリンアレルギーは最初に確認。服用薬（特に抗凝固薬・抗血小板薬）も必ず聴取する。</div>
+    </div>
+  </div>
+
+  <!-- D2 -->
+  <div class="dialogue-card" id="d2">
+    <div class="dlg-header">
+      <span class="scene-icon">🩺</span>
+      <div><h3>Scene 2: 内科健康診断</h3><p>Annual Check-up / Internal Medicine Exam</p></div>
+    </div>
+    <div class="dialogue-body">
+      <div class="bubble-wrap"><div class="bubble-avatar doc">👨‍⚕️</div><div class="bubble-content"><div class="bubble-label">Dr.</div><div class="bubble doc"><span class="en">Good morning. Today is your annual check-up. Please take off your shirt and sit on the exam table.</span><div class="jp">おはようございます。今日は年1回の健診です。上着を脱いで診察台に座ってください。</div></div></div></div>
+      <div class="bubble-wrap right"><div class="bubble-avatar pt">🧑</div><div class="bubble-content"><div class="bubble-label">Pt.</div><div class="bubble pt"><span class="en">Sure. Should I be worried about anything?</span><div class="jp">わかりました。何か心配なことはありますか？</div></div></div></div>
+      <div class="bubble-wrap"><div class="bubble-avatar doc">👨‍⚕️</div><div class="bubble-content"><div class="bubble-label">Dr.</div><div class="bubble doc"><span class="en">Let's see how things are. Take a deep breath, please... now hold it... and breathe out.</span><div class="jp">確認しましょう。深呼吸してください…息を止めて…吐いて。</div></div></div></div>
+      <div class="bubble-wrap"><div class="bubble-avatar doc">👨‍⚕️</div><div class="bubble-content"><div class="bubble-label">Dr.</div><div class="bubble doc"><span class="en">Your lungs sound clear. Now I'll check your blood pressure. Please roll up your sleeve.</span><div class="jp">肺音は清明です。では血圧を測ります。袖をまくってください。</div></div></div></div>
+      <div class="bubble-wrap right"><div class="bubble-avatar pt">🧑</div><div class="bubble-content"><div class="bubble-label">Pt.</div><div class="bubble pt"><span class="en">Okay. My blood pressure tends to be a bit high.</span><div class="jp">はい。血圧はやや高めな傾向があります。</div></div></div></div>
+      <div class="bubble-wrap"><div class="bubble-avatar doc">👨‍⚕️</div><div class="bubble-content"><div class="bubble-label">Dr.</div><div class="bubble doc"><span class="en">Your blood pressure is 138 over 88 — slightly elevated. Let's check your blood work and discuss lifestyle changes.</span><div class="jp">血圧は138/88です。やや高めです。血液検査をして、生活習慣について話しましょう。</div></div></div></div>
+      <div class="dlg-note">⚑ "over" = per（分数式の血圧表記）。138/88 → "one thirty-eight over eighty-eight"</div>
+    </div>
+  </div>
+
+  <!-- D3 -->
+  <div class="dialogue-card" id="d3">
+    <div class="dlg-header">
+      <span class="scene-icon">🌡️</span>
+      <div><h3>Scene 3: 発熱</h3><p>Fever Consultation</p></div>
+    </div>
+    <div class="dialogue-body">
+      <div class="bubble-wrap"><div class="bubble-avatar doc">👨‍⚕️</div><div class="bubble-content"><div class="bubble-label">Dr.</div><div class="bubble doc"><span class="en">Your temperature is 38.7°C. When did the fever start?</span><div class="jp">体温は38.7度です。熱はいつから始まりましたか？</div></div></div></div>
+      <div class="bubble-wrap right"><div class="bubble-avatar pt">🧑</div><div class="bubble-content"><div class="bubble-label">Pt.</div><div class="bubble pt"><span class="en">Since last night. I also have a sore throat and body aches.</span><div class="jp">昨夜からです。喉の痛みと体の痛みもあります。</div></div></div></div>
+      <div class="bubble-wrap"><div class="bubble-avatar doc">👨‍⚕️</div><div class="bubble-content"><div class="bubble-label">Dr.</div><div class="bubble doc"><span class="en">I see. Have you traveled recently or been in contact with anyone who was sick?</span><div class="jp">わかりました。最近旅行されましたか、または体調不良の方と接触しましたか？</div></div></div></div>
+      <div class="bubble-wrap right"><div class="bubble-avatar pt">🧑</div><div class="bubble-content"><div class="bubble-label">Pt.</div><div class="bubble pt"><span class="en">My colleague at work had a cold last week.</span><div class="jp">先週、同僚が風邪をひいていました。</div></div></div></div>
+      <div class="bubble-wrap"><div class="bubble-avatar doc">👨‍⚕️</div><div class="bubble-content"><div class="bubble-label">Dr.</div><div class="bubble doc"><span class="en">I'd like to do a rapid influenza test. It only takes about 15 minutes. Please open your mouth wide.</span><div class="jp">迅速インフルエンザ検査をしたいと思います。15分ほどで結果が出ます。口を大きく開けてください。</div></div></div></div>
+      <div class="bubble-wrap right"><div class="bubble-avatar pt">🧑</div><div class="bubble-content"><div class="bubble-label">Pt.</div><div class="bubble pt"><span class="en">Sure. Is it the nose swab?</span><div class="jp">わかりました。鼻の綿棒検査ですか？</div></div></div></div>
+      <div class="bubble-wrap"><div class="bubble-avatar doc">👨‍⚕️</div><div class="bubble-content"><div class="bubble-label">Dr.</div><div class="bubble doc"><span class="en">Yes. The test came back positive for influenza A. I'll prescribe an antiviral medication. Rest at home and stay well hydrated.</span><div class="jp">はい。検査でインフルエンザA型が陽性でした。抗ウイルス薬を処方します。自宅で安静にし、水分をしっかり取ってください。</div></div></div></div>
+      <div class="dlg-note">⚑ antiviral（抗ウイルス薬）と antimicrobial / antibiotic（抗菌薬）は区別して使う。インフルエンザの治療薬はantiviral。</div>
+    </div>
+  </div>
+
+  <!-- D4 -->
+  <div class="dialogue-card" id="d4">
+    <div class="dlg-header">
+      <span class="scene-icon">🩹</span>
+      <div><h3>Scene 4: 外傷・怪我</h3><p>Trauma / Wound Care</p></div>
+    </div>
+    <div class="dialogue-body">
+      <div class="bubble-wrap"><div class="bubble-avatar doc">👨‍⚕️</div><div class="bubble-content"><div class="bubble-label">Dr.</div><div class="bubble doc"><span class="en">That's quite a deep cut. How did this happen?</span><div class="jp">かなり深い切り傷ですね。どのようにして怪我しましたか？</div></div></div></div>
+      <div class="bubble-wrap right"><div class="bubble-avatar pt">🧑</div><div class="bubble-content"><div class="bubble-label">Pt.</div><div class="bubble pt"><span class="en">I slipped and fell on a piece of glass about an hour ago.</span><div class="jp">約1時間前に転んでガラスで切りました。</div></div></div></div>
+      <div class="bubble-wrap"><div class="bubble-avatar doc">👨‍⚕️</div><div class="bubble-content"><div class="bubble-label">Dr.</div><div class="bubble doc"><span class="en">Can you feel me touching your fingers? Any numbness or tingling?</span><div class="jp">指に触れているのがわかりますか？しびれやピリピリ感はありますか？</div></div></div></div>
+      <div class="bubble-wrap right"><div class="bubble-avatar pt">🧑</div><div class="bubble-content"><div class="bubble-label">Pt.</div><div class="bubble pt"><span class="en">I can feel it. No numbness.</span><div class="jp">感覚はあります。しびれはありません。</div></div></div></div>
+      <div class="bubble-wrap"><div class="bubble-avatar doc">👨‍⚕️</div><div class="bubble-content"><div class="bubble-label">Dr.</div><div class="bubble doc"><span class="en">Good. This wound will need about four stitches. I'll give you a local anesthetic first — you'll feel a slight sting.</span><div class="jp">よかった。この傷口は4針縫合が必要です。まず局所麻酔をします。少しチクっとします。</div></div></div></div>
+      <div class="bubble-wrap right"><div class="bubble-avatar pt">🧑</div><div class="bubble-content"><div class="bubble-label">Pt.</div><div class="bubble pt"><span class="en">Okay. Do I need a tetanus shot?</span><div class="jp">わかりました。破傷風の注射は必要ですか？</div></div></div></div>
+      <div class="bubble-wrap"><div class="bubble-avatar doc">👨‍⚕️</div><div class="bubble-content"><div class="bubble-label">Dr.</div><div class="bubble doc"><span class="en">When was your last tetanus vaccination? If it's been more than five years, I recommend one. Keep the wound clean and dry, and come back in a week for suture removal.</span><div class="jp">最後に破傷風ワクチンを受けたのはいつですか？5年以上前なら推奨します。傷口は清潔に乾燥させて、1週間後に抜糸に来てください。</div></div></div></div>
+      <div class="dlg-note">⚑ "stitches" = sutures（縫合糸）。口語ではstitchesが自然。</div>
+    </div>
+  </div>
+
+  <!-- D5 -->
+  <div class="dialogue-card" id="d5">
+    <div class="dlg-header">
+      <span class="scene-icon">🧠</span>
+      <div><h3>Scene 5: 意識障害</h3><p>Altered Consciousness / Emergency</p></div>
+    </div>
+    <div class="dialogue-body">
+      <div class="bubble-wrap"><div class="bubble-avatar doc">👨‍⚕️</div><div class="bubble-content"><div class="bubble-label">Dr.</div><div class="bubble doc"><span class="en">Can you hear me? Open your eyes, please. What is your name?</span><div class="jp">聞こえますか？目を開けてください。お名前は？</div></div></div></div>
+      <div class="bubble-wrap right"><div class="bubble-avatar pt">🧑</div><div class="bubble-content"><div class="bubble-label">Pt.</div><div class="bubble pt"><span class="en">...Wh... where am I?</span><div class="jp">…こ、ここはどこ…？</div></div></div></div>
+      <div class="bubble-wrap"><div class="bubble-avatar doc">👨‍⚕️</div><div class="bubble-content"><div class="bubble-label">Dr.</div><div class="bubble doc"><span class="en">You're at the hospital. You're safe. I'm going to check your blood sugar immediately.</span><div class="jp">病院にいます。大丈夫ですよ。今すぐ血糖値を確認します。</div></div></div></div>
+      <div class="bubble-wrap"><div class="bubble-avatar doc">👨‍⚕️</div><div class="bubble-content"><div class="bubble-label">Dr. → Nurse</div><div class="bubble doc"><span class="en">His glucose is 38 mg/dL — severe hypoglycemia. Give 50% dextrose IV now, and call for the neurology consult.</span><div class="jp">血糖が38 mg/dL です。重症低血糖です。今すぐ50%ブドウ糖を静注して、神経内科にコンサルトしてください。</div></div></div></div>
+      <div class="bubble-wrap right"><div class="bubble-avatar pt">🧑</div><div class="bubble-content"><div class="bubble-label">Pt. (recovering)</div><div class="bubble pt"><span class="en">I... I think I skipped my meal today.</span><div class="jp">今日…食事を抜いてしまいました。</div></div></div></div>
+      <div class="bubble-wrap"><div class="bubble-avatar doc">👨‍⚕️</div><div class="bubble-content"><div class="bubble-label">Dr.</div><div class="bubble doc"><span class="en">You're responding — that's great. You had very low blood sugar. Do you have diabetes and take insulin or other medications?</span><div class="jp">反応が出てきました。よかった。血糖が非常に低かったです。糖尿病でインスリンや薬を使っていますか？</div></div></div></div>
+      <div class="dlg-note">⚑ 意識障害の初期対応：まずABCDE（気道・呼吸・循環・意識・体温）評価。血糖は即時確認できる可逆的原因。</div>
+    </div>
+  </div>
+
+  <!-- D6 -->
+  <div class="dialogue-card" id="d6">
+    <div class="dlg-header">
+      <span class="scene-icon">🤢</span>
+      <div><h3>Scene 6: 腹痛</h3><p>Abdominal Pain Consultation</p></div>
+    </div>
+    <div class="dialogue-body">
+      <div class="bubble-wrap"><div class="bubble-avatar doc">👨‍⚕️</div><div class="bubble-content"><div class="bubble-label">Dr.</div><div class="bubble doc"><span class="en">Tell me about your pain. Where is it, and how long have you had it?</span><div class="jp">痛みについて教えてください。どこで、いつからですか？</div></div></div></div>
+      <div class="bubble-wrap right"><div class="bubble-avatar pt">🧑</div><div class="bubble-content"><div class="bubble-label">Pt.</div><div class="bubble pt"><span class="en">It started around my belly button this morning and now it's moved to my lower right side. It's getting worse.</span><div class="jp">今朝おへそのあたりから始まって、今は右下に移ってきました。だんだん悪化しています。</div></div></div></div>
+      <div class="bubble-wrap"><div class="bubble-avatar doc">👨‍⚕️</div><div class="bubble-content"><div class="bubble-label">Dr.</div><div class="bubble doc"><span class="en">That pattern is concerning. Do you have nausea or fever?</span><div class="jp">その経過は心配です。吐き気や発熱はありますか？</div></div></div></div>
+      <div class="bubble-wrap right"><div class="bubble-avatar pt">🧑</div><div class="bubble-content"><div class="bubble-label">Pt.</div><div class="bubble pt"><span class="en">Yes, I feel nauseous and I've been sweating. No vomiting yet.</span><div class="jp">はい、吐き気があって汗をかいています。まだ嘔吐はしていません。</div></div></div></div>
+      <div class="bubble-wrap"><div class="bubble-avatar doc">👨‍⚕️</div><div class="bubble-content"><div class="bubble-label">Dr.</div><div class="bubble doc"><span class="en">I'm going to press here — does this hurt? <em>(presses McBurney's point)</em></span><div class="jp">ここを押します。痛いですか？（マックバーニー点を押す）</div></div></div></div>
+      <div class="bubble-wrap right"><div class="bubble-avatar pt">🧑</div><div class="bubble-content"><div class="bubble-label">Pt.</div><div class="bubble pt"><span class="en">Ouch — yes, very much.</span><div class="jp">痛い！はい、とても。</div></div></div></div>
+      <div class="bubble-wrap"><div class="bubble-avatar doc">👨‍⚕️</div><div class="bubble-content"><div class="bubble-label">Dr.</div><div class="bubble doc"><span class="en">The findings are consistent with appendicitis. I'm ordering an urgent CT scan and a surgical consult. Please don't eat or drink anything.</span><div class="jp">所見は虫垂炎と一致します。緊急CTと外科コンサルトを依頼します。何も食べたり飲んだりしないでください。</div></div></div></div>
+      <div class="dlg-note">⚑ 右下腹部への疼痛移動（Migration）はAppendicitisの典型的パターン。</div>
+    </div>
+  </div>
+
+  <!-- D7 -->
+  <div class="dialogue-card" id="d7">
+    <div class="dlg-header">
+      <span class="scene-icon">😮‍💨</span>
+      <div><h3>Scene 7: 呼吸困難</h3><p>Shortness of Breath / Asthma Attack</p></div>
+    </div>
+    <div class="dialogue-body">
+      <div class="bubble-wrap"><div class="bubble-avatar doc">👨‍⚕️</div><div class="bubble-content"><div class="bubble-label">Dr.</div><div class="bubble doc"><span class="en">Try to stay calm and breathe slowly. How long have you been having trouble breathing?</span><div class="jp">落ち着いて、ゆっくり呼吸してください。息苦しさはいつからですか？</div></div></div></div>
+      <div class="bubble-wrap right"><div class="bubble-avatar pt">🧑</div><div class="bubble-content"><div class="bubble-label">Pt.</div><div class="bubble pt"><span class="en">About... 30 minutes. I used my inhaler but it didn't help.</span><div class="jp">約30分です。吸入器を使いましたが、効きませんでした。</div></div></div></div>
+      <div class="bubble-wrap"><div class="bubble-avatar doc">👨‍⚕️</div><div class="bubble-content"><div class="bubble-label">Dr.</div><div class="bubble doc"><span class="en">Your oxygen saturation is 90%. I'm going to put you on oxygen right now and start a nebulizer with salbutamol.</span><div class="jp">酸素飽和度が90%です。今すぐ酸素を投与して、サルブタモールのネブライザーを始めます。</div></div></div></div>
+      <div class="bubble-wrap right"><div class="bubble-avatar pt">🧑</div><div class="bubble-content"><div class="bubble-label">Pt.</div><div class="bubble pt"><span class="en">Will I be okay?</span><div class="jp">大丈夫でしょうか？</div></div></div></div>
+      <div class="bubble-wrap"><div class="bubble-avatar doc">👨‍⚕️</div><div class="bubble-content"><div class="bubble-label">Dr.</div><div class="bubble doc"><span class="en">We're going to take good care of you. Keep breathing through the mask. I can hear wheezing, so I'll also give you an IV corticosteroid to reduce the inflammation.</span><div class="jp">きちんと対応します。マスクをつけて呼吸し続けてください。喘鳴が聴こえるので、炎症を抑えるためにステロイドの点滴も投与します。</div></div></div></div>
+      <div class="bubble-wrap right"><div class="bubble-avatar pt">🧑</div><div class="bubble-content"><div class="bubble-label">Pt. (10 min later)</div><div class="bubble pt"><span class="en">I'm breathing a little better now. Thank you.</span><div class="jp">少し楽になってきました。ありがとうございます。</div></div></div></div>
+      <div class="dlg-note">⚑ salbutamol（サルブタモール）= albuterol（米語）。β₂刺激薬。急性喘息発作の第一選択。</div>
+    </div>
+  </div>
+
+  <!-- D8 -->
+  <div class="dialogue-card" id="d8">
+    <div class="dlg-header">
+      <span class="scene-icon">💔</span>
+      <div><h3>Scene 8: 胸痛</h3><p>Chest Pain / Possible MI</p></div>
+    </div>
+    <div class="dialogue-body">
+      <div class="bubble-wrap"><div class="bubble-avatar doc">👨‍⚕️</div><div class="bubble-content"><div class="bubble-label">Dr.</div><div class="bubble doc"><span class="en">Sir, please lie still. Tell me — where is the pain, and what does it feel like?</span><div class="jp">じっとしていてください。どこが痛んで、どのような感じですか？</div></div></div></div>
+      <div class="bubble-wrap right"><div class="bubble-avatar pt">🧑</div><div class="bubble-content"><div class="bubble-label">Pt.</div><div class="bubble pt"><span class="en">It's like something heavy is sitting on my chest. It started 20 minutes ago and it's spreading to my left arm.</span><div class="jp">胸に重いものが乗っているような感じです。20分前から始まって、左腕に広がっています。</div></div></div></div>
+      <div class="bubble-wrap"><div class="bubble-avatar doc">👨‍⚕️</div><div class="bubble-content"><div class="bubble-label">Dr.</div><div class="bubble doc"><span class="en">That sounds very concerning. We're doing an ECG right now. Do you have any history of heart disease?</span><div class="jp">非常に心配な状況です。今すぐ心電図を取ります。心臓病の既往はありますか？</div></div></div></div>
+      <div class="bubble-wrap right"><div class="bubble-avatar pt">🧑</div><div class="bubble-content"><div class="bubble-label">Pt.</div><div class="bubble pt"><span class="en">My father had a heart attack. I've never had one myself.</span><div class="jp">父が心筋梗塞を起こしました。私自身はありません。</div></div></div></div>
+      <div class="bubble-wrap"><div class="bubble-avatar doc">👨‍⚕️</div><div class="bubble-content"><div class="bubble-label">Dr.</div><div class="bubble doc"><span class="en">The ECG shows ST elevation in leads II, III, and aVF. This looks like a myocardial infarction — a heart attack. We're activating the cath lab immediately. I'll give you aspirin and nitroglycerin now.</span><div class="jp">II、III、aVFのST上昇があります。心筋梗塞（心臓発作）のようです。心臓カテーテル室を緊急起動します。今すぐアスピリンとニトログリセリンを投与します。</div></div></div></div>
+      <div class="dlg-note">⚑ cath lab = cardiac catheterization laboratory（心臓カテーテル検査室）。急性STEMI対応の鍵フレーズ。</div>
+    </div>
+  </div>
+
+  <!-- D9 -->
+  <div class="dialogue-card" id="d9">
+    <div class="dlg-header">
+      <span class="scene-icon">🔬</span>
+      <div><h3>Scene 9: 処置・検査説明</h3><p>Informed Consent & Procedure Explanation</p></div>
+    </div>
+    <div class="dialogue-body">
+      <div class="bubble-wrap"><div class="bubble-avatar doc">👨‍⚕️</div><div class="bubble-content"><div class="bubble-label">Dr.</div><div class="bubble doc"><span class="en">I'd like to do a lumbar puncture to check for meningitis. Let me explain the procedure.</span><div class="jp">髄膜炎を確認するために腰椎穿刺を行いたいと思います。処置について説明させてください。</div></div></div></div>
+      <div class="bubble-wrap right"><div class="bubble-avatar pt">🧑</div><div class="bubble-content"><div class="bubble-label">Pt.</div><div class="bubble pt"><span class="en">What is that exactly?</span><div class="jp">それは具体的にどういうものですか？</div></div></div></div>
+      <div class="bubble-wrap"><div class="bubble-avatar doc">👨‍⚕️</div><div class="bubble-content"><div class="bubble-label">Dr.</div><div class="bubble doc"><span class="en">We insert a thin needle into your lower back to collect a small amount of spinal fluid. We'll numb the area first with a local anesthetic, so the main discomfort is during the numbing injection.</span><div class="jp">腰の下部に細い針を刺して、少量の脊髄液を採取します。まず局所麻酔で痺れさせるので、主な不快感は麻酔注射の時です。</div></div></div></div>
+      <div class="bubble-wrap right"><div class="bubble-avatar pt">🧑</div><div class="bubble-content"><div class="bubble-label">Pt.</div><div class="bubble pt"><span class="en">Are there any risks?</span><div class="jp">リスクはありますか？</div></div></div></div>
+      <div class="bubble-wrap"><div class="bubble-avatar doc">👨‍⚕️</div><div class="bubble-content"><div class="bubble-label">Dr.</div><div class="bubble doc"><span class="en">The most common side effect is a post-procedure headache, which occurs in about 10–30% of cases. Serious complications like infection or bleeding are rare. It's an important test to diagnose a potentially life-threatening condition.</span><div class="jp">最も多い副作用は術後の頭痛で、10〜30%程度に見られます。感染や出血などの重篤な合併症はまれです。生命に関わる可能性のある状態を診断するために重要な検査です。</div></div></div></div>
+      <div class="bubble-wrap right"><div class="bubble-avatar pt">🧑</div><div class="bubble-content"><div class="bubble-label">Pt.</div><div class="bubble pt"><span class="en">I understand. I'll go ahead with it.</span><div class="jp">わかりました。受けます。</div></div></div></div>
+      <div class="bubble-wrap"><div class="bubble-avatar doc">👨‍⚕️</div><div class="bubble-content"><div class="bubble-label">Dr.</div><div class="bubble doc"><span class="en">Thank you. Please sign this consent form. We'll start in a few minutes.</span><div class="jp">ありがとうございます。この同意書にサインをお願いします。数分後に始めます。</div></div></div></div>
+      <div class="dlg-note">⚑ informed consent（インフォームドコンセント）では benefi / risk / alternative（利益・リスク・代替手段）の3点を含める。</div>
+    </div>
+  </div>
+
+  <!-- D10 -->
+  <div class="dialogue-card" id="d10">
+    <div class="dlg-header">
+      <span class="scene-icon">📋</span>
+      <div><h3>Scene 10: 退院・処方説明</h3><p>Discharge Instructions & Prescription</p></div>
+    </div>
+    <div class="dialogue-body">
+      <div class="bubble-wrap"><div class="bubble-avatar doc">👨‍⚕️</div><div class="bubble-content"><div class="bubble-label">Dr.</div><div class="bubble doc"><span class="en">Great news — you're ready to go home today. Your condition has improved significantly.</span><div class="jp">よいお知らせです。今日退院できます。状態がとても改善しました。</div></div></div></div>
+      <div class="bubble-wrap right"><div class="bubble-avatar pt">🧑</div><div class="bubble-content"><div class="bubble-label">Pt.</div><div class="bubble pt"><span class="en">That's a relief! What medications do I need to take?</span><div class="jp">よかった！どんな薬を飲めばいいですか？</div></div></div></div>
+      <div class="bubble-wrap"><div class="bubble-avatar doc">👨‍⚕️</div><div class="bubble-content"><div class="bubble-label">Dr.</div><div class="bubble doc"><span class="en">I'm prescribing an oral antimicrobial agent for 7 days. Take one tablet twice a day — morning and evening, with food. It's very important to finish the entire course even if you feel better.</span><div class="jp">7日間の内服抗菌薬を処方します。朝・夕食後に1錠ずつ飲んでください。症状が改善しても、必ず最後まで飲み切ることが非常に重要です。</div></div></div></div>
+      <div class="bubble-wrap right"><div class="bubble-avatar pt">🧑</div><div class="bubble-content"><div class="bubble-label">Pt.</div><div class="bubble pt"><span class="en">Understood. Are there any foods or activities I should avoid?</span><div class="jp">わかりました。避けるべき食べ物や活動はありますか？</div></div></div></div>
+      <div class="bubble-wrap"><div class="bubble-avatar doc">👨‍⚕️</div><div class="bubble-content"><div class="bubble-label">Dr.</div><div class="bubble doc"><span class="en">Avoid alcohol while taking this medication. Light activity is fine, but avoid strenuous exercise for one more week. Please follow up at our outpatient clinic in one week, and come to the emergency room if you develop a high fever, chest pain, or severe shortness of breath.</span><div class="jp">この薬を飲んでいる間はアルコールを避けてください。軽い活動は問題ありませんが、もう1週間は激しい運動を避けてください。1週間後に外来を受診し、高熱・胸痛・高度の息苦しさがあれば救急外来に来てください。</div></div></div></div>
+      <div class="bubble-wrap right"><div class="bubble-avatar pt">🧑</div><div class="bubble-content"><div class="bubble-label">Pt.</div><div class="bubble pt"><span class="en">Thank you so much, Doctor. I really appreciate everything.</span><div class="jp">本当にありがとうございました。大変お世話になりました。</div></div></div></div>
+      <div class="dlg-note">⚑ 退院時は①薬の用法用量、②活動制限、③再受診のタイミングの3点を必ず説明する。</div>
+    </div>
+  </div>
+
+</div>
+</div>
+
+<!-- ══════════════════════════════════════
+     SECTION 4: QUIZ
+══════════════════════════════════════ -->
+<div class="section" id="quiz">
+<div class="container">
+  <h2 class="sec-title">ミニテスト</h2>
+  <p class="sec-lead">10問の3択問題で理解度を確認しましょう。</p>
+
+  <div class="quiz-intro">
+    <h2>🩺 Medical English Quiz</h2>
+    <p>全10問・3択形式<br>1問ずつ答えて、即時フィードバックを確認しながら進みます</p>
+    <button id="start-quiz-btn" onclick="startQuiz()">テストを開始する →</button>
+  </div>
+
+  <div id="quiz-area">
+    <div class="quiz-progress">
+      <div class="progress-bar"><div class="progress-fill" id="prog-fill" style="width:0%"></div></div>
+      <span class="progress-text" id="prog-text">1 / 10</span>
+    </div>
+    <div class="quiz-card" id="quiz-card">
+      <!-- filled by JS -->
+    </div>
+    <button id="next-btn" onclick="nextQuestion()">次の問題へ →</button>
+  </div>
+
+  <div id="result-area">
+    <div class="result-card">
+      <div class="score-circle">
+        <span class="score-num" id="res-score">0</span>
+        <span class="score-denom">/ 10</span>
+      </div>
+      <div class="grade-msg" id="res-grade"></div>
+      <div class="grade-sub" id="res-sub"></div>
+      <div class="review-list" id="res-review"></div>
+      <button id="retry-btn" onclick="retryQuiz()">もう一度挑戦する</button>
+    </div>
+  </div>
+
+</div>
+</div>
+
+<footer>
+  <p>本テキストは AI（Claude, Anthropic）を用いて作成されました。内容には誤りが含まれる可能性があります。<br>
+  医療上の判断には必ず公式の教科書・文献・専門家の指導を参照してください。</p>
+  <p style="margin-top:6px;">二次利用・再配布は自己責任のもとで可能です。その際、本注記の保持を推奨します。</p>
+</footer>
+
+<script>
+// ── TABS ──────────────────────────────────────────────────────────
+function showSection(id, btn) {
+  document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+  document.querySelectorAll('nav.tabs button').forEach(b => b.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  btn.classList.add('active');
+}
+
+// ── PHRASE PANELS ─────────────────────────────────────────────────
+function showPhrase(id, btn) {
+  document.querySelectorAll('.phrase-panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.scene-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  btn.classList.add('active');
+}
+
+// ── DIALOGUES ─────────────────────────────────────────────────────
+function showDialogue(id, btn) {
+  document.querySelectorAll('.dialogue-card').forEach(c => c.classList.remove('active'));
+  document.querySelectorAll('.dlg-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  btn.classList.add('active');
+}
+
+// ── QUIZ DATA ─────────────────────────────────────────────────────
+const questions = [
+  {
+    scene: "Scene 1: 受付・問診",
+    q: "患者に「今日はどうされましたか？」と聞くとき、最も自然な英語表現はどれですか？",
+    ctx: "外来受付で、初診の外国人患者が来院しました。",
+    opts: [
+      "What is your problem today?",
+      "What brings you here today?",
+      "Why are you coming here today?"
+    ],
+    ans: 1,
+    fb: "「What brings you here today?」が最も自然で丁寧な表現です。「What is your problem?」は問題に焦点を当てすぎてやや失礼に聞こえることがあります。「Why are you coming here?」は文法的に不自然です。"
+  },
+  {
+    scene: "Scene 2: 内科健診",
+    q: "「袖をまくってください」を英語で正しく表現しているのはどれですか？",
+    ctx: "血圧を測定するため、患者に袖をまくるよう指示します。",
+    opts: [
+      "Please raise your sleeve.",
+      "Please roll up your sleeve.",
+      "Please open your sleeve."
+    ],
+    ans: 1,
+    fb: "「roll up your sleeve」が正しい表現です。袖をまくる動作は「roll up」で表します。「raise」は上げる、「open」は開けるという意味で、どちらも袖に使うには不自然です。"
+  },
+  {
+    scene: "Scene 3: 発熱",
+    q: "インフルエンザ治療薬について患者に説明するとき、正しい用語はどれですか？",
+    ctx: "インフルエンザA型が確定し、薬を処方する場面です。",
+    opts: [
+      "I will prescribe an antibiotic.",
+      "I will prescribe an antifungal.",
+      "I will prescribe an antiviral medication."
+    ],
+    ans: 2,
+    fb: "インフルエンザウイルスに対する薬は「antiviral（抗ウイルス薬）」が正しい用語です。Antibiotic（抗菌薬）は細菌感染症、antifungal（抗真菌薬）は真菌感染症に使います。ウイルスには抗菌薬は効きません。"
+  },
+  {
+    scene: "Scene 4: 外傷・怪我",
+    q: "「この傷口は数針縫合が必要です」を英語で表現するとき、正しいのはどれですか？",
+    ctx: "深い裂傷の処置説明をしています。",
+    opts: [
+      "This wound needs a few stitches.",
+      "This wound needs a few injections.",
+      "This wound needs a few operations."
+    ],
+    ans: 0,
+    fb: "縫合（縫い合わせ）は「stitches」または「sutures」を使います。「stitches」は口語でよく使われます。「injections」は注射、「operations」は手術全体を指すため、縫合の文脈では不適切です。"
+  },
+  {
+    scene: "Scene 5: 意識障害",
+    q: "意識障害の患者に最初にかける声かけとして適切なのはどれですか？",
+    ctx: "ストレッチャーで搬送されてきた反応の乏しい患者です。",
+    opts: [
+      "Please fill out this form.",
+      "Can you hear me? Open your eyes.",
+      "What medications are you taking?"
+    ],
+    ans: 1,
+    fb: "意識障害の初期対応では、まず「Can you hear me? Open your eyes.（聞こえますか？目を開けてください）」で意識レベルを評価します。書類記載や詳しい問診は意識が確保されてから行います。"
+  },
+  {
+    scene: "Scene 6: 腹痛",
+    q: "腹痛の痛みが「持続的」か「波がある」かを確認する正しい表現はどれですか？",
+    ctx: "腹痛の性状を聴取しています。",
+    opts: [
+      "Is the pain constant or does it come and go?",
+      "Is the pain strong or weak?",
+      "Is the pain here or there?"
+    ],
+    ans: 0,
+    fb: "「constant（持続的）」か「come and go（波がある・間欠的）」かを尋ねるのが適切です。この表現で疝痛（colic）か持続痛（constant pain）かを鑑別できます。"
+  },
+  {
+    scene: "Scene 7: 呼吸困難",
+    q: "「酸素飽和度が92%です」を正しく英語で表現しているのはどれですか？",
+    ctx: "喘息発作で来院した患者のバイタルを報告しています。",
+    opts: [
+      "Your oxygen level is 92 degrees.",
+      "Your oxygen saturation is 92 percent.",
+      "Your oxygen pressure is 92 points."
+    ],
+    ans: 1,
+    fb: "酸素飽和度（SpO₂）は「oxygen saturation」で表し、単位は「percent（%）」です。「degrees」は温度、「pressure」は圧力に使う語で、酸素飽和度には適しません。"
+  },
+  {
+    scene: "Scene 8: 胸痛",
+    q: "「痛みは左腕に広がりますか？」を英語で適切に表現しているのはどれですか？",
+    ctx: "胸痛を訴える患者に放散痛の有無を確認しています。",
+    opts: [
+      "Does the pain move to your left arm?",
+      "Is there pain in your left arm?",
+      "Does the pain radiate to your left arm?"
+    ],
+    ans: 2,
+    fb: "放散痛（irradiating / radiating pain）を確認する際は「radiate（放散する）」が最も医学的に正確な表現です。「move（移動する）」も通じますが、「radiate」がより適切な医学用語です。"
+  },
+  {
+    scene: "Scene 9: 処置説明",
+    q: "患者に「少しチクっとします」と伝えるときの正しい英語表現はどれですか？",
+    ctx: "採血や局所麻酔の注射を行う前の声かけです。",
+    opts: [
+      "You will feel a big pain.",
+      "You'll feel a small sting.",
+      "It will be very painful."
+    ],
+    ans: 1,
+    fb: "「You'll feel a small sting（少しチクっとします）」が適切な表現です。「small sting」は注射時の軽微な痛みを表す定型表現で、患者を不必要に不安にさせない配慮があります。"
+  },
+  {
+    scene: "Scene 10: 退院・処方",
+    q: "「症状が改善しても薬を最後まで飲み切ってください」を正しく表現しているのはどれですか？",
+    ctx: "抗菌薬の処方説明をしています。服薬アドヒアランスの向上が目的です。",
+    opts: [
+      "Take the medicine only when you feel sick.",
+      "Stop the medication when you feel better.",
+      "Finish the entire course, even if you feel better."
+    ],
+    ans: 2,
+    fb: "「Finish the entire course, even if you feel better」が正確な表現です。抗菌薬の早期中断は薬剤耐性（Antimicrobial Resistance; AMR）の原因となります。この指導は感染症治療において特に重要です。"
+  }
+];
+
+let currentQ = 0;
+let score = 0;
+let answered = [];
+
+function startQuiz() {
+  currentQ = 0; score = 0; answered = [];
+  document.querySelector('.quiz-intro').style.display = 'none';
+  document.getElementById('quiz-area').style.display = 'block';
+  document.getElementById('result-area').style.display = 'none';
+  renderQuestion();
+}
+
+function renderQuestion() {
+  const q = questions[currentQ];
+  const fill = ((currentQ) / 10) * 100;
+  document.getElementById('prog-fill').style.width = fill + '%';
+  document.getElementById('prog-text').textContent = (currentQ + 1) + ' / 10';
+
+  const labels = ['A', 'B', 'C'];
+  let optsHTML = q.opts.map((o, i) =>
+    `<button class="opt-btn" id="opt-${i}" onclick="selectAnswer(${i})">
+      <span class="opt-label">${labels[i]}</span>
+      <span>${o}</span>
+    </button>`
+  ).join('');
+
+  document.getElementById('quiz-card').innerHTML = `
+    <div class="q-scene">${q.scene}</div>
+    <div class="q-text">Q${currentQ + 1}. ${q.q}</div>
+    <div class="q-context">${q.ctx}</div>
+    <div class="options">${optsHTML}</div>
+    <div class="q-feedback" id="q-feedback"></div>
+  `;
+  document.getElementById('next-btn').style.display = 'none';
+}
+
+function selectAnswer(i) {
+  const q = questions[currentQ];
+  const correct = q.ans === i;
+  if (correct) score++;
+  answered.push({ q: q.q, correct, userAns: q.opts[i], correctAns: q.opts[q.ans] });
+
+  document.querySelectorAll('.opt-btn').forEach((b, idx) => {
+    b.disabled = true;
+    if (idx === q.ans) b.classList.add('correct');
+    if (idx === i && !correct) b.classList.add('wrong');
+  });
+
+  const fb = document.getElementById('q-feedback');
+  fb.className = 'q-feedback show ' + (correct ? 'correct-fb' : 'wrong-fb');
+  fb.innerHTML = `<div class="fb-title">${correct ? '✅ 正解！' : '❌ 不正解'}</div>${q.fb}`;
+  document.getElementById('next-btn').style.display = 'block';
+  document.getElementById('next-btn').textContent =
+    currentQ < 9 ? '次の問題へ →' : '結果を見る →';
+}
+
+function nextQuestion() {
+  currentQ++;
+  if (currentQ < 10) {
+    renderQuestion();
+  } else {
+    showResult();
+  }
+}
+
+function showResult() {
+  document.getElementById('quiz-area').style.display = 'none';
+  document.getElementById('result-area').style.display = 'block';
+  document.getElementById('res-score').textContent = score;
+
+  let grade, sub;
+  if (score === 10) {
+    grade = '🏆 パーフェクト！'; sub = '素晴らしい！医学英語の基本は完璧です。';
+  } else if (score >= 8) {
+    grade = '🥇 優秀！'; sub = 'ほぼマスター。苦手な場面をもう一度確認しましょう。';
+  } else if (score >= 6) {
+    grade = '👍 良好'; sub = '基本的な表現は身についています。さらに練習しましょう。';
+  } else if (score >= 4) {
+    grade = '📚 もう少し'; sub = 'フレーズ集と会話文を見直してから再挑戦しましょう。';
+  } else {
+    grade = '💪 がんばろう！'; sub = '基礎から学び直しましょう。焦らず一歩ずつ。';
+  }
+  document.getElementById('res-grade').textContent = grade;
+  document.getElementById('res-sub').textContent = sub;
+
+  let reviewHTML = '<h3 style="font-family:\'Noto Serif JP\';color:var(--navy);margin-bottom:12px;">問題の振り返り</h3>';
+  answered.forEach((a, i) => {
+    reviewHTML += `
+      <div class="review-item ${a.correct ? 'ok' : 'ng'}">
+        <span class="ri-icon">${a.correct ? '✅' : '❌'}</span>
+        <div>
+          <div class="ri-q">Q${i+1}. ${a.q}</div>
+          ${!a.correct ? `<div class="ri-a">あなたの答え：${a.userAns} → 正解：${a.correctAns}</div>` : ''}
+        </div>
+      </div>`;
+  });
+  document.getElementById('res-review').innerHTML = reviewHTML;
+}
+
+function retryQuiz() {
+  document.querySelector('.quiz-intro').style.display = 'block';
+  document.getElementById('result-area').style.display = 'none';
+  document.getElementById('quiz-area').style.display = 'none';
+}
+</script>
+</body>
+</html>
